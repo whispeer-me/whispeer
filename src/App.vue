@@ -17,6 +17,16 @@
   color: #2c3e50;
 }
 
+@font-face {
+  font-family: "LCD-Solid";
+  src: url("@/assets/fonts/LCD-Solid.ttf.woff") format("woff"),
+    url("@/assets//fonts/LCD-Solid.ttf.svg#LCD-Solid") format("svg"),
+    url("@/assets/fonts/LCD-Solid.ttf.eot"),
+    url("@/assets/fonts/LCD-Solid.ttf.eot?#iefix") format("embedded-opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 nav {
   padding: 30px;
 
