@@ -2,10 +2,10 @@
   <div id="board" v-if="isBoardReady">
     <div v-for="(row, r) in rows" :key="r">
       <span
-        v-for="(cell, c) in cols"
         class="char"
-        :class="matrix[r][c].class"
+        v-for="(cell, c) in cols"
         :key="createId(r, c)"
+        :class="matrix[r][c].class"
         :ref="getCellRef(r, c)"
       >
         {{ matrix[r][c].char }}

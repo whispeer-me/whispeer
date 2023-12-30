@@ -27,15 +27,21 @@
   font-style: normal;
 }
 
+body {
+  background-color: #000;
+}
+
 nav {
   padding: 30px;
 
   a {
     font-weight: bold;
-    color: #2c3e50;
+    color: #c4872b;
+    opacity: 0.3;
 
     &.router-link-exact-active {
-      color: #42b983;
+      color: #c4872b;
+      opacity: 1;
     }
   }
 }
