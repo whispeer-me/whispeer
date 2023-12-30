@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "start": "node server.js",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
@@ -10,6 +11,7 @@
   },
   "dependencies": {
     "core-js": "^3.8.3",
+    "express": "^4.18.2",
     "vue": "^2.6.14",
     "vue-router": "^3.5.1"
   },
