@@ -27,15 +27,20 @@ export default {
     };
   },
   async mounted() {
-    try {
-      const data = await MessageService.getMessage(this.id);
-      this.message = data.message;
-    } catch (error) {
-      console.error(error);
-      this.errorMessage = "Failed to load message. Please try again later.";
-    }
+    await this.getTheMessage();
   },
-  methods: {},
+  methods: {
+    async getTheMessage() {
+      try {
+        const data = await MessageService.getMessage(this.id);
+        console.log(data);
+        this.message = data.data.content;
+      } catch (error) {
+        console.error(error);
+        this.errorMessage = "Failed to load message. Please try again later.";
+      }
+    },
+  },
 };
 </script>
 
