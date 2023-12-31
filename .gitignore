@@ -24,3 +24,8 @@ pnpm-debug.log*
 
 # fly.io
 fly.toml
+
+# Environment variables
+.env.development
+.env.production
+```
