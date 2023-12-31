@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import MessageView from "../views/MessageView.vue";
 
 Vue.use(VueRouter);
 
@@ -19,11 +20,17 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
   },
+  {
+    path: "/:id",
+    name: "message",
+    component: MessageView,
+    props: true,
+  },
 ];
 
 const router = new VueRouter({
   mode: "history",
-  base: process.env.BASE_URL,
+  base: process.env.VUE_APP_API_URL,
   routes,
 });
 
