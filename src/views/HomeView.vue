@@ -55,17 +55,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-// Main color for statistics
-$primary-color: #f0c041;
-
-// Secondary color for text
-$secondary-color: #e0e0e0;
-
-// Common font size for text
-$text-font-size: 1.4em;
-
-// Font size for headings
-$heading-font-size: 3em;
+@import "@/assets/scss/app.scss";
 
 .home {
   text-align: center;

@@ -11,18 +11,10 @@
 </template>
 
 <style lang="scss">
-@font-face {
-  font-family: "LCD-Solid";
-  src: url("@/assets/fonts/LCD-Solid.ttf.woff") format("woff"),
-    url("@/assets/fonts/LCD-Solid.ttf.svg#LCD-Solid") format("svg"),
-    url("@/assets/fonts/LCD-Solid.ttf.eot"),
-    url("@/assets/fonts/LCD-Solid.ttf.eot?#iefix") format("embedded-opentype");
-  font-weight: normal;
-  font-style: normal;
-}
+@import "@/assets/scss/app.scss";
 
 #app {
-  font-family: "LCD-Solid", sans-serif;
+  @extend %lcd-font;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -30,14 +22,11 @@
 }
 
 body {
-  background-color: #000;
+  background-color: $background-color;
 }
 
 .divider {
-  border: none;
-  height: 2px;
-  background-color: #c4872b;
-  margin: 0;
+  @extend %divider;
 }
 
 .main-nav {
@@ -46,9 +35,9 @@ body {
   text-align: left;
 
   .nav-link {
-    font-family: "LCD-Solid", sans-serif;
+    @extend %lcd-font;
     font-size: 24px;
-    color: #c4872b;
+    color: $primary-color;
     text-decoration: none;
     margin: 0 15px;
     opacity: 0.7;

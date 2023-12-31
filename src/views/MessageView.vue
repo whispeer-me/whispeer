@@ -44,9 +44,6 @@ export default {
 };
 </script>
 
-<style scoped>
-.error-message {
-  color: red;
-  margin-top: 20px;
-}
+<style scoped lang="scss">
+@import "@/assets/scss/app.scss";
 </style>

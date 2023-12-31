@@ -58,8 +58,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-$primary-color: #c4872b;
-$hover-color: #b07524;
+@import "@/assets/scss/app.scss";
+
 $border-radius: 5px;
 $input-padding: 10px;
 $color-on: $primary-color;

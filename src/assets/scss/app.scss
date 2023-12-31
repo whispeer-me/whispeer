@@ -1,0 +1,49 @@
+
+// Fonts
+@font-face {
+  font-family: "LCD-Solid";
+  src: url("@/assets/fonts/LCD-Solid.ttf.woff") format("woff"),
+       url("@/assets/fonts/LCD-Solid.ttf.svg#LCD-Solid") format("svg"),
+       url("@/assets/fonts/LCD-Solid.ttf.eot"),
+       url("@/assets/fonts/LCD-Solid.ttf.eot?#iefix") format("embedded-opentype");
+}
+
+// Colors
+$primary-color: #c4872b;
+$secondary-color: #e0e0e0;
+$hover-color: #b07524;
+$background-color: #000;
+$divider-color: #c4872b;
+$error-color: red;
+
+// Sizes and Padding
+$border-radius: 5px;
+$input-padding: 10px;
+$text-font-size: 1.4em;
+$heading-font-size: 3em;
+
+// Common Styles
+%lcd-font {
+  font-family: "LCD-Solid", sans-serif;
+}
+
+%divider {
+  border: none;
+  height: 2px;
+  background-color: $divider-color;
+  margin: 0;
+}
+
+%button-style {
+  background-color: $primary-color;
+  color: white;
+  padding: $input-padding 20px;
+  border: none;
+  border-radius: $border-radius;
+  cursor: pointer;
+  font-size: 1em;
+
+  &:hover {
+    background-color: $hover-color;
+  }
+}
