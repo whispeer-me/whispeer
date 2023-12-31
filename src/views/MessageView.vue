@@ -1,9 +1,6 @@
 <template>
   <div class="message">
     <ChiperDisplay v-if="message" :message="message" />
-    <!-- <ChiperDisplay
-      message="Hello World! Programming is awesome! Enjoy it while you can." -->
-    />
     <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
   </div>
 </template>
@@ -18,7 +15,7 @@ export default {
     ChiperDisplay,
   },
   props: {
-    messageId: {
+    id: {
       type: String,
       required: true,
     },
@@ -31,7 +28,7 @@ export default {
   },
   async mounted() {
     try {
-      const data = await MessageService.getMessage(this.messageId);
+      const data = await MessageService.getMessage(this.id);
       this.message = data.message;
     } catch (error) {
       console.error(error);
