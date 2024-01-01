@@ -51,6 +51,11 @@ export default {
   },
   methods: {
     async submitMessage() {
+      this.$analytics.trackEvent("message-created", {
+        props: {
+          isPrivate: this.message.isPrivate,
+        },
+      });
       console.log("Message submitted:", this.message);
     },
   },
