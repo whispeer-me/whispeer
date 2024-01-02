@@ -8,15 +8,18 @@
     <hr class="divider" />
     <router-view />
     <AnalyticsConsentBanner @consent-given="initAnalytics" />
+    <AppFooter />
   </div>
 </template>
 
 <script>
 import AnalyticsConsentBanner from "@/components/AnalyticsConsentBanner.vue";
+import AppFooter from "@/components/AppFooter.vue";
 
 export default {
   components: {
     AnalyticsConsentBanner,
+    AppFooter,
   },
   methods: {
     initAnalytics() {
@@ -37,6 +40,9 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 body {
