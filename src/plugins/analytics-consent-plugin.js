@@ -7,22 +7,11 @@ export const AnalyticsConsentPlugin = {
       methods: {
         checkConsent() {
           // Check for Do Not Track setting
+          // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/doNotTrack
           const doNotTrackIsEnabled = navigator.doNotTrack === "1";
-          if (doNotTrackIsEnabled) {
-            return;
-          }
-
           const consentGiven = localStorage.getItem("analyticsConsent");
-          if (consentGiven === null) {
-            // Show consent prompt logic here
-            // For simplicity, using a confirm dialog
-            if (confirm("Can we collect analytics data during your visit?")) {
-              localStorage.setItem("analyticsConsent", "true");
-              options.onConsentGiven();
-            } else {
-              localStorage.setItem("analyticsConsent", "false");
-            }
-          } else if (consentGiven === "true") {
+
+          if (!doNotTrackIsEnabled && consentGiven === "true") {
             options.onConsentGiven();
           }
         },

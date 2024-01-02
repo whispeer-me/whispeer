@@ -7,8 +7,26 @@
     </nav>
     <hr class="divider" />
     <router-view />
+    <AnalyticsConsentBanner @consent-given="initAnalytics" />
   </div>
 </template>
+
+<script>
+import AnalyticsConsentBanner from "@/components/AnalyticsConsentBanner.vue";
+
+export default {
+  components: {
+    AnalyticsConsentBanner,
+  },
+  methods: {
+    initAnalytics() {
+      if (!navigator.doNotTrack) {
+        this.$initAnalytics();
+      }
+    },
+  },
+};
+</script>
 
 <style lang="scss">
 @import "@/assets/scss/app.scss";

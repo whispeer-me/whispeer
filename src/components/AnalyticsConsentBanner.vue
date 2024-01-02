@@ -1,0 +1,87 @@
+<template>
+  <div v-if="show" class="analytics-consent-banner">
+    <p>
+      Can we collect analytics data during your visit? <br />
+      Any concern? Read our
+      <a href="/privacy">Privacy Policy.</a>
+    </p>
+
+    <button class="consent-button yes-button" @click="giveConsent">Yes</button>
+    <button class="consent-button no-button" @click="declineConsent">No</button>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      show: false,
+    };
+  },
+  created() {
+    this.checkConsent();
+  },
+  methods: {
+    checkConsent() {
+      const consentGiven = localStorage.getItem("analyticsConsent");
+      if (consentGiven === null) {
+        this.show = true;
+      }
+    },
+    giveConsent() {
+      localStorage.setItem("analyticsConsent", "true");
+      this.show = false;
+      this.$emit("consent-given");
+    },
+    declineConsent() {
+      localStorage.setItem("analyticsConsent", "false");
+      this.show = false;
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+@import "@/assets/scss/app.scss";
+
+$font-size: 12px;
+
+.analytics-consent-banner {
+  @extend %lcd-font;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: $primary-color;
+  color: $secondary-color;
+  text-align: center;
+  padding: 16px;
+  z-index: 1000;
+  font-size: $font-size;
+
+  p {
+    line-height: 1.5;
+  }
+
+  .consent-button {
+    @extend %button-style;
+    margin: 0 10px;
+  }
+
+  .yes-button {
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+  }
+
+  .no-button {
+    background-color: $secondary-color;
+    color: $primary-color;
+
+    &:hover {
+      background-color: lighten($secondary-color, 10%);
+      color: darken($primary-color, 10%);
+    }
+  }
+}
+</style>

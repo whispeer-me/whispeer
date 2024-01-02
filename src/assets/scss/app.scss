@@ -47,3 +47,13 @@ $heading-font-size: 3em;
     background-color: $hover-color;
   }
 }
+
+a {
+  color: $secondary-color;
+  text-decoration: none;
+  font-weight: bold;
+
+  &:hover {
+    color: $hover-color;
+  }
+}
