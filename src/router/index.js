@@ -1,8 +1,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import HomeView from "../views/HomeView.vue";
-import MessageView from "../views/MessageView.vue";
-import CreateMessageView from "../views/CreateMessageView.vue";
+import HomeView from "@/views/HomeView.vue";
+import MessageView from "@/views/message/MessageView.vue";
+import CreateMessageView from "@/views/message/CreateMessageView.vue";
 
 Vue.use(VueRouter);
 
