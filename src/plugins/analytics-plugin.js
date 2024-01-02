@@ -10,17 +10,19 @@ const mockAnalytics = {
 
 const AnalyticsPlugin = {
   install(Vue, options) {
-    // Check for Do Not Track setting
-    const doNotTrackeIsEnabled = navigator.doNotTrack === "1";
-    const analytics = doNotTrackeIsEnabled ? mockAnalytics : Plausible(options);
+    // To prevent crashes in case user won't be "tracked"
+    Vue.prototype.$analytics = mockAnalytics;
 
-    Vue.prototype.$analytics = analytics;
+    Vue.prototype.$initAnalytics = () => {
+      const analyticsPlatform = Plausible(options);
+      Vue.prototype.$analytics = analyticsPlatform;
 
-    if (options.router && !doNotTrackeIsEnabled) {
-      options.router.afterEach((to) => {
-        analytics.trackPageview({ path: to.fullPath });
-      });
-    }
+      if (options.router) {
+        options.router.afterEach((to) => {
+          analyticsPlatform.trackPageview({ path: to.fullPath });
+        });
+      }
+    };
   },
 };
 
