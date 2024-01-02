@@ -1,8 +1,9 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import HomeView from "../views/HomeView.vue";
-import MessageView from "../views/MessageView.vue";
-import CreateMessageView from "../views/CreateMessageView.vue";
+import HomeView from "@/views/HomeView.vue";
+import MessageView from "@/views/message/MessageView.vue";
+import CreateMessageView from "@/views/message/CreateMessageView.vue";
+import PrivacyPolicyView from "@/views/PrivacyPolicyView.vue";
 
 Vue.use(VueRouter);
 
@@ -20,6 +21,11 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
+  },
+  {
+    path: "/privacy-policy",
+    name: "privacy-policy",
+    component: PrivacyPolicyView,
   },
   {
     path: "/new",

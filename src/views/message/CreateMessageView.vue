@@ -9,15 +9,11 @@
       ></textarea>
 
       <div class="privacy-settings">
-        <span>Private Message:</span>
-        <label class="switch">
-          <input
-            type="checkbox"
-            id="privateToggle"
-            v-model="message.isPrivate"
-          />
-          <span class="slider round"></span>
-        </label>
+        <ToggleSwitch
+          title="Private Message"
+          :value="message.isPrivate"
+          @change="handleToggleChange"
+        />
       </div>
 
       <div v-if="message.isPrivate" class="passphrase">
@@ -38,6 +34,8 @@
 </template>
 
 <script>
+import ToggleSwitch from "@/components/common/ToggleSwitch.vue";
+
 export default {
   name: "CreateMessageView",
   data() {
@@ -49,6 +47,9 @@ export default {
       },
     };
   },
+  components: {
+    ToggleSwitch,
+  },
   methods: {
     async submitMessage() {
       this.$analytics.trackEvent("message-created", {
@@ -57,6 +58,9 @@ export default {
         },
       });
       console.log("Message submitted:", this.message);
+    },
+    handleToggleChange(newValue) {
+      this.message.isPrivate = newValue;
     },
   },
 };
@@ -67,8 +71,6 @@ export default {
 
 $border-radius: 5px;
 $input-padding: 10px;
-$color-on: $primary-color;
-$color-off: #ccc;
 
 .create-message-view {
   text-align: center;
@@ -96,64 +98,6 @@ $color-off: #ccc;
       margin-right: 10px;
     }
 
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 70px;
-      height: 34px;
-      margin-right: 10px;
-
-      & input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-      }
-
-      .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: $color-off; // Off color
-        transition: 0.4s;
-        border-radius: 34px;
-
-        &:before {
-          position: absolute;
-          content: "";
-          height: 26px;
-          width: 26px;
-          left: 4px;
-          bottom: 4px;
-          background-color: white;
-          transition: 0.4s;
-          border-radius: 50%;
-        }
-      }
-
-      input:checked + .slider {
-        background-color: $color-on; // On color
-      }
-
-      input:focus + .slider {
-        box-shadow: 0 0 1px $color-on; // On color
-      }
-
-      input:checked + .slider:before {
-        transform: translateX(26px);
-      }
-
-      &.round {
-        border-radius: 34px;
-
-        .slider:before {
-          border-radius: 50%;
-        }
-      }
-    }
-
     .passphrase {
       width: 80%;
       margin: 10px auto;
@@ -176,18 +120,7 @@ $color-off: #ccc;
   }
 
   button {
-    background-color: $primary-color;
-    color: white;
-    padding: $input-padding 20px;
-    border: none;
-    border-radius: $border-radius;
-    cursor: pointer;
-    font-size: 1em;
-    margin-top: 20px;
-
-    &:hover {
-      background-color: $hover-color;
-    }
+    @extend %button-style;
   }
 }
 </style>

@@ -7,8 +7,19 @@
     </nav>
     <hr class="divider" />
     <router-view />
+    <AppFooter />
   </div>
 </template>
+
+<script>
+import AppFooter from "@/components/main/AppFooter.vue";
+
+export default {
+  components: {
+    AppFooter,
+  },
+};
+</script>
 
 <style lang="scss">
 @import "@/assets/scss/app.scss";
@@ -19,6 +30,9 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 body {

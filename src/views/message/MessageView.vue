@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import ChiperDisplay from "@/components/ChiperDisplay.vue";
+import ChiperDisplay from "@/components/message/ChiperDisplay.vue";
 import MessageService from "@/services/MessageService";
 
 export default {
