@@ -9,7 +9,7 @@ const mockLocalStorage = (() => {
       return store[key] || null;
     },
     setItem(key, value) {
-      if  (value == null) {
+      if (value == null) {
         delete store[key];
         return;
       }
@@ -21,7 +21,7 @@ const mockLocalStorage = (() => {
   };
 })();
 
-Object.defineProperty(window, 'localStorage', {
+Object.defineProperty(window, "localStorage", {
   value: mockLocalStorage,
 });
 
@@ -36,7 +36,7 @@ describe("AnalyticsConsentBanner.vue", () => {
     mockLocalStorage.setItem("analyticsConsent", null);
 
     const wrapper = shallowMount(AnalyticsConsentBanner, {
-      stubs: ['router-link'],
+      stubs: ["router-link"],
     });
 
     // Check if the banner is visible
@@ -48,7 +48,7 @@ describe("AnalyticsConsentBanner.vue", () => {
     mockLocalStorage.setItem("analyticsConsent", "true");
 
     const wrapper = shallowMount(AnalyticsConsentBanner, {
-      stubs: ['router-link'],
+      stubs: ["router-link"],
     });
 
     expect(wrapper.vm.show).toBe(false);
@@ -58,7 +58,7 @@ describe("AnalyticsConsentBanner.vue", () => {
   it("emits `consent-given` when 'Yes' button is clicked", async () => {
     mockLocalStorage.setItem("analyticsConsent", null);
     const wrapper = shallowMount(AnalyticsConsentBanner, {
-      stubs: ['router-link'],
+      stubs: ["router-link"],
     });
 
     await wrapper.find(".yes-button").trigger("click");
@@ -69,7 +69,7 @@ describe("AnalyticsConsentBanner.vue", () => {
   it("sets `analyticsConsent` to false in localStorage when 'No' button is clicked", async () => {
     mockLocalStorage.setItem("analyticsConsent", null);
     const wrapper = shallowMount(AnalyticsConsentBanner, {
-      stubs: ['router-link'],
+      stubs: ["router-link"],
     });
 
     await wrapper.find(".no-button").trigger("click");
