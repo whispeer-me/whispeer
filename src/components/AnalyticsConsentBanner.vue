@@ -3,7 +3,9 @@
     <p>
       Can we collect analytics data during your visit? <br />
       Any concern? Read our
-      <a href="/privacy">Privacy Policy.</a>
+      <router-link to="/privacy-policy" class="footer-link"
+        >Privacy Policy</router-link
+      >.
     </p>
 
     <button class="consent-button yes-button" @click="giveConsent">Yes</button>
@@ -13,6 +15,7 @@
 
 <script>
 export default {
+  name: "AnalyticsConsentBanner",
   data() {
     return {
       show: false,
