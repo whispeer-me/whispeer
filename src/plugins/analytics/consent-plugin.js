@@ -1,4 +1,4 @@
-export const AnalyticsConsentPlugin = {
+const AnalyticsConsentPlugin = {
   install(Vue, options) {
     Vue.mixin({
       created() {
@@ -19,3 +19,5 @@ export const AnalyticsConsentPlugin = {
     });
   },
 };
+
+export default AnalyticsConsentPlugin;

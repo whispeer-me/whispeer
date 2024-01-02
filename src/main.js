@@ -1,8 +1,8 @@
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
-import AnalyticsPlugin from "./plugins/analytics-plugin";
-import { AnalyticsConsentPlugin } from "./plugins/analytics-consent-plugin";
+import AnalyticsPlugin from "./plugins/analytics/analytics-plugin";
+import AnalyticsConsentPlugin from "./plugins/analytics/consent-plugin";
 
 Vue.config.productionTip = false;
 
