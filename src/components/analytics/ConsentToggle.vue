@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import ToggleSwitch from "@/components/ToggleSwitch.vue";
+import ToggleSwitch from "@/components/common/ToggleSwitch.vue";
 
 export default {
   name: "AnalyticsConsentToggle",

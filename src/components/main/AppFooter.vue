@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import AnalyticsConsentToggle from "@/components/AnalyticsConsentToggle.vue";
+import AnalyticsConsentToggle from "@/components/analytics/ConsentToggle.vue";
 
 export default {
   components: {

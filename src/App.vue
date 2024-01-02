@@ -13,8 +13,8 @@
 </template>
 
 <script>
-import AnalyticsConsentBanner from "@/components/AnalyticsConsentBanner.vue";
-import AppFooter from "@/components/AppFooter.vue";
+import AnalyticsConsentBanner from "@/components/analytics/ConsentBanner.vue";
+import AppFooter from "@/components/main/AppFooter.vue";
 
 export default {
   components: {
