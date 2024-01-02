@@ -1,79 +1,65 @@
 import { shallowMount } from "@vue/test-utils";
 import AnalyticsConsentBanner from "@/components/analytics/ConsentBanner.vue";
+import ToggleSwitch from "@/components/common/ToggleSwitch.vue";
+import PreferenceService from "@/services/PreferenceService";
 
-// Mocking localStorage
-const mockLocalStorage = (() => {
-  let store = {};
-  return {
-    getItem(key) {
-      return store[key] || null;
-    },
-    setItem(key, value) {
-      if (value == null) {
-        delete store[key];
-        return;
-      }
-      store[key] = value.toString();
-    },
-    clear() {
-      store = {};
-    },
-  };
-})();
-
-Object.defineProperty(window, "localStorage", {
-  value: mockLocalStorage,
-});
+// Mocking PreferenceService
+jest.mock("@/services/PreferenceService", () => ({
+  getAnalyticsConsent: jest.fn(),
+  updateAnalyticsConsent: jest.fn(),
+}));
 
 describe("AnalyticsConsentBanner.vue", () => {
   beforeEach(() => {
-    // Clear localStorage before each test
-    mockLocalStorage.clear();
+    // Clear mock calls before each test
+    PreferenceService.getAnalyticsConsent.mockClear();
+    PreferenceService.updateAnalyticsConsent.mockClear();
   });
 
-  it("renders when `show` is true", () => {
-    // Set initial state for the component
-    mockLocalStorage.setItem("analyticsConsent", null);
-
+  it("renders the consent banner when user visits very first time", async () => {
+    PreferenceService.getAnalyticsConsent.mockResolvedValue(null);
     const wrapper = shallowMount(AnalyticsConsentBanner, {
       stubs: ["router-link"],
     });
 
-    // Check if the banner is visible
-    expect(wrapper.vm.show).toBe(true);
+    // Wait for the promise to resolve
+    await wrapper.vm.$nextTick();
     expect(wrapper.find(".analytics-consent-banner").exists()).toBe(true);
   });
 
-  it("does not render when `analyticsConsent` is set in localStorage", () => {
-    mockLocalStorage.setItem("analyticsConsent", "true");
-
-    const wrapper = shallowMount(AnalyticsConsentBanner, {
-      stubs: ["router-link"],
-    });
-
-    expect(wrapper.vm.show).toBe(false);
-    expect(wrapper.find(".analytics-consent-banner").exists()).toBe(false);
-  });
-
   it("emits `consent-given` when 'Yes' button is clicked", async () => {
-    mockLocalStorage.setItem("analyticsConsent", null);
+    PreferenceService.getAnalyticsConsent.mockResolvedValue(null);
     const wrapper = shallowMount(AnalyticsConsentBanner, {
       stubs: ["router-link"],
     });
 
+    // Wait for the component to update
+    await wrapper.vm.$nextTick();
     await wrapper.find(".yes-button").trigger("click");
     expect(wrapper.emitted("consent-given")).toBeTruthy();
-    expect(mockLocalStorage.getItem("analyticsConsent")).toBe("true");
   });
 
-  it("sets `analyticsConsent` to false in localStorage when 'No' button is clicked", async () => {
-    mockLocalStorage.setItem("analyticsConsent", null);
+  it("emits `consent-denied` when 'No' button is clicked", async () => {
+    PreferenceService.getAnalyticsConsent.mockResolvedValue(null);
     const wrapper = shallowMount(AnalyticsConsentBanner, {
       stubs: ["router-link"],
     });
 
+    await wrapper.vm.$nextTick();
     await wrapper.find(".no-button").trigger("click");
-    expect(wrapper.emitted("consent-given")).toBeFalsy();
-    expect(mockLocalStorage.getItem("analyticsConsent")).toBe("false");
+    expect(wrapper.emitted("consent-denied")).toBeTruthy();
+  });
+
+  it("emits correct event based on the toggle switch change", async () => {
+    PreferenceService.getAnalyticsConsent.mockResolvedValue("true");
+    const wrapper = shallowMount(AnalyticsConsentBanner, {
+      stubs: ["router-link"],
+      components: {
+        ToggleSwitch,
+      },
+    });
+    await wrapper.vm.$nextTick();
+    wrapper.findComponent(ToggleSwitch).vm.$emit("change", false);
+    expect(wrapper.emitted("consent-denied")).toBeTruthy();
   });
 });
