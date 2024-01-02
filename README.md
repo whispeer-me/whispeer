@@ -27,3 +27,8 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+# ANALYTICS SETUP
+
+Update `VUE_APP_ANALYTICS_DOMAIN` in  `.env.production` file.
