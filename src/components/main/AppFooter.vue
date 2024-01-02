@@ -1,6 +1,9 @@
 <template>
   <footer class="app-footer">
-    <AnalyticsConsentToggle @consent-given="handleConsentGiven" />
+    <AnalyticsConsentBanner
+      @consent-given="initAnalytics"
+      @consent-denied="stopAnalytics"
+    />
     <p class="footer-text">
       © 2024 Whispeer.me
       <router-link to="/privacy-policy" class="footer-link"
@@ -11,16 +14,23 @@
 </template>
 
 <script>
-import AnalyticsConsentToggle from "@/components/analytics/ConsentToggle.vue";
+import AnalyticsConsentBanner from "@/components/analytics/ConsentBanner.vue";
 
-export default {
+import Vue from "vue";
+export default Vue.extend({
+  name: "AppFooter",
   components: {
-    AnalyticsConsentToggle,
+    AnalyticsConsentBanner,
   },
   methods: {
-    handleConsentGiven() {},
+    initAnalytics() {
+      this.$initAnalytics();
+    },
+    stopAnalytics() {
+      this.$stopAnalytics();
+    },
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

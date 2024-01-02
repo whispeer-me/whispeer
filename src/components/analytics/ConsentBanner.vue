@@ -11,34 +11,62 @@
     <button class="consent-button yes-button" @click="giveConsent">Yes</button>
     <button class="consent-button no-button" @click="declineConsent">No</button>
   </div>
+
+  <div v-else class="consent-toggle">
+    <ToggleSwitch
+      title="Analytics Tracking"
+      :value="consentGiven"
+      @change="toggleConsent"
+    />
+  </div>
 </template>
 
 <script>
+import PreferenceService from "@/services/PreferenceService";
+import ToggleSwitch from "@/components/common/ToggleSwitch.vue";
+
 export default {
   name: "AnalyticsConsentBanner",
+  components: {
+    ToggleSwitch,
+  },
   data() {
     return {
       show: false,
+      consentGiven: false,
     };
   },
-  created() {
-    this.checkConsent();
-  },
-  methods: {
-    checkConsent() {
-      const consentGiven = localStorage.getItem("analyticsConsent");
-      if (consentGiven === null) {
+  mounted() {
+    PreferenceService.getAnalyticsConsent().then((value) => {
+      if (value === null) {
         this.show = true;
       }
-    },
+    });
+  },
+  methods: {
     giveConsent() {
-      localStorage.setItem("analyticsConsent", "true");
+      this.consentGiven = true;
       this.show = false;
+      this.updatePreference();
       this.$emit("consent-given");
     },
     declineConsent() {
-      localStorage.setItem("analyticsConsent", "false");
+      this.consentGiven = false;
       this.show = false;
+      this.updatePreference();
+      this.$emit("consent-denied");
+    },
+    toggleConsent(newValue) {
+      this.consentGiven = newValue;
+      this.updatePreference();
+      if (newValue) {
+        this.$emit("consent-given");
+      } else {
+        this.$emit("consent-denied");
+      }
+    },
+    updatePreference() {
+      PreferenceService.updateAnalyticsConsent(this.consentGiven);
     },
   },
 };

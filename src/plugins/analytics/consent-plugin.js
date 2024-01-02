@@ -1,3 +1,5 @@
+import PreferenceService from "@/services/PreferenceService";
+
 const AnalyticsConsentPlugin = {
   install(Vue, options) {
     Vue.mixin({
@@ -5,11 +7,11 @@ const AnalyticsConsentPlugin = {
         this.checkConsent();
       },
       methods: {
-        checkConsent() {
+        async checkConsent() {
           // Check for Do Not Track setting
           // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/doNotTrack
           const doNotTrackIsEnabled = navigator.doNotTrack === "1";
-          const consentGiven = localStorage.getItem("analyticsConsent");
+          const consentGiven = await PreferenceService.getAnalyticsConsent();
 
           if (!doNotTrackIsEnabled && consentGiven === "true") {
             options.onConsentGiven();

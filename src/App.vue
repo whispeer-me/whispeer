@@ -7,26 +7,16 @@
     </nav>
     <hr class="divider" />
     <router-view />
-    <AnalyticsConsentBanner @consent-given="initAnalytics" />
     <AppFooter />
   </div>
 </template>
 
 <script>
-import AnalyticsConsentBanner from "@/components/analytics/ConsentBanner.vue";
 import AppFooter from "@/components/main/AppFooter.vue";
 
 export default {
   components: {
-    AnalyticsConsentBanner,
     AppFooter,
-  },
-  methods: {
-    initAnalytics() {
-      if (!navigator.doNotTrack) {
-        this.$initAnalytics();
-      }
-    },
   },
 };
 </script>

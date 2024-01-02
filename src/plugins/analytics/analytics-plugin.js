@@ -23,6 +23,10 @@ const AnalyticsPlugin = {
         });
       }
     };
+
+    Vue.prototype.$stopAnalytics = () => {
+      Vue.prototype.$analytics = mockAnalytics;
+    };
   },
 };
 
