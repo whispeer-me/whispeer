@@ -34,6 +34,11 @@ $heading-font-size: 3em;
   margin: 0;
 }
 
+.error-message {
+  color: $error-color;
+  margin-top: 10px;
+}
+
 %button-style {
   background-color: $primary-color;
   color: white;

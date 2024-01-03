@@ -1,6 +1,10 @@
 <template>
   <div class="create-message-view">
     <h1>Create a New Message</h1>
+    <div v-if="errorMessage" class="error-message">
+      <p>{{ errorMessage }}</p>
+    </div>
+
     <form @submit.prevent="submitMessage">
       <textarea
         v-model="message.content"
