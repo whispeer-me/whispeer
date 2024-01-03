@@ -56,7 +56,21 @@ class Api {
   }
 
   error(error) {
-    throw error;
+    // Instead of throwing the raw error, we can format it or just pass the relevant parts
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      throw {
+        status: error.response.status,
+        message: error.response.data?.data?.message || "An error occurred",
+      };
+    } else if (error.request) {
+      // The request was made but no response was received
+      throw { message: "No response from server", error };
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      throw { message: error.message, error };
+    }
   }
 
   enableDebugForDevelopment() {

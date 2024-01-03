@@ -32,22 +32,31 @@ export default {
   },
   methods: {
     async getTheMessage() {
+      let message = null;
       try {
-        const message = await MessageService.getMessage(this.id);
-        console.log(message.content);
-        // TODO: Handle not found case
-        if (message.isPrivate) {
-          const passphrase = prompt("Enter the passphrase");
-          console.log("passphrase", passphrase);
-          this.message = await this.decryptMessage(message, passphrase);
-        } else {
-          this.message = message.content;
-        }
+        message = await MessageService.getMessage(this.id);
       } catch (error) {
-        console.error(error);
-        this.errorMessage = "Failed to load message. Please try again later.";
+        console.error("Error in getTheMessage:", error);
+        if (error.status === 404) {
+          let messageNotFoundOrExpired = "Message not found or has expired.";
+          this.errorMessage = error.message || messageNotFoundOrExpired;
+        } else {
+          this.errorMessage =
+            error.message || "Failed to load message. Please try again later.";
+        }
+        return;
+      }
+
+      if (message && message.isPrivate) {
+        const passphrase = prompt(
+          "Enter the passphrase to decrypt the message"
+        );
+        this.message = await this.decryptMessage(message, passphrase);
+      } else {
+        this.message = message.content;
       }
     },
+
     async decryptMessage(message, passphrase) {
       try {
         const decryptedMessage = await CryptoService.decrypt(

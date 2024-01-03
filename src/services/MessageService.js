@@ -4,7 +4,7 @@ export default {
   async getMessage(id) {
     try {
       const response = await Api.get(`/message/${id}`);
-      return response.data.data;
+      return response.data;
     } catch (error) {
       console.error("Error fetching message:", error);
       throw error;
