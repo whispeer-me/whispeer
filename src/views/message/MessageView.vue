@@ -35,6 +35,7 @@ export default {
       try {
         const message = (await MessageService.getMessage(this.id)).data;
         await this.handleMessageRetrieval(message);
+        this.logAnalytics(message);
       } catch (error) {
         this.handleError(error);
       }
@@ -95,6 +96,12 @@ export default {
           serverMessage || "Failed to load message. Please try again later.";
       }
     },
+  },
+
+  logAnalytics() {
+    this.$analytics.trackEvent("message-viewed", {
+      props: { isPrivate: this.message.isPrivate },
+    });
   },
 };
 </script>
