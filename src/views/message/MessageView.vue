@@ -1,7 +1,9 @@
 <template>
   <div class="message">
     <ChiperDisplay v-if="message" :message="message" />
-    <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+    <p v-if="!message && errorMessage" class="error-message">
+      {{ errorMessage }}
+    </p>
   </div>
 </template>
 
@@ -32,6 +34,8 @@ export default {
   },
   methods: {
     async getTheMessage() {
+      this.errorMessage = null;
+      this.message = null;
       try {
         const message = (await MessageService.getMessage(this.id)).data;
         await this.handleMessageRetrieval(message);
