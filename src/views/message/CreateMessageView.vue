@@ -66,34 +66,21 @@ export default {
       let newMessage;
 
       try {
-        newMessage = this.prepareMessage();
+        newMessage = this.prepareAndMaybeEncryptTheMessage();
       } catch (error) {
-        console.error("Error during message encryption:", error);
-        this.errorMessage = "Encryption failed. Please check your input.";
+        this.handleError(error, "Error during message encryption:");
         return;
       }
 
       try {
         const result = await MessageService.createMessage(newMessage);
-        if (result.id) {
-          this.messageLink = `${window.location.origin}/m/${result.id}`;
-          this.resetForm();
-          this.logAnalytics();
-        }
+        this.handleSuccessfulSubmission(result);
       } catch (error) {
-        console.error("Error submitting message to the server:", error);
-        this.errorMessage = "Failed to send message. Please try again.";
-        return;
+        this.handleError(error, "Error submitting message to the server:");
       }
     },
 
-    logAnalytics() {
-      this.$analytics.trackEvent("message-created", {
-        props: { isPrivate: this.message.isPrivate },
-      });
-    },
-
-    prepareMessage() {
+    prepareAndMaybeEncryptTheMessage() {
       const newMessage = {
         content: this.message.content,
         isPrivate: this.message.isPrivate,
@@ -114,7 +101,22 @@ export default {
       return newMessage;
     },
 
+    handleSuccessfulSubmission(result) {
+      if (result.id) {
+        this.messageLink = `${window.location.origin}/m/${result.id}`;
+        this.resetForm();
+        this.logAnalytics();
+      }
+    },
+
+    handleError(error, consoleMessage) {
+      console.error(consoleMessage, error);
+      this.errorMessage =
+        error.response?.data?.data?.message || "An unexpected error occurred.";
+    },
+
     resetForm() {
+      this.errorMessage = null;
       this.message.content = "";
       this.message.isPrivate = false;
       this.message.passphrase = "";
@@ -122,6 +124,12 @@ export default {
 
     handleToggleChange(newValue) {
       this.message.isPrivate = newValue;
+    },
+
+    logAnalytics() {
+      this.$analytics.trackEvent("message-created", {
+        props: { isPrivate: this.message.isPrivate },
+      });
     },
   },
 };
