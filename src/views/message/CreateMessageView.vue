@@ -33,15 +33,23 @@
       <div class="submit-button">
         <button type="submit">Send Message</button>
       </div>
+
+      <div v-if="messageLink" class="message-link">
+        <p>Share this link with your friends:</p>
+        <p>{{ messageLink }}</p>
+      </div>
     </form>
   </div>
 </template>
 
 <script>
 import ToggleSwitch from "@/components/common/ToggleSwitch.vue";
+import CryptoService from "@/services/CryptoService";
+import MessageService from "@/services/MessageService";
 
 export default {
   name: "CreateMessageView",
+  components: { ToggleSwitch },
   data() {
     return {
       message: {
@@ -49,20 +57,57 @@ export default {
         isPrivate: false,
         passphrase: "",
       },
+      messageLink: null,
+      errorMessage: null,
     };
-  },
-  components: {
-    ToggleSwitch,
   },
   methods: {
     async submitMessage() {
       this.$analytics.trackEvent("message-created", {
-        props: {
-          isPrivate: this.message.isPrivate,
-        },
+        props: { isPrivate: this.message.isPrivate },
       });
-      console.log("Message submitted:", this.message);
+
+      try {
+        const newMessage = this.prepareMessage();
+        const result = await MessageService.createMessage(newMessage);
+
+        if (result.id) {
+          this.messageLink = `${window.location.origin}/message/${result.id}`;
+          this.resetForm();
+        }
+      } catch (error) {
+        this.errorMessage = "Failed to send message. Please try again.";
+        console.error("Error submitting message:", error);
+      }
     },
+
+    prepareMessage() {
+      const newMessage = {
+        content: this.message.content,
+        isPrivate: this.message.isPrivate,
+      };
+
+      if (this.message.isPrivate && this.message.passphrase) {
+        const encryptedMessage = CryptoService.encrypt(
+          this.message.content,
+          this.message.passphrase
+        );
+        Object.assign(newMessage, {
+          content: encryptedMessage.ciphertext,
+          iv: encryptedMessage.iv,
+          salt: encryptedMessage.salt,
+        });
+      }
+
+      return newMessage;
+    },
+
+    resetForm() {
+      this.message.content = "";
+      this.message.isPrivate = false;
+      this.message.passphrase = "";
+    },
+
     handleToggleChange(newValue) {
       this.message.isPrivate = newValue;
     },
