@@ -32,43 +32,67 @@ export default {
   },
   methods: {
     async getTheMessage() {
-      let message = null;
       try {
-        message = await MessageService.getMessage(this.id);
+        const message = await MessageService.getMessage(this.id);
+        await this.handleMessageRetrieval(message);
       } catch (error) {
-        console.error("Error in getTheMessage:", error);
-        if (error.status === 404) {
-          let messageNotFoundOrExpired = "Message not found or has expired.";
-          this.errorMessage = error.message || messageNotFoundOrExpired;
-        } else {
-          this.errorMessage =
-            error.message || "Failed to load message. Please try again later.";
-        }
+        this.handleError(error);
+      }
+    },
+
+    async handleMessageRetrieval(message) {
+      if (!message) {
+        this.errorMessage = "No message data received.";
         return;
       }
 
-      if (message && message.isPrivate) {
+      if (message.isPrivate) {
         const passphrase = prompt(
           "Enter the passphrase to decrypt the message"
         );
-        this.message = await this.decryptMessage(message, passphrase);
+        if (passphrase) {
+          await this.decryptMessage(message, passphrase);
+        } else {
+          this.errorMessage = "Passphrase is required for decryption.";
+        }
       } else {
         this.message = message.content;
       }
     },
 
     async decryptMessage(message, passphrase) {
+      if (!message.content) {
+        this.errorMessage = "No message content available for decryption.";
+        return;
+      }
+
       try {
-        const decryptedMessage = await CryptoService.decrypt(
+        this.message = await CryptoService.decrypt(
           message.content,
           passphrase,
           message.salt,
           message.iv
         );
-        return decryptedMessage;
       } catch (error) {
-        console.error(error);
+        console.error("Decryption error:", error);
         this.errorMessage = "Decryption failed. Please check the passphrase.";
+      }
+    },
+
+    handleError(error) {
+      console.error("Error:", error);
+
+      const serverMessage =
+        error.response &&
+        error.response.data &&
+        error.response.data.data.message;
+
+      if (error.response && error.response.status === 404) {
+        this.errorMessage =
+          serverMessage || "Message not found or has expired.";
+      } else {
+        this.errorMessage =
+          serverMessage || "Failed to load message. Please try again later.";
       }
     },
   },
