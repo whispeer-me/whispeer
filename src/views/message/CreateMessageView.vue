@@ -63,22 +63,34 @@ export default {
   },
   methods: {
     async submitMessage() {
+      let newMessage;
+
+      try {
+        newMessage = this.prepareMessage();
+      } catch (error) {
+        console.error("Error during message encryption:", error);
+        this.errorMessage = "Encryption failed. Please check your input.";
+        return;
+      }
+
+      try {
+        const result = await MessageService.createMessage(newMessage);
+        if (result.id) {
+          this.messageLink = `${window.location.origin}/m/${result.id}`;
+          this.resetForm();
+          this.logAnalytics();
+        }
+      } catch (error) {
+        console.error("Error submitting message to the server:", error);
+        this.errorMessage = "Failed to send message. Please try again.";
+        return;
+      }
+    },
+
+    logAnalytics() {
       this.$analytics.trackEvent("message-created", {
         props: { isPrivate: this.message.isPrivate },
       });
-
-      try {
-        const newMessage = this.prepareMessage();
-        const result = await MessageService.createMessage(newMessage);
-
-        if (result.id) {
-          this.messageLink = `${window.location.origin}/message/${result.id}`;
-          this.resetForm();
-        }
-      } catch (error) {
-        this.errorMessage = "Failed to send message. Please try again.";
-        console.error("Error submitting message:", error);
-      }
     },
 
     prepareMessage() {
