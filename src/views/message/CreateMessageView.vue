@@ -1,6 +1,10 @@
 <template>
   <div class="create-message-view">
     <h1>Create a New Message</h1>
+    <div v-if="errorMessage" class="error-message">
+      <p>{{ errorMessage }}</p>
+    </div>
+
     <form @submit.prevent="submitMessage">
       <textarea
         v-model="message.content"
@@ -29,15 +33,35 @@
       <div class="submit-button">
         <button type="submit">Send Message</button>
       </div>
+
+      <div v-if="messageLink" class="message-link">
+        <p>Share this link with your friends:</p>
+        <p
+          title="Click to copy link"
+          class="copyable-link"
+          @click="copyLinkToClipboard"
+        >
+          {{ messageLink }}
+        </p>
+        <p v-if="messageCopiedToClipboard" class="link-copied">
+          Copied to clipboard!
+        </p>
+        <p v-if="messageCopiedToClipboardFailed" class="link-copied-error">
+          Can NOT copied to clipboard!
+        </p>
+      </div>
     </form>
   </div>
 </template>
 
 <script>
 import ToggleSwitch from "@/components/common/ToggleSwitch.vue";
+import CryptoService from "@/services/CryptoService";
+import MessageService from "@/services/MessageService";
 
 export default {
   name: "CreateMessageView",
+  components: { ToggleSwitch },
   data() {
     return {
       message: {
@@ -45,22 +69,103 @@ export default {
         isPrivate: false,
         passphrase: "",
       },
+      messageLink: null,
+      errorMessage: null,
+      messageCopiedToClipboard: false,
+      messageCopiedToClipboardFailed: false,
     };
-  },
-  components: {
-    ToggleSwitch,
   },
   methods: {
     async submitMessage() {
-      this.$analytics.trackEvent("message-created", {
-        props: {
-          isPrivate: this.message.isPrivate,
-        },
-      });
-      console.log("Message submitted:", this.message);
+      let newMessage;
+
+      try {
+        newMessage = this.prepareAndMaybeEncryptTheMessage();
+      } catch (error) {
+        this.handleError(error, "Error during message encryption:");
+        return;
+      }
+
+      try {
+        const newlyCreatedMessage = await MessageService.createMessage(
+          newMessage
+        );
+        this.handleSuccessfulSubmission(newlyCreatedMessage);
+      } catch (error) {
+        this.handleError(error, "Error submitting message to the server:");
+      }
     },
+
+    prepareAndMaybeEncryptTheMessage() {
+      let newMessage = {
+        content: this.message.content,
+        isPrivate: this.message.isPrivate,
+      };
+
+      if (this.message.isPrivate && this.message.passphrase) {
+        const encryptedMessage = CryptoService.encrypt(
+          this.message.content,
+          this.message.passphrase
+        );
+
+        newMessage.content = encryptedMessage.ciphertext;
+        newMessage.iv = encryptedMessage.iv;
+        newMessage.salt = encryptedMessage.salt;
+      }
+
+      return newMessage;
+    },
+
+    handleSuccessfulSubmission(newlyCreatedMessage) {
+      if (newlyCreatedMessage.id) {
+        this.messageLink = `${window.location.origin}/m/${newlyCreatedMessage.id}`;
+        this.resetForm();
+        this.logAnalytics();
+      }
+    },
+
+    handleError(error, consoleMessage) {
+      console.error(consoleMessage, error);
+      this.errorMessage =
+        error.response?.data?.data?.message || "An unexpected error occurred.";
+    },
+
+    resetForm() {
+      this.errorMessage = null;
+      this.message.content = "";
+      this.message.isPrivate = false;
+      this.message.passphrase = "";
+    },
+
     handleToggleChange(newValue) {
       this.message.isPrivate = newValue;
+    },
+
+    logAnalytics() {
+      this.$analytics.trackEvent("message-created", {
+        props: { isPrivate: this.message.isPrivate },
+      });
+    },
+
+    copyLinkToClipboard() {
+      if (!navigator.clipboard) {
+        return;
+      }
+
+      navigator.clipboard
+        .writeText(this.messageLink)
+        .then(() => {
+          this.messageCopiedToClipboard = true;
+          this.messageCopiedToClipboardFailed = false;
+
+          setTimeout(() => {
+            this.messageCopiedToClipboard = false;
+          }, 3000);
+        })
+        .catch(() => {
+          this.messageCopiedToClipboard = true;
+          this.messageCopiedToClipboardFailed = true;
+        });
     },
   },
 };
@@ -121,6 +226,24 @@ $input-padding: 10px;
 
   button {
     @extend %button-style;
+  }
+
+  .message-link {
+    color: $secondary-color;
+    margin-top: 20px;
+
+    .copyable-link {
+      color: $primary-color;
+      cursor: pointer;
+    }
+
+    .link-copied {
+      color: $success-color;
+    }
+
+    .link-copied-error {
+      color: $error-color;
+    }
   }
 }
 </style>

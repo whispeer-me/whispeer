@@ -28,12 +28,12 @@ const routes = [
     component: PrivacyPolicyView,
   },
   {
-    path: "/new",
-    name: "new",
+    path: "/m/new",
+    name: "new-message",
     component: CreateMessageView,
   },
   {
-    path: "/:id",
+    path: "/m/:id",
     name: "message",
     component: MessageView,
     props: true,
