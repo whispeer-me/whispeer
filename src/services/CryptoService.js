@@ -1,4 +1,4 @@
-import CryptoJS from 'crypto-js';
+import CryptoJS from "crypto-js";
 
 export default class CryptoService {
   static encrypt(message, passphrase) {
@@ -35,7 +35,7 @@ export default class CryptoService {
     });
 
     const originalText = decrypted.toString(CryptoJS.enc.Utf8);
-    if (!originalText) throw new Error('Incorrect passphrase');
+    if (!originalText) throw new Error("Incorrect passphrase");
     return originalText;
   }
 }
