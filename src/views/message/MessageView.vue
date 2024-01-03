@@ -33,7 +33,7 @@ export default {
   methods: {
     async getTheMessage() {
       try {
-        const message = await MessageService.getMessage(this.id);
+        const message = (await MessageService.getMessage(this.id)).data;
         await this.handleMessageRetrieval(message);
       } catch (error) {
         this.handleError(error);
