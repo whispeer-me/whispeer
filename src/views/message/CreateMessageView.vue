@@ -36,7 +36,19 @@
 
       <div v-if="messageLink" class="message-link">
         <p>Share this link with your friends:</p>
-        <p>{{ messageLink }}</p>
+        <p
+          title="Click to copy link"
+          class="copyable-link"
+          @click="copyLinkToClipboard"
+        >
+          {{ messageLink }}
+        </p>
+        <p v-if="messageCopiedToClipboard" class="link-copied">
+          Copied to clipboard!
+        </p>
+        <p v-if="messageCopiedToClipboardFailed" class="link-copied-error">
+          Can NOT copied to clipboard!
+        </p>
       </div>
     </form>
   </div>
@@ -59,6 +71,8 @@ export default {
       },
       messageLink: null,
       errorMessage: null,
+      messageCopiedToClipboard: false,
+      messageCopiedToClipboardFailed: false,
     };
   },
   methods: {
@@ -73,15 +87,17 @@ export default {
       }
 
       try {
-        const result = await MessageService.createMessage(newMessage);
-        this.handleSuccessfulSubmission(result);
+        const newlyCreatedMessage = await MessageService.createMessage(
+          newMessage
+        );
+        this.handleSuccessfulSubmission(newlyCreatedMessage);
       } catch (error) {
         this.handleError(error, "Error submitting message to the server:");
       }
     },
 
     prepareAndMaybeEncryptTheMessage() {
-      const newMessage = {
+      let newMessage = {
         content: this.message.content,
         isPrivate: this.message.isPrivate,
       };
@@ -91,19 +107,18 @@ export default {
           this.message.content,
           this.message.passphrase
         );
-        Object.assign(newMessage, {
-          content: encryptedMessage.ciphertext,
-          iv: encryptedMessage.iv,
-          salt: encryptedMessage.salt,
-        });
+
+        newMessage.content = encryptedMessage.ciphertext;
+        newMessage.iv = encryptedMessage.iv;
+        newMessage.salt = encryptedMessage.salt;
       }
 
       return newMessage;
     },
 
-    handleSuccessfulSubmission(result) {
-      if (result.id) {
-        this.messageLink = `${window.location.origin}/m/${result.id}`;
+    handleSuccessfulSubmission(newlyCreatedMessage) {
+      if (newlyCreatedMessage.id) {
+        this.messageLink = `${window.location.origin}/m/${newlyCreatedMessage.id}`;
         this.resetForm();
         this.logAnalytics();
       }
@@ -130,6 +145,27 @@ export default {
       this.$analytics.trackEvent("message-created", {
         props: { isPrivate: this.message.isPrivate },
       });
+    },
+
+    copyLinkToClipboard() {
+      if (!navigator.clipboard) {
+        return;
+      }
+
+      navigator.clipboard
+        .writeText(this.messageLink)
+        .then(() => {
+          this.messageCopiedToClipboard = true;
+          this.messageCopiedToClipboardFailed = false;
+
+          setTimeout(() => {
+            this.messageCopiedToClipboard = false;
+          }, 3000);
+        })
+        .catch(() => {
+          this.messageCopiedToClipboard = true;
+          this.messageCopiedToClipboardFailed = true;
+        });
     },
   },
 };
@@ -190,6 +226,24 @@ $input-padding: 10px;
 
   button {
     @extend %button-style;
+  }
+
+  .message-link {
+    color: $secondary-color;
+    margin-top: 20px;
+
+    .copyable-link {
+      color: $primary-color;
+      cursor: pointer;
+    }
+
+    .link-copied {
+      color: $success-color;
+    }
+
+    .link-copied-error {
+      color: $error-color;
+    }
   }
 }
 </style>
