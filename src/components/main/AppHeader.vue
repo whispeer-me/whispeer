@@ -28,6 +28,8 @@ export default Vue.extend({
   z-index: 1000;
   height: $header-height;
   overflow: scroll;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .main-nav {
