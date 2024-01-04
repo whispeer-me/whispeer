@@ -64,6 +64,16 @@ a {
   }
 }
 
+.loading-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #c4872b;
+  text-align: center;
+  font-family: "LCD-Solid";
+}
+
 // Components
 
 $color-on: $primary-color;
