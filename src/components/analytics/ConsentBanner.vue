@@ -78,7 +78,6 @@ export default {
 $font-size: 12px;
 
 .analytics-consent-banner {
-  @extend %lcd-font;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -86,12 +85,13 @@ $font-size: 12px;
   background-color: $primary-color;
   color: $secondary-color;
   text-align: center;
-  padding: 16px;
   z-index: 1000;
   font-size: $font-size;
+  padding-bottom: 16px;
 
   p {
     line-height: 1.5;
+    padding: 16px;
   }
 
   .consent-button {
