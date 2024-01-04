@@ -1,14 +1,16 @@
 <template>
   <div class="message">
-    <ChiperDisplay v-if="message" :message="message" />
+    <LoadingIndicator :isLoading="isLoading" />
     <p v-if="!message && errorMessage" class="error-message">
       {{ errorMessage }}
     </p>
+    <ChiperDisplay v-if="message" :message="message" />
   </div>
 </template>
 
 <script>
 import ChiperDisplay from "@/components/message/ChiperDisplay.vue";
+import LoadingIndicator from "@/components/common/LoadingIndicator.vue";
 import MessageService from "@/services/MessageService";
 import CryptoService from "@/services/CryptoService";
 
@@ -16,6 +18,7 @@ export default {
   name: "MessageView",
   components: {
     ChiperDisplay,
+    LoadingIndicator,
   },
   props: {
     id: {
@@ -27,6 +30,7 @@ export default {
     return {
       message: null,
       errorMessage: null,
+      isLoading: true,
     };
   },
   async mounted() {
@@ -34,6 +38,7 @@ export default {
   },
   methods: {
     async getTheMessage() {
+      this.isLoading = true;
       this.errorMessage = null;
       this.message = null;
       try {
@@ -42,6 +47,8 @@ export default {
         this.logAnalytics(message);
       } catch (error) {
         this.handleError(error);
+      } finally {
+        this.isLoading = false;
       }
     },
 

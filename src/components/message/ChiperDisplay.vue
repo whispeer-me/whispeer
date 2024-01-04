@@ -10,7 +10,6 @@
       {{ char.char }}
     </span>
   </div>
-  <div v-else class="loading-indicator">{{ loadingText }}</div>
 </template>
 
 <script>
@@ -29,7 +28,6 @@ export default {
       randomLocation: 0,
       startMatching: false,
       isBoardReady: false,
-      loadingText: "L o a d i n g . . .",
     };
   },
   beforeDestroy() {
@@ -151,16 +149,6 @@ export default {
 </script>
 
 <style scoped>
-.loading-indicator {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #c4872b;
-  text-align: center;
-  font-family: "LCD-Solid";
-}
-
 #board {
   background-color: #000;
   width: 100%;
