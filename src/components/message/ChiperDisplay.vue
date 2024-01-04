@@ -6,9 +6,8 @@
       :class="char.class"
       :key="index"
       :ref="index"
+      >{{ char.char }}</span
     >
-      {{ char.char }}
-    </span>
   </div>
 </template>
 
@@ -148,7 +147,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 #board {
   background-color: #000;
   width: 100%;
@@ -160,10 +159,14 @@ export default {
   opacity: 0.3 !important;
 }
 
+$char-size: "36px";
+
 .char {
+  display: inline-block;
+  font-size: $char-size;
+  width: $char-size;
+  height: $char-size;
   margin: 10px;
-  float: left;
-  font-size: 36px;
   font-family: "LCD-Solid";
   color: #c4872b;
 }

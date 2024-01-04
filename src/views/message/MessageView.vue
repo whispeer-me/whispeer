@@ -4,7 +4,7 @@
     <p v-if="!message && errorMessage" class="error-message">
       {{ errorMessage }}
     </p>
-    <ChiperDisplay v-if="message" :message="message" />
+    <ChiperDisplay v-if="message" :message="message" class="chiper-display" />
   </div>
 </template>
 
@@ -119,4 +119,9 @@ export default {
 
 <style scoped lang="scss">
 @import "@/assets/scss/app.scss";
+
+.chiper-display {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
 </style>
