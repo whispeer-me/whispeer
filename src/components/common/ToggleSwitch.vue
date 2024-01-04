@@ -44,6 +44,7 @@ export default {
 
   span {
     margin-right: 10px;
+    color: $primary-color;
   }
 
   .switch {

@@ -30,6 +30,18 @@
         />
       </div>
 
+      <div class="security-disclaimer">
+        <p>
+          Please note that while Whispeer provides enhanced encryption for
+          messaging, <br />
+          <b
+            >it has not been audited by experts, and it is not made by security
+            experts. </b
+          ><br />
+          It should not be solely relied upon for complete privacy or anonymity.
+        </p>
+      </div>
+
       <div class="submit-button">
         <button type="submit">Send Message</button>
       </div>
@@ -226,6 +238,12 @@ $input-padding: 10px;
 
   button {
     @extend %button-style;
+  }
+
+  .security-disclaimer {
+    color: $secondary-color;
+    margin: 16px;
+    line-height: 1.5;
   }
 
   .message-link {
