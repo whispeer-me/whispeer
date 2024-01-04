@@ -34,7 +34,7 @@ $footer-height: 130px;
 
 .content {
   padding: 20px;
-  height: calc(100vh - $footer-height);
+  height: calc(100vh + $footer-height);
   padding-bottom: 10px;
 }
 
