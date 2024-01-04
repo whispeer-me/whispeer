@@ -1,16 +1,14 @@
 <template>
   <div id="board" v-if="isBoardReady">
-    <div v-for="(row, r) in rows" :key="r">
-      <span
-        class="char"
-        v-for="(cell, c) in cols"
-        :key="createId(r, c)"
-        :class="matrix[r][c].class"
-        :ref="getCellRef(r, c)"
-      >
-        {{ matrix[r][c].char }}
-      </span>
-    </div>
+    <span
+      class="char"
+      v-for="(char, index) in characters"
+      :class="char.class"
+      :key="index"
+      :ref="index"
+    >
+      {{ char.char }}
+    </span>
   </div>
   <div v-else class="loading-indicator">{{ loadingText }}</div>
 </template>
@@ -25,38 +23,17 @@ export default {
   },
   data() {
     return {
-      matrix: [],
-      startMatching: false,
+      characters: [],
       asciiStart: 33,
       asciiEnd: 126,
-      randomRow: 0,
-      randomCol: 0,
+      randomLocation: 0,
+      startMatching: false,
       isBoardReady: false,
       loadingText: "L o a d i n g . . .",
     };
   },
   beforeDestroy() {
     this.destroyRandomizer();
-  },
-  computed: {
-    screenWidth() {
-      return window.innerWidth;
-    },
-    screenHeight() {
-      return window.innerHeight;
-    },
-    charWidth() {
-      return 36;
-    },
-    charHeight() {
-      return 36;
-    },
-    rows() {
-      return Math.floor(this.screenHeight / this.charHeight);
-    },
-    cols() {
-      return Math.floor(this.screenWidth / this.charWidth);
-    },
   },
   mounted() {
     // Interval in milliseconds between each randomization
@@ -76,9 +53,7 @@ export default {
   },
   methods: {
     randomize() {
-      this.matrix = this.createMatrixWithRandomChars();
-      this.randomRow = this.getRandomInt(0, this.rows);
-      this.randomCol = this.getRandomInt(0, this.cols);
+      this.characters = this.createRandomChars();
       this.isBoardReady = true;
     },
     stopRandomization() {
@@ -110,97 +85,59 @@ export default {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     },
 
-    createMatrixWithRandomChars() {
-      const matrix = [];
-      for (let r = 0; r < this.rows; r++) {
-        matrix[r] = [];
-        for (let c = 0; c < this.cols; c++) {
-          const char = this.getRandomChar();
-          matrix[r][c] = {
-            char,
-            class: "",
-            matched: false,
-          };
-        }
+    createRandomChars() {
+      const chars = [];
+      for (let r = 0; r < 1000; r++) {
+        chars.push({
+          char: this.getRandomChar(),
+          class: "",
+          matched: false,
+        });
       }
-      return matrix;
-    },
 
-    getCellRef(row, col) {
-      // Use a unique identifier for each cell that can be used as a ref to scroll later (after animation stop)
-      // Due to random position the message can be out of the screen.
-      const id = this.createId(row, col);
-      return `cell-${id}`;
-    },
-
-    createId(row, col) {
-      return `${row}-${col}`;
+      return chars;
     },
 
     display() {
-      // Since the `getRandomInt` will return the last number exclusive and positive (0)
-      // We don't need to substrct 1 from the rows and cols
-      // However, to avoid confusion, I rename the variables to `endRowIndex` and `endColIndex`
-      let startRowIndex = this.randomRow;
-      let startColIndex = this.randomCol;
+      // Put the message in a random location as a char
+      // Somewhere in the middle
+      let startLocation = this.characters.length / 2;
 
-      // Estimate the rows count needed to display the message
-      let linesCount = Math.ceil(this.message.length / this.cols);
-      let endRowIndex = startRowIndex + linesCount;
+      // To avoid out of boundry
+      const endLocation = this.characters.length - 1 - this.message.length;
+      this.randomLocation = this.getRandomInt(startLocation, endLocation);
 
-      // Ensure we're still in the bounds of the matrix
-      if (endRowIndex > this.rows) {
-        startRowIndex = startRowIndex - linesCount;
-        endRowIndex = startRowIndex - linesCount;
-      }
+      let charIndex = 0;
+      for (let i = 0; i < this.characters.length; i++) {
+        const char = this.characters[i];
 
-      let currentRowIndex = startRowIndex;
-      let currentColIndex = startColIndex;
-
-      for (
-        let messageCharIndex = 0;
-        messageCharIndex < this.message.length;
-        messageCharIndex++
-      ) {
-        const char = this.message[messageCharIndex];
-
-        // If the current col is the last col in the matrix, move to the next row
-        if (currentColIndex === this.matrix[currentRowIndex].length) {
-          // Next row
-          currentRowIndex++;
-
-          // Reset the colon index
-          currentColIndex = 0;
+        // Check if I'm in the randomLocation's boundry
+        if (
+          i >= this.randomLocation &&
+          i < this.randomLocation + this.message.length
+        ) {
+          char.matched = true;
+          char.class = "matched";
+          char.char = this.message[charIndex];
+          charIndex++;
+        } else {
+          char.class = "unmatched";
+          char.matched = false;
         }
-
-        this.matrix[currentRowIndex][currentColIndex] = {
-          char,
-          class: "matched",
-          matched: true,
-        };
-
-        currentColIndex++;
       }
       this.scrollToMessage();
-      this.unmatchOthers();
     },
-    unmatchOthers() {
-      for (let r = 0; r < this.rows; r++) {
-        for (let c = 0; c < this.cols; c++) {
-          if (this.matrix[r][c].matched) {
-            continue;
-          }
 
-          this.matrix[r][c].class = "unmatched";
-        }
-      }
-    },
     scrollToMessage() {
       this.$nextTick(() => {
-        const refName = this.getCellRef(this.randomRow, this.randomCol);
+        const refName = this.randomLocation;
         const messageStartElement = this.$refs[refName];
 
-        if (messageStartElement && messageStartElement[0]) {
+        if (
+          messageStartElement &&
+          messageStartElement.length > 0 &&
+          messageStartElement[0]
+        ) {
           messageStartElement[0].scrollIntoView({
             behavior: "smooth",
             block: "center",
