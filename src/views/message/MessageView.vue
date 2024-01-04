@@ -100,12 +100,12 @@ export default {
           serverMessage || "Failed to load message. Please try again later.";
       }
     },
-  },
 
-  logAnalytics() {
-    this.$analytics.trackEvent("message-viewed", {
-      props: { isPrivate: this.message.isPrivate },
-    });
+    logAnalytics() {
+      this.$analytics.trackEvent("message-viewed", {
+        props: { isPrivate: this.message.isPrivate },
+      });
+    },
   },
 };
 </script>
