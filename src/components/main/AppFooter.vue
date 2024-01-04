@@ -39,15 +39,15 @@ export default Vue.extend({
 .app-footer {
   background-color: rgba(0, 0, 0, 0.7);
   color: $primary-color;
-  padding: 20px;
+  padding: 10px;
   text-align: center;
   position: fixed;
   bottom: 0;
-  left: 0;
   width: 100%;
+  z-index: 1000;
 
   .footer-text {
-    margin-top: 10px;
+    margin: 10px;
   }
 
   .footer-link {

@@ -23,16 +23,24 @@ $input-padding: 10px;
 $text-font-size: 1.4em;
 $heading-font-size: 3em;
 
+// Navigation
+$header-height: 60px;
+$footer-height: 130px;
+
 // Common Styles
 %lcd-font {
   font-family: "LCD-Solid", sans-serif;
 }
 
-%divider {
-  border: none;
-  height: 2px;
-  background-color: $divider-color;
-  margin: 0;
+.content {
+  padding: 20px;
+  height: calc(100vh - $footer-height);
+  padding-bottom: 10px;
+}
+
+body {
+  background-color: $background-color;
+  @extend %lcd-font;
 }
 
 .error-message {

@@ -159,7 +159,7 @@ export default {
   opacity: 0.3 !important;
 }
 
-$char-size: "36px";
+$char-size: 36px;
 
 .char {
   display: inline-block;
