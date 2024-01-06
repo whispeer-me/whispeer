@@ -28,6 +28,25 @@
   </div>
 </template>
 
+<script>
+export default {
+  name: "TheStory",
+  metaInfo() {
+    return {
+      title: "The Story - Whispeer",
+      meta: [
+        {
+          vmid: "description",
+          name: "description",
+          content:
+            "Whispeer: A unique app combining secure messaging with artistic animations inspired by the Traveler TV series.",
+        },
+      ],
+    };
+  },
+};
+</script>
+
 <style scoped lang="scss">
 @import "@/assets/scss/app.scss";
 
