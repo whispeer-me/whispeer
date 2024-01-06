@@ -6,7 +6,9 @@
       Create and share secure, encrypted messages that auto-expires in 24 hours.
     </p>
 
-    <button class="cta-button">Create a secure message</button>
+    <button class="cta-button" @click="redirectToCreateMessagePage">
+      Create a secure message
+    </button>
 
     <div class="statistics">
       <h2 class="stats-title">Messages</h2>
@@ -51,6 +53,10 @@ export default {
       if (num < 1000) return num.toString();
       if (num < 1000000) return (num / 1000).toFixed(1) + "K";
       return (num / 1000000).toFixed(1) + "M";
+    },
+
+    redirectToCreateMessagePage() {
+      this.$router.push({ name: "new-message" });
     },
   },
 };
