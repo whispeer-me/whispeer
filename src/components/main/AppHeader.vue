@@ -2,8 +2,7 @@
   <div class="header">
     <nav class="main-nav">
       <router-link to="/" class="nav-link">Home</router-link>
-      <router-link to="/about" class="nav-link">About</router-link>
-      <router-link to="/m/new" class="nav-link">Message</router-link>
+      <router-link to="/the-story" class="nav-link">The Story</router-link>
       <router-link to="/code" class="nav-link">Code</router-link>
       <router-link to="/contact" class="nav-link">Contact</router-link>
     </nav>
