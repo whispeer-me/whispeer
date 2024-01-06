@@ -16,6 +16,39 @@ import CryptoService from "@/services/CryptoService";
 
 export default {
   name: "MessageView",
+  metaInfo() {
+    return {
+      title: "Whispeer - Private Message",
+      meta: [
+        {
+          vmid: "og:description",
+          property: "og:description",
+          content:
+            "Someone has sent you a private message on Whispeer and it will expire in 24 hours.",
+        },
+        {
+          vmid: "og:title",
+          property: "og:title",
+          content: "Whispeer - Private Message",
+        },
+        {
+          vmid: "og:image",
+          property: "og:image",
+          content: this.fullImageUrl,
+        },
+        {
+          vmid: "og:type",
+          property: "og:type",
+          content: "website",
+        },
+        {
+          vmid: "twitter:card",
+          name: "twitter:card",
+          content: "summary_large_image",
+        },
+      ],
+    };
+  },
   components: {
     ChiperDisplay,
     LoadingIndicator,
@@ -32,6 +65,11 @@ export default {
       errorMessage: null,
       isLoading: true,
     };
+  },
+  computed: {
+    fullImageUrl() {
+      return window.location.origin + "/whispeer-me-og-image.png";
+    },
   },
   async mounted() {
     await this.getTheMessage();
