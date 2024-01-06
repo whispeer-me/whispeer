@@ -7,7 +7,7 @@
     </p>
 
     <button class="cta-button" @click="redirectToCreateMessagePage">
-      Create a secure message
+      {{ ctaButtonTitle }}
     </button>
 
     <div class="statistics">
@@ -33,6 +33,7 @@ export default {
     return {
       totalMessages: 0,
       messagesExpiring: 0,
+      ctaButtonTitle: "Create a secure message",
     };
   },
   created() {
@@ -56,7 +57,7 @@ export default {
     },
 
     redirectToCreateMessagePage() {
-      this.$router.push({ name: "new-message" });
+      this.$router.push({ name: "new-message", query: { ref: "cta" } });
     },
   },
 };
