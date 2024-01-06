@@ -14,6 +14,7 @@
 
   <div v-else class="consent-toggle">
     <ToggleSwitch
+      v-if="showOptInOptOutFeature"
       title="Analytics Tracking"
       :value="consentGiven"
       @change="toggleConsent"
@@ -34,6 +35,7 @@ export default {
     return {
       show: false,
       consentGiven: false,
+      showOptInOptOutFeature: false,
     };
   },
   mounted() {
