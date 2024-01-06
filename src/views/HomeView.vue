@@ -29,6 +29,23 @@
 <script>
 export default {
   name: "HomeView",
+  metaInfo: {
+    title: "Whispeer - Secure, Private Messaging",
+    meta: [
+      {
+        vmid: "description",
+        name: "description",
+        content:
+          "Whispeer offers a secure way to create and share encrypted messages that auto-expire in 24 hours, ensuring your privacy and data security.",
+      },
+      {
+        vmid: "keywords",
+        name: "keywords",
+        content:
+          "secure messaging, private communication, encrypted messaging, message encryption, auto-expiring messages, data security, privacy, anonymous messaging",
+      },
+    ],
+  },
   data() {
     return {
       totalMessages: 0,
