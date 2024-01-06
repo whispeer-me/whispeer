@@ -43,7 +43,7 @@
       </div>
 
       <div class="submit-button">
-        <button type="submit">Send Message</button>
+        <button type="submit">Create Message</button>
       </div>
 
       <div v-if="messageLink" class="message-link">
