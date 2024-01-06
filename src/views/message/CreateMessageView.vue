@@ -273,6 +273,7 @@ $input-padding: 10px;
   }
 
   .security-disclaimer {
+    font-family: $secondary-font;
     color: $secondary-color;
     margin: 16px;
     line-height: 1.5;

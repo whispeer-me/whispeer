@@ -76,6 +76,7 @@ export default {
     line-height: 1.6;
     font-size: $text-font-size;
     color: $secondary-color;
+    font-family: $secondary-font;
   }
 
   .cta-button {
