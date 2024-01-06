@@ -18,6 +18,17 @@
 
 <script>
 export default {
+  metaInfo: {
+    title: "Code - Whispeer",
+    meta: [
+      {
+        vmid: "description",
+        name: "description",
+        content:
+          "Dive into the coding world of Whispeer. Explore our open-source code, understand our tech stack, and contribute to the project.",
+      },
+    ],
+  },
   data() {
     return {
       repositories: [
