@@ -3,20 +3,24 @@
     <h1>Welcome to Whispeer</h1>
 
     <p class="intro">
-      Whispeer is an innovative platform that allows you to create and share
-      encrypted messages securely. Whether you're sharing sensitive information
-      or just having a private conversation, Whispeer ensures your communication
-      remains confidential and secure.
+      Create and share secure, encrypted messages that auto-expires in 24 hours.
     </p>
 
+    <button class="cta-button" @click="redirectToCreateMessagePage">
+      {{ ctaButtonTitle }}
+    </button>
+
     <div class="statistics">
-      <div class="stat-item">
-        <h2 :key="totalMessages">{{ formatNumber(totalMessages) }}</h2>
-        <p>Total Messages Created</p>
-      </div>
-      <div class="stat-item">
-        <h2 :key="messagesExpiring">{{ formatNumber(messagesExpiring) }}</h2>
-        <p>Messages Expiring in 24 Hours</p>
+      <h2 class="stats-title">Messages</h2>
+      <div class="stat-groups">
+        <div class="stat-item">
+          <span class="stat-value">{{ formatNumber(totalMessages) }}</span>
+          <p>Total Created</p>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">{{ formatNumber(messagesExpiring) }}</span>
+          <p>Expiring Soon</p>
+        </div>
       </div>
     </div>
   </div>
@@ -29,6 +33,7 @@ export default {
     return {
       totalMessages: 0,
       messagesExpiring: 0,
+      ctaButtonTitle: "Create a secure message",
     };
   },
   created() {
@@ -50,6 +55,10 @@ export default {
       if (num < 1000000) return (num / 1000).toFixed(1) + "K";
       return (num / 1000000).toFixed(1) + "M";
     },
+
+    redirectToCreateMessagePage() {
+      this.$router.push({ name: "new-message", query: { ref: "cta" } });
+    },
   },
 };
 </script>
@@ -69,29 +78,39 @@ export default {
     color: $secondary-color;
   }
 
+  .cta-button {
+    @extend %button-style;
+    margin-top: 20px;
+  }
+
   .statistics {
-    display: flex;
-    justify-content: center;
-    margin-top: 40px;
+    text-align: center;
+    margin-top: 60px;
     color: $primary-color;
 
-    .stat-item {
-      margin: 0 20px;
-      text-align: center;
+    .stats-title {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
 
-      h2 {
-        font-size: $heading-font-size;
-        margin-bottom: 0.5em;
-        transition: transform 0.5s ease-in-out;
-      }
+    .stat-groups {
+      display: flex;
+      justify-content: center;
 
-      h2.leave-active {
-        animation: pop 0.5s;
-      }
+      .stat-item {
+        margin: 0 20px;
+        text-align: center;
 
-      p {
-        font-size: $text-font-size;
-        color: $secondary-color;
+        .stat-value {
+          font-size: $heading-font-size;
+          margin-bottom: 0.5em;
+          transition: transform 0.5s ease-in-out;
+        }
+
+        p {
+          font-size: $text-font-size;
+          color: $secondary-color;
+        }
       }
     }
   }

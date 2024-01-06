@@ -97,11 +97,11 @@ export default {
 
     display() {
       // Put the message in a random location as a char
-      // Somewhere in the middle
-      let startLocation = this.characters.length / 2;
+      // Somewhere in the above of center
+      let startLocation = this.characters.length / 4;
 
       // To avoid out of boundry
-      const endLocation = this.characters.length - 1 - this.message.length;
+      const endLocation = this.characters.length - 1 - this.message.length - 1;
       this.randomLocation = this.getRandomInt(startLocation, endLocation);
 
       let charIndex = 0;
@@ -167,7 +167,7 @@ $char-size: 36px;
   width: $char-size;
   height: $char-size;
   margin: 10px;
-  font-family: "LCD-Solid";
+  font-family: "LCD-Solid" sans-serif;
   color: #c4872b;
 }
 </style>

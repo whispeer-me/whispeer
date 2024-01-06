@@ -1,6 +1,6 @@
 <template>
   <div class="create-message-view">
-    <h1>Create a New Message</h1>
+    <h1>New Message</h1>
     <div v-if="errorMessage" class="error-message">
       <p>{{ errorMessage }}</p>
     </div>
@@ -8,13 +8,21 @@
     <form @submit.prevent="submitMessage">
       <textarea
         v-model="message.content"
-        placeholder="Type your message here..."
+        placeholder="Type your message here ..."
+        :maxlength="maxCharsAllowed"
         required
       ></textarea>
 
+      <p>Maximum characters allowed: {{ maxCharsAllowed }}.</p>
+
+      <p v-if="shouldWarn" class="warning">
+        {{ this.maxCharsAllowed - this.message.content.length }} characters
+        left.
+      </p>
+
       <div class="privacy-settings">
         <ToggleSwitch
-          title="Private Message"
+          title="Secure Message"
           :value="message.isPrivate"
           @change="handleToggleChange"
         />
@@ -43,7 +51,7 @@
       </div>
 
       <div class="submit-button">
-        <button type="submit">Send Message</button>
+        <button type="submit">Create Message</button>
       </div>
 
       <div v-if="messageLink" class="message-link">
@@ -85,10 +93,26 @@ export default {
       errorMessage: null,
       messageCopiedToClipboard: false,
       messageCopiedToClipboardFailed: false,
+      maxCharsAllowed: 256,
+      warningCharsLeft: 20,
     };
+  },
+  computed: {
+    charsLeft() {
+      return this.maxCharsAllowed - this.message.content.length;
+    },
+    shouldWarn() {
+      return this.charsLeft < this.warningCharsLeft;
+    },
   },
   methods: {
     async submitMessage() {
+      if (this.message.content.length > this.maxCharsAllowed) {
+        this.errorMessage = `Message exceeds ${this.maxCharsAllowed} characters.`;
+        return;
+      }
+
+      this.errorMessage = "";
       let newMessage;
 
       try {
@@ -204,6 +228,14 @@ $input-padding: 10px;
     font-size: 1em;
     border-radius: $border-radius;
     border: 1px solid $primary-color;
+  }
+
+  p {
+    color: $secondary-color;
+  }
+
+  p.warning {
+    color: $primary-color;
   }
 
   .privacy-settings {
