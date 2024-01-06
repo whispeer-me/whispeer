@@ -80,6 +80,23 @@
   </div>
 </template>
 
+<script>
+export default {
+  name: "PrivacyPolicy",
+  metaInfo: {
+    title: "Privacy Policy - Whispeer",
+    meta: [
+      {
+        vmid: "description",
+        name: "description",
+        content:
+          "Explore Whispeer's commitment to privacy. Read our privacy policy to understand how we handle and protect your data.",
+      },
+    ],
+  },
+};
+</script>
+
 <style scoped lang="scss">
 @import "@/assets/scss/app.scss";
 
