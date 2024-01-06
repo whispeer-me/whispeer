@@ -30,6 +30,10 @@ $heading-font-size: 3em;
 $header-height: 60px;
 $footer-height: 130px;
 
+h1 {
+  color: $primary-color;
+}
+
 // Common Styles
 %lcd-font {
   font-family: "LCD-Solid", sans-serif;

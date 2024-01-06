@@ -216,10 +216,6 @@ $input-padding: 10px;
 .create-message-view {
   text-align: center;
 
-  h1 {
-    color: $primary-color;
-  }
-
   textarea {
     width: 80%;
     height: 100px;
