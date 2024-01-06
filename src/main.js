@@ -1,4 +1,5 @@
 import Vue from "vue";
+import VueMeta from "vue-meta";
 import App from "./App.vue";
 import router from "./router";
 import AnalyticsPlugin from "./plugins/analytics/analytics-plugin";
@@ -17,6 +18,8 @@ Vue.use(AnalyticsConsentPlugin, {
     Vue.prototype.$initAnalytics();
   },
 });
+
+Vue.use(VueMeta);
 
 new Vue({
   router,
