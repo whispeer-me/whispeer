@@ -1,15 +1,33 @@
 <template>
   <div class="message">
     <LoadingIndicator :isLoading="isLoading" />
-    <p v-if="!message && errorMessage" class="error-message">
+    <p v-if="errorMessage != null" class="error-message">
       {{ errorMessage }}
     </p>
     <ChiperDisplay v-if="message" :message="message" class="chiper-display" />
+
+    <SimpleModal ref="simpleModal" class="passphrase-modal">
+      <h3>Enter Passphrase</h3>
+      <p>Please enter the passphrase to decrypt the message.</p>
+      <input
+        type="password"
+        v-model="passphrase"
+        placeholder="Enter the passphrase"
+        class="passphrase-input"
+        required
+      />
+      <div class="modal-buttons">
+        <button @click="onModalSubmit">Decrypt the message</button>
+        <button @click="closeModal">Cancel</button>
+      </div>
+    </SimpleModal>
   </div>
 </template>
 
 <script>
 import ChiperDisplay from "@/components/message/ChiperDisplay.vue";
+import SimpleModal from "@/components/common/SimpleModal.vue";
+
 import LoadingIndicator from "@/components/common/LoadingIndicator.vue";
 import MessageService from "@/services/MessageService";
 import CryptoService from "@/services/CryptoService";
@@ -52,6 +70,7 @@ export default {
   components: {
     ChiperDisplay,
     LoadingIndicator,
+    SimpleModal,
   },
   props: {
     id: {
@@ -64,6 +83,9 @@ export default {
       message: null,
       errorMessage: null,
       isLoading: true,
+      passphrase: null,
+      resolvePassphrase: null,
+      rejectPassphrase: null,
     };
   },
   computed: {
@@ -97,14 +119,9 @@ export default {
       }
 
       if (message.isPrivate) {
-        const passphrase = prompt(
-          "Enter the passphrase to decrypt the message"
-        );
-        if (passphrase) {
-          await this.decryptMessage(message, passphrase);
-        } else {
-          this.errorMessage = "Passphrase is required for decryption.";
-        }
+        // Wait for passphrase submission
+        const passphrase = await this.showPassphraseModal();
+        this.decryptMessage(message, passphrase);
       } else {
         this.message = message.content;
       }
@@ -146,6 +163,34 @@ export default {
       }
     },
 
+    showPassphraseModal() {
+      this.$refs.simpleModal.openModal();
+
+      return new Promise((resolve, reject) => {
+        this.resolvePassphrase = resolve;
+        this.rejectPassphrase = reject;
+      });
+    },
+
+    closeModal() {
+      this.$refs.simpleModal.closeModal();
+      if (this.rejectPassphrase) {
+        this.rejectPassphrase("Modal closed by user");
+        this.rejectPassphrase = null; // Reset the reject function
+      }
+    },
+
+    onModalSubmit() {
+      if (this.passphrase) {
+        // Resolve the Promise with the passphrase
+        this.resolvePassphrase(this.passphrase);
+        this.passphrase = null; // Reset passphrase
+        this.closeModal();
+      } else {
+        this.errorMessage = "Passphrase is required for decryption.";
+      }
+    },
+
     logAnalytics() {
       this.$analytics.trackEvent("message-viewed", {
         props: { isPrivate: this.message.isPrivate },
@@ -161,5 +206,26 @@ export default {
 .chiper-display {
   margin-top: 16px;
   margin-bottom: 16px;
+}
+
+.passphrase-modal {
+  font-family: $secondary-font;
+}
+
+.passphrase-input {
+  @extend %input-style;
+  width: 80%;
+  margin: 20px;
+  padding: 10px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+
+  button {
+    margin-left: 8px;
+  }
 }
 </style>

@@ -94,6 +94,9 @@ a {
 $color-on: $primary-color;
 $color-off: #ccc;
 
+$border-radius: 5px;
+$input-padding: 10px;
+
 %switch-style {
   position: relative;
   display: inline-block;
@@ -146,4 +149,25 @@ $color-off: #ccc;
   &.round .slider:before {
     border-radius: 50%;
   }
+}
+
+%input-style {
+  font-size: 1em;
+  border-radius: $border-radius;
+  border: 1px solid $primary-color;
+}
+
+%textarea-style {
+  padding: $input-padding;
+  font-size: 1em;
+  border-radius: $border-radius;
+  border: 1px solid $primary-color;
+}
+
+button {
+  @extend %button-style;
+}
+
+.modal-passphrase-input {
+  @extend %input-style;
 }

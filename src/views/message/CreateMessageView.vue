@@ -220,20 +220,15 @@ export default {
 <style scoped lang="scss">
 @import "@/assets/scss/app.scss";
 
-$border-radius: 5px;
-$input-padding: 10px;
-
 .create-message-view {
   text-align: center;
 
   textarea {
+    @extend %textarea-style;
     width: 80%;
     height: 100px;
     margin: 10px 0;
     padding: $input-padding;
-    font-size: 1em;
-    border-radius: $border-radius;
-    border: 1px solid $primary-color;
   }
 
   p {
@@ -260,12 +255,10 @@ $input-padding: 10px;
   }
 
   .passphrase-input {
+    @extend %input-style;
     width: 80%;
-    padding: $input-padding;
-    font-size: 1em;
-    border-radius: $border-radius;
-    border: 1px solid $primary-color;
     margin-top: 20px;
+    padding: 10px;
   }
 
   .submit-button {
@@ -279,10 +272,6 @@ $input-padding: 10px;
         cursor: not-allowed;
       }
     }
-  }
-
-  button {
-    @extend %button-style;
   }
 
   .security-disclaimer {
