@@ -35,23 +35,34 @@
 
     <h2>Encryption and Security</h2>
     <p>
-      <b>Encryption Techniques:</b> To safeguard your communications, we employ
-      robust encryption methods. Our service uses AES encryption for messages,
-      with each message uniquely encrypted using a passphrase.
+      <b>Client-Side Encryption:</b> Whispeer ensures your security by
+      encrypting messages directly on your device. When you choose the "Secure
+      Message" option while creating a message, the encryption is performed
+      client-side. Consequently, only the encrypted form of your message is
+      stored in our database, maintaining its confidentiality.
     </p>
     <p>
-      <b>Encryption Process:</b> The encryption process involves generating a
-      random salt and initialization vector (IV) each time a message is
-      encrypted. This ensures enhanced security for each message.
+      <b>Non-Encrypted Messages:</b> If the "Secure Message" option is not
+      selected, the message will be saved as plain text in our database. We
+      recommend using the "Secure Message" option for sensitive communications.
     </p>
     <p>
-      <b>Passphrase-Based Encryption:</b> The encryption key is derived from the
-      user-provided passphrase using PBKDF2, enhancing the security of each
-      message.
+      <b>Encryption Techniques:</b> Whispeer uses AES encryption for messages,
+      uniquely encrypting each message with a passphrase.
+    </p>
+    <p>
+      <b>Encryption Process:</b> The process involves generating a random salt
+      and initialization vector (IV) for each encrypted message, ensuring
+      enhanced security.
+    </p>
+    <p>
+      <b>Passphrase-Based Encryption:</b> The encryption key is derived from
+      your passphrase using PBKDF2, further securing each message.
     </p>
     <p>
       <b>CBC Mode and Pkcs7 Padding:</b> We use Cipher Block Chaining (CBC) mode
-      and Pkcs7 padding for encryption, ensuring strong cryptographic standards.
+      and Pkcs7 padding for encryption, adhering to strong cryptographic
+      standards.
     </p>
 
     <h2>User Responsibilities</h2>
