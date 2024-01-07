@@ -97,6 +97,7 @@ export default {
       messageCopiedToClipboardFailed: false,
       maxCharsAllowed: 256,
       warningCharsLeft: 20,
+      requestProcessing: false,
     };
   },
   computed: {
