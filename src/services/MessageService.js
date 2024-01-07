@@ -20,4 +20,14 @@ export default {
       throw error;
     }
   },
+
+  async getStats() {
+    try {
+      const response = await Api.get("/message/stats");
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching stats:", error);
+      throw error;
+    }
+  },
 };

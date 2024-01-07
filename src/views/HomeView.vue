@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import MessageService from "@/services/MessageService";
+
 export default {
   name: "HomeView",
   metaInfo: {
@@ -54,7 +56,7 @@ export default {
     };
   },
   created() {
-    this.fetchData();
+    this.fetchStats();
     // 30-second interval to fetch data
     this.interval = setInterval(this.fetchData, 30000);
   },
@@ -62,7 +64,25 @@ export default {
     clearInterval(this.interval);
   },
   methods: {
-    fetchData() {
+    async fetchStats() {
+      try {
+        const stats = (await MessageService.getStats()).data;
+        this.totalMessages = stats.totalMessages;
+        this.messagesExpiring = stats.messagesExpiring;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async fetchData() {
+      try {
+        const response = await MessageService.getStats();
+        this.totalMessages = response.data.totalMessages;
+        this.messagesExpiring = response.data.messagesExpiring;
+      } catch (error) {
+        console.log(error);
+        this.$toast.error("Failed to fetch stats");
+      }
+
       // For demonstration purposes
       this.totalMessages = Math.floor(Math.random() * 1000000);
       this.messagesExpiring = Math.floor(Math.random() * 5000);
