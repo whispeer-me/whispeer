@@ -51,7 +51,9 @@
       </div>
 
       <div class="submit-button">
-        <button type="submit">Create Message</button>
+        <button type="submit" :disabled="requestProcessing">
+          Create Message
+        </button>
       </div>
 
       <div v-if="messageLink" class="message-link">
@@ -114,6 +116,7 @@ export default {
 
       this.errorMessage = "";
       let newMessage;
+      this.requestProcessing = true;
 
       try {
         newMessage = this.prepareAndMaybeEncryptTheMessage();
@@ -129,6 +132,8 @@ export default {
         this.handleSuccessfulSubmission(newlyCreatedMessage);
       } catch (error) {
         this.handleError(error, "Error submitting message to the server:");
+      } finally {
+        this.requestProcessing = false;
       }
     },
 
@@ -262,6 +267,13 @@ $input-padding: 10px;
     display: flex;
     justify-content: center;
     margin-top: 20px;
+
+    button {
+      &:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+    }
   }
 
   button {
