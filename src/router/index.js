@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import HomeView from "@/views/HomeView.vue";
 import CodeView from "@/views/CodeView.vue";
+import ContactView from "@/views/ContactView.vue";
 import MessageView from "@/views/message/MessageView.vue";
 import CreateMessageView from "@/views/message/CreateMessageView.vue";
 import PrivacyPolicyView from "@/views/PrivacyPolicyView.vue";
@@ -23,11 +24,15 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/TheStoryView.vue"),
   },
-
   {
     path: "/code",
     name: "code",
     component: CodeView,
+  },
+  {
+    path: "/contact",
+    name: "contact",
+    component: ContactView,
   },
   {
     path: "/privacy-policy",
