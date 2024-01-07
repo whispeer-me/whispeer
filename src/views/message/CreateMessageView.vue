@@ -52,7 +52,7 @@
 
       <div class="submit-button">
         <button type="submit" :disabled="requestProcessing">
-          Create Message
+          {{ submitButtonTitle }}
         </button>
       </div>
 
@@ -105,6 +105,11 @@ export default {
     },
     shouldWarn() {
       return this.charsLeft < this.warningCharsLeft;
+    },
+    submitButtonTitle() {
+      return this.message.isPrivate
+        ? "Create Secure Message"
+        : "Create Message";
     },
   },
   methods: {
