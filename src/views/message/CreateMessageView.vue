@@ -180,8 +180,9 @@ export default {
     resetForm() {
       this.errorMessage = null;
       this.message.content = "";
-      this.message.isPrivate = false;
       this.message.passphrase = "";
+
+      // Due to Toggle Switch problem let's not change the state of the switch
     },
 
     handleToggleChange(newValue) {
