@@ -118,7 +118,7 @@ export default {
         return;
       }
 
-      if (message.isPrivate) {
+      if (message.is_private) {
         // Wait for passphrase submission
         const passphrase = await this.showPassphraseModal();
         this.decryptMessage(message, passphrase);
@@ -193,7 +193,7 @@ export default {
 
     logAnalytics() {
       this.$analytics.trackEvent("message-viewed", {
-        props: { isPrivate: this.message.isPrivate },
+        props: { is_private: this.message.is_private },
       });
     },
   },

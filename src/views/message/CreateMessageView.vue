@@ -23,12 +23,12 @@
       <div class="privacy-settings">
         <ToggleSwitch
           title="Secure Message"
-          :value="message.isPrivate"
+          :value="message.is_private"
           @change="handleToggleChange"
         />
       </div>
 
-      <div v-if="message.isPrivate" class="passphrase">
+      <div v-if="message.is_private" class="passphrase">
         <input
           class="passphrase-input"
           type="password"
@@ -88,7 +88,7 @@ export default {
     return {
       message: {
         content: "",
-        isPrivate: false,
+        is_private: false,
         passphrase: "",
       },
       messageLink: null,
@@ -108,7 +108,7 @@ export default {
       return this.charsLeft < this.warningCharsLeft;
     },
     submitButtonTitle() {
-      return this.message.isPrivate
+      return this.message.is_private
         ? "Create Secure Message"
         : "Create Message";
     },
@@ -146,10 +146,10 @@ export default {
     prepareAndMaybeEncryptTheMessage() {
       let newMessage = {
         content: this.message.content,
-        isPrivate: this.message.isPrivate,
+        is_private: this.message.is_private,
       };
 
-      if (this.message.isPrivate && this.message.passphrase) {
+      if (this.message.is_private && this.message.passphrase) {
         const encryptedMessage = CryptoService.encrypt(
           this.message.content,
           this.message.passphrase
@@ -186,12 +186,12 @@ export default {
     },
 
     handleToggleChange(newValue) {
-      this.message.isPrivate = newValue;
+      this.message.is_private = newValue;
     },
 
     logAnalytics() {
       this.$analytics.trackEvent("message-created", {
-        props: { isPrivate: this.message.isPrivate },
+        props: { is_private: this.message.is_private },
       });
     },
 
