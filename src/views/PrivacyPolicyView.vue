@@ -33,6 +33,18 @@
       our servers beyond this time frame.
     </p>
 
+    <h2>Data Management</h2>
+    <p>
+      <b>Non-Personal Data Handling:</b> In order to ensure the uniqueness of
+      each message's ID, which forms part of the URL used by users to access
+      their messages, Whispeer employs a system of randomly generated IDs. These
+      are stored in a dedicated 'archived_ids' database table. These IDs are
+      essential for operational purposes, helping to maintain the integrity and
+      performance of our messaging service. Importantly, these IDs do not
+      contain any personal data and cannot be linked back to individual users,
+      ensuring that your privacy is always protected.
+    </p>
+
     <h2>Encryption and Security</h2>
     <p>
       <b>Client-Side Encryption:</b> Whispeer ensures your security by
