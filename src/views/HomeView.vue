@@ -80,7 +80,6 @@ export default {
         this.messagesExpiring = response.data.messagesExpiring;
       } catch (error) {
         console.log(error);
-        this.$toast.error("Failed to fetch stats");
       }
 
       // For demonstration purposes
