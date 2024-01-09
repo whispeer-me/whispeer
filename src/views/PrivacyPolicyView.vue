@@ -18,6 +18,16 @@
       are paramount and fully respected.
     </p>
 
+    <h3>Aggregate Data Collection</h3>
+    <p>
+      <b>General Statistics:</b> Whispeer collects aggregate data such as the
+      total number of messages created, the number of messages expiring soon,
+      and the total view count of all messages. This information is used to
+      provide statistical insights on our homepage and enhance user experience.
+      Importantly, this data is purely statistical and does not include any
+      personal or identifiable information about our users.
+    </p>
+
     <h2>No Logging of Personal Data</h2>
     <p>
       <b>Respecting Privacy:</b> While we track anonymized usage data for
