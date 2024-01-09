@@ -100,6 +100,26 @@ export default {
       requestProcessing: false,
     };
   },
+  metaInfo() {
+    return {
+      title: "Whispeer - Create New Message",
+      meta: [
+        {
+          vmid: "description",
+          name: "description",
+          content:
+            "Create new secure and private messages with Whispeer. Our platform offers end-to-end encryption for confidential, private communication.",
+        },
+        {
+          vmid: "keywords",
+          name: "keywords",
+          content:
+            "Secure Messaging, Private Message Creation, Encrypted Communication, Confidential Messaging Platform, End-to-End Encryption, Whispeer Messaging Service, Safe Online Communication, Private Chat Application, Digital Privacy, Personal Data Security, Anonymous Messaging Tool, Vue.js Encrypted Chat, Protecting Conversations Online, Cybersecurity in Messaging",
+        },
+      ],
+    };
+  },
+
   computed: {
     charsLeft() {
       return this.maxCharsAllowed - this.message.content.length;
