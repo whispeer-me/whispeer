@@ -83,8 +83,8 @@ export default {
         this.total_created_count = total_created_count;
         this.expiring_soon_count = expiring_soon_count;
         this.total_view_count = total_view_count;
-      } catch (error) {
-        console.log(error);
+      } catch (err) {
+        // do nothing
       }
     },
     formatNumber(num) {
