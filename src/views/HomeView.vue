@@ -14,11 +14,21 @@
       <h2 class="stats-title">Messages</h2>
       <div class="stat-groups">
         <div class="stat-item">
-          <span class="stat-value">{{ formatNumber(totalMessages) }}</span>
-          <p>Total Created</p>
+          <span class="stat-value">{{
+            formatNumber(this.total_created_count)
+          }}</span>
+          <p>Created</p>
         </div>
         <div class="stat-item">
-          <span class="stat-value">{{ formatNumber(messagesExpiring) }}</span>
+          <span class="stat-value">{{
+            formatNumber(this.total_view_count)
+          }}</span>
+          <p>Viewed</p>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">{{
+            formatNumber(this.expiring_soon_count)
+          }}</span>
           <p>Expiring Soon</p>
         </div>
       </div>
@@ -50,13 +60,14 @@ export default {
   },
   data() {
     return {
-      totalMessages: 0,
-      messagesExpiring: 0,
+      total_created_count: 0,
+      expiring_soon_count: 0,
+      total_view_count: 0,
       ctaButtonTitle: "Create a secure message",
     };
   },
   created() {
-    this.fetchStats();
+    this.fetchData();
     // 30-second interval to fetch data
     this.interval = setInterval(this.fetchData, 30000);
   },
@@ -64,27 +75,17 @@ export default {
     clearInterval(this.interval);
   },
   methods: {
-    async fetchStats() {
-      try {
-        const stats = (await MessageService.getStats()).data;
-        this.totalMessages = stats.totalMessages;
-        this.messagesExpiring = stats.messagesExpiring;
-      } catch (error) {
-        console.log(error);
-      }
-    },
     async fetchData() {
       try {
-        const response = await MessageService.getStats();
-        this.totalMessages = response.data.totalMessages;
-        this.messagesExpiring = response.data.messagesExpiring;
+        const { total_created_count, expiring_soon_count, total_view_count } = (
+          await MessageService.getStats()
+        ).data;
+        this.total_created_count = total_created_count;
+        this.expiring_soon_count = expiring_soon_count;
+        this.total_view_count = total_view_count;
       } catch (error) {
         console.log(error);
       }
-
-      // For demonstration purposes
-      this.totalMessages = Math.floor(Math.random() * 1000000);
-      this.messagesExpiring = Math.floor(Math.random() * 5000);
     },
     formatNumber(num) {
       if (num < 1000) return num.toString();
