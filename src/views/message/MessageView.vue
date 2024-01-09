@@ -72,12 +72,6 @@ export default {
     LoadingIndicator,
     SimpleModal,
   },
-  props: {
-    id: {
-      type: String,
-      required: true,
-    },
-  },
   data() {
     return {
       message: null,
@@ -94,15 +88,21 @@ export default {
     },
   },
   async mounted() {
-    await this.getTheMessage();
+    const messageId = this.$route.hash.substring(1); // Removes the '#' from the hash
+    if (messageId) {
+      await this.getTheMessage(messageId);
+    } else {
+      this.errorMessage =
+        "No message ID provided in the url. Please ensure the url includes # followed by the message ID";
+    }
   },
   methods: {
-    async getTheMessage() {
+    async getTheMessage(messageId) {
       this.isLoading = true;
       this.errorMessage = null;
       this.message = null;
       try {
-        const message = (await MessageService.getMessage(this.id)).data;
+        const message = (await MessageService.getMessage(messageId)).data;
         await this.handleMessageRetrieval(message);
         this.logAnalytics(message);
       } catch (error) {

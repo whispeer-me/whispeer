@@ -165,7 +165,7 @@ export default {
 
     handleSuccessfulSubmission(newlyCreatedMessage) {
       if (newlyCreatedMessage.id) {
-        this.messageLink = `${window.location.origin}/m/${newlyCreatedMessage.id}`;
+        this.messageLink = `${window.location.origin}/m/#${newlyCreatedMessage.id}`;
         this.resetForm();
         this.logAnalytics();
       }

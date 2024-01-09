@@ -45,10 +45,9 @@ const routes = [
     component: CreateMessageView,
   },
   {
-    path: "/m/:id",
-    name: "message",
+    path: "/m",
+    name: "view-message",
     component: MessageView,
-    props: true,
   },
 ];
 
