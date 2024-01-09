@@ -1,6 +1,6 @@
 <template>
   <div class="code">
-    <h1>Whispeer Open Source</h1>
+    <h1>Whispeer is Open Source</h1>
     <div class="repo-section" v-for="repo in repositories" :key="repo.name">
       <h2>{{ repo.name }}</h2>
       <p><a :href="repo.url" target="_blank">Code</a></p>
