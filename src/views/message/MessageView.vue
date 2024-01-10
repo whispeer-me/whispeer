@@ -151,14 +151,11 @@ export default {
           message.iv
         );
       } catch (error) {
-        console.error("Decryption error:", error);
         this.errorMessage = "Decryption failed. Please check the passphrase.";
       }
     },
 
     handleError(error) {
-      console.error("Error:", error);
-
       const serverMessage =
         error.response &&
         error.response.data &&
