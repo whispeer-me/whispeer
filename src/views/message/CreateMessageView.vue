@@ -36,6 +36,10 @@
           placeholder="Enter a passphrase to encrypt"
           required
         />
+        <p class="passphrase-warning">
+          Handle passphrase with care: never share it where the message link is
+          visible.
+        </p>
       </div>
 
       <div class="security-disclaimer">
@@ -305,6 +309,12 @@ export default {
     color: $secondary-color;
     margin: 16px;
     line-height: 1.5;
+  }
+
+  .passphrase-warning {
+    color: $warning-color;
+    margin-top: 10px;
+    font-family: $secondary-font;
   }
 
   .message-link {
