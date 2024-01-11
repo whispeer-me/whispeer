@@ -41,7 +41,9 @@ h1 {
 
 .content {
   padding: 20px;
-  height: calc(100vh + $footer-height);
+  height: calc(100vh - $header-height - $footer-height);
+  box-sizing: border-box;
+
   padding-bottom: 10px;
 }
 
