@@ -1,4 +1,6 @@
-# frontend
+# Whispeer.me
+
+Hey there! Welcome to Whispeer, where we're all about keeping your messages safe and private. We've mixed some cool tech like PostgreSQL, Node.js, and Vue.js 2 to make sure your chats are not just fun and easy to use, but also super secure.
 
 ## Project setup
 ```
@@ -32,6 +34,10 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 # ANALYTICS SETUP
 
 Update `VUE_APP_ANALYTICS_DOMAIN` in  `.env.production` file.
+
+# API URL SETUP
+
+Update `VUE_APP_API_URL` in  `.env.production` file.
 
 ## Client-Side Encryption
 
