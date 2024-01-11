@@ -26,6 +26,8 @@ export default Vue.extend({
   background-color: $background-color;
   color: white;
   text-align: center;
+  position: sticky;
+  top: 0;
   width: 100%;
   z-index: 1000;
   height: $header-height;
