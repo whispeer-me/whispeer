@@ -14,15 +14,11 @@
       <h2 class="stats-title">Messages</h2>
       <div class="stat-groups">
         <div class="stat-item">
-          <span class="stat-value">{{
-            formatNumber(this.total_created_count)
-          }}</span>
+          <span class="stat-value">{{ formatNumber(this.created_count) }}</span>
           <p>Created</p>
         </div>
         <div class="stat-item">
-          <span class="stat-value">{{
-            formatNumber(this.total_view_count)
-          }}</span>
+          <span class="stat-value">{{ formatNumber(this.view_count) }}</span>
           <p>Viewed</p>
         </div>
         <div class="stat-item">
@@ -60,9 +56,9 @@ export default {
   },
   data() {
     return {
-      total_created_count: 0,
+      created_count: 0,
       expiring_soon_count: 0,
-      total_view_count: 0,
+      view_count: 0,
       ctaButtonTitle: "Create a secure message",
     };
   },
@@ -77,12 +73,12 @@ export default {
   methods: {
     async fetchData() {
       try {
-        const { total_created_count, expiring_soon_count, total_view_count } = (
+        const { created_count, expiring_soon_count, view_count } = (
           await MessageService.getStats()
         ).data;
-        this.total_created_count = total_created_count;
+        this.created_count = created_count;
         this.expiring_soon_count = expiring_soon_count;
-        this.total_view_count = total_view_count;
+        this.view_count = view_count;
       } catch (err) {
         // do nothing
       }
