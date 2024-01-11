@@ -23,6 +23,9 @@ export default Vue.extend({
 @import "@/assets/scss/app.scss";
 
 .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background-color: $background-color;
   color: white;
   text-align: center;
