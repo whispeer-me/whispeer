@@ -1,43 +1,39 @@
-# Whispeer.me
+# Welcome to Whispeer!
 
-Hey there! Welcome to Whispeer, where we're all about keeping your messages safe and private. We've mixed some cool tech like PostgreSQL, Node.js, and Vue.js 2 to make sure your chats are not just fun and easy to use, but also super secure.
+Hey there! Welcome to [Whispeer](https://whispeer.me), where we're all about keeping your messages safe and private. We've mixed some cool tech like PostgreSQL, Node.js, and Vue.js 2 to make sure your chats are not just fun and easy to use, but also super secure.
 
-## Project setup
-```
-npm install
-```
+## Contribute to the Project
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+Help us make Whispeer even better! We're always looking for new contributors to help us build, design, and test our code. If you're interested in helping out, check out our [Contributing Guide](CONTRIBUTING.md) for more information.
 
-### Compiles and minifies for production
-```
-npm run build
-```
+### Development
+ - **Install the Packages"** Get all the dependencies:
+   ```
+   npm i
+   ```
 
-### Run your unit tests
-```
-npm run test:unit
-```
+- **Making Changes?** Use this for a smooth coding ride:
+  ```
+  npm run serve
+  ```
+- **Going Live?** Get your code ready for showtime:
+  ```
+  npm run build
+  ```
 
-### Lints and fixes files
-```
-npm run lint
-```
+### Testing and Keeping It Clean
+- **Testing Made Easy:** Run your tests with:
+  ```
+  npm run test:unit
+  ```
+- **Stay Neat and Tidy:** Fix up your code:
+  ```
+  npm run lint
+  ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+# Environment Variables
 
-
-# ANALYTICS SETUP
-
-Update `VUE_APP_ANALYTICS_DOMAIN` in  `.env.production` file.
-
-# API URL SETUP
-
-Update `VUE_APP_API_URL` in  `.env.production` file.
+Update `VUE_APP_API_URL` and `VUE_APP_ANALYTICS_DOMAIN` in `.env.production` file accordingly.
 
 ## Client-Side Encryption
 
@@ -55,4 +51,4 @@ Here's a brief overview of how our encryption process works:
 
    If the passphrase is incorrect, the decryption will fail and an error will be thrown.
 
-By performing all encryption and decryption on the client side, we ensure that your message is always secure and private. Only you and the other party that you shared your passphrase with can decrypt the message. 
+By performing all encryption and decryption on the client side, we ensure that your message is always secure and private. Only you and the other party that you shared your passphrase with can decrypt the message.
