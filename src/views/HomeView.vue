@@ -123,7 +123,7 @@ export default {
 
   .statistics {
     text-align: center;
-    margin-top: 60px;
+    margin-top: 100px;
     color: $primary-color;
 
     .stats-title {
