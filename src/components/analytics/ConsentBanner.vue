@@ -77,8 +77,6 @@ export default {
 <style lang="scss" scoped>
 @import "@/assets/scss/app.scss";
 
-$font-size: 12px;
-
 .analytics-consent-banner {
   position: fixed;
   bottom: 0;
@@ -88,7 +86,8 @@ $font-size: 12px;
   color: $secondary-color;
   text-align: center;
   z-index: 1000;
-  font-size: $font-size;
+  font-size: 14px;
+  font-family: $secondary-font;
   padding-bottom: 16px;
 
   p {
