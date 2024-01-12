@@ -83,7 +83,7 @@ export default {
   left: 0;
   width: 100%;
   background-color: $primary-color;
-  color: $secondary-color;
+  color: white;
   text-align: center;
   z-index: 1000;
   font-size: 14px;
