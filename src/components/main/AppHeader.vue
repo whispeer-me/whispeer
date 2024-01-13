@@ -2,13 +2,36 @@
   <div class="header">
     <nav class="main-nav">
       <img :src="logo" alt="Logo" class="logo" />
-      <router-link to="/" class="nav-link">Home</router-link>
-      <router-link to="/m/new?ref=nav" class="nav-link"
-        >New Message</router-link
+      <router-link to="/" class="nav-link"
+        ><span v-if="isMobile" class="icon-mobile"
+          ><i class="fas fa-home"></i
+        ></span>
+        <span v-if="!isMobile">Home</span></router-link
       >
-      <router-link to="/the-story" class="nav-link">The Story</router-link>
-      <router-link to="/code" class="nav-link">Code</router-link>
-      <router-link to="/contact" class="nav-link">Contact</router-link>
+      <router-link to="/m/new?ref=nav" class="nav-link"
+        ><span v-if="isMobile" class="icon-mobile"
+          ><i class="fas fa-envelope"></i
+        ></span>
+        <span v-if="!isMobile">New Message</span></router-link
+      >
+      <router-link to="/the-story" class="nav-link"
+        ><span v-if="isMobile" class="icon-mobile"
+          ><i class="fas fa-book"></i
+        ></span>
+        <span v-if="!isMobile">The Story</span></router-link
+      >
+      <router-link to="/code" class="nav-link"
+        ><span v-if="isMobile" class="icon-mobile"
+          ><i class="fas fa-code"></i
+        ></span>
+        <span v-if="!isMobile">Code</span></router-link
+      >
+      <router-link to="/contact" class="nav-link"
+        ><span v-if="isMobile" class="icon-mobile"
+          ><i class="fas fa-address-book"></i
+        ></span>
+        <span v-if="!isMobile">Contact</span></router-link
+      >
     </nav>
   </div>
 </template>
@@ -21,7 +44,19 @@ export default Vue.extend({
   data() {
     return {
       logo: logo,
+      isMobile: window.innerWidth <= 480, // Adjust the breakpoint as needed
     };
+  },
+  mounted() {
+    window.addEventListener("resize", this.handleResize);
+  },
+  methods: {
+    handleResize() {
+      this.isMobile = window.innerWidth <= 480; // Adjust the breakpoint as needed
+    },
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.handleResize);
   },
 });
 </script>
@@ -106,6 +141,12 @@ export default Vue.extend({
   .logo {
     max-height: 35px;
     margin-right: 20px;
+  }
+
+  @media (max-width: 480px) {
+    .icon-mobile {
+      font-size: 28px; /* Adjust the font size as needed for larger icons */
+    }
   }
 }
 </style>
