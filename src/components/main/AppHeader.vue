@@ -1,6 +1,7 @@
 <template>
   <div class="header">
     <nav class="main-nav">
+      <img :src="logo" alt="Logo" class="logo" />
       <router-link to="/" class="nav-link">Home</router-link>
       <router-link to="/m/new?ref=nav" class="nav-link"
         >New Message</router-link
@@ -14,8 +15,14 @@
 
 <script>
 import Vue from "vue";
+import logo from "/src/assets/logo.png";
 export default Vue.extend({
   name: "AppHeader",
+  data() {
+    return {
+      logo: logo,
+    };
+  },
 });
 </script>
 
@@ -95,6 +102,10 @@ export default Vue.extend({
     &.router-link-exact-active {
       opacity: 1;
     }
+  }
+  .logo {
+    max-height: 35px;
+    margin-right: 20px;
   }
 }
 </style>
