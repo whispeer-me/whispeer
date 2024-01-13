@@ -36,6 +36,10 @@
           placeholder="Enter a passphrase to encrypt"
           required
         />
+        <p class="passphrase-warning">
+          Handle passphrase with care: never share it where the message link is
+          visible.
+        </p>
       </div>
 
       <div class="security-disclaimer">
@@ -147,7 +151,7 @@ export default {
       try {
         newMessage = this.prepareAndMaybeEncryptTheMessage();
       } catch (error) {
-        this.handleError(error, "Error during message encryption:");
+        this.handleError(error, "Error occured during message encryption.");
         return;
       }
 
@@ -157,7 +161,10 @@ export default {
         );
         this.handleSuccessfulSubmission(newlyCreatedMessage);
       } catch (error) {
-        this.handleError(error, "Error submitting message to the server:");
+        this.handleError(
+          error,
+          "Error occured while submitting the message to the server. Please try again."
+        );
       } finally {
         this.requestProcessing = false;
       }
@@ -191,10 +198,11 @@ export default {
       }
     },
 
-    handleError(error, consoleMessage) {
-      console.error(consoleMessage, error);
+    handleError(error, info) {
       this.errorMessage =
-        error.response?.data?.data?.message || "An unexpected error occurred.";
+        error.response?.data?.data?.message ||
+        info ||
+        "An unexpected error occurred";
     },
 
     resetForm() {
@@ -301,6 +309,12 @@ export default {
     color: $secondary-color;
     margin: 16px;
     line-height: 1.5;
+  }
+
+  .passphrase-warning {
+    color: $warning-color;
+    margin-top: 10px;
+    font-family: $secondary-font;
   }
 
   .message-link {

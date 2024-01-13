@@ -88,15 +88,25 @@ export default {
     },
   },
   async mounted() {
-    const messageId = this.$route.hash.substring(1); // Removes the '#' from the hash
-    if (messageId) {
-      await this.getTheMessage(messageId);
-    } else {
-      this.errorMessage =
-        "No message ID provided in the url. Please ensure the url includes # followed by the message ID";
+    if (this.$route.hash) {
+      await this.processHashChange(this.$route.hash);
     }
   },
+  watch: {
+    async "$route.hash"(newHash) {
+      await this.processHashChange(newHash);
+    },
+  },
   methods: {
+    async processHashChange(hash) {
+      const messageId = hash.substring(1); // Removes the '#' from the hash
+      if (messageId) {
+        await this.getTheMessage(messageId);
+      } else {
+        this.errorMessage =
+          "No message ID provided in the url. Please ensure the url includes # followed by the message ID";
+      }
+    },
     async getTheMessage(messageId) {
       this.isLoading = true;
       this.errorMessage = null;
@@ -141,14 +151,11 @@ export default {
           message.iv
         );
       } catch (error) {
-        console.error("Decryption error:", error);
         this.errorMessage = "Decryption failed. Please check the passphrase.";
       }
     },
 
     handleError(error) {
-      console.error("Error:", error);
-
       const serverMessage =
         error.response &&
         error.response.data &&
