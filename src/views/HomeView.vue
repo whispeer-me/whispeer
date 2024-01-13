@@ -131,6 +131,11 @@ export default {
       display: flex;
       justify-content: center;
 
+      @media (max-width: 480px) {
+        width: 80%; /* Adjust the width as needed for smaller screens */
+        margin: 0 auto; /* Center the stat-groups container */
+      }
+
       .stat-item {
         margin: 0 20px;
         text-align: center;
@@ -144,6 +149,9 @@ export default {
         p {
           font-size: $text-font-size;
           color: $secondary-color;
+          @media (max-width: 480px) {
+            font-size: 20px;
+          }
         }
       }
     }

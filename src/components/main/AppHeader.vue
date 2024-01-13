@@ -93,7 +93,6 @@ export default Vue.extend({
   padding: 20px;
   background-color: rgba(0, 0, 0, 0.7);
   text-align: left;
-
   $min-width: 80vw;
   $optimal-view-width: 150vw;
   min-width: $min-width;
