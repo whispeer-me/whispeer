@@ -42,7 +42,7 @@
         </p>
       </div>
 
-      <div class="security-disclaimer">
+      <div v-if="!messageLink" class="security-disclaimer">
         <p>
           Please note that while Whispeer provides enhanced encryption for
           messaging, <br />
