@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="page-wrapper">
     <AppHeader />
     <hr class="divider" />
     <div class="content">

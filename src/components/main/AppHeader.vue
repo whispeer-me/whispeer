@@ -1,21 +1,77 @@
 <template>
   <div class="header">
     <nav class="main-nav">
-      <router-link to="/" class="nav-link">Home</router-link>
-      <router-link to="/m/new?ref=nav" class="nav-link"
-        >New Message</router-link
-      >
-      <router-link to="/the-story" class="nav-link">The Story</router-link>
-      <router-link to="/code" class="nav-link">Code</router-link>
-      <router-link to="/contact" class="nav-link">Contact</router-link>
+      <img src="/logo.png" alt="Whisper Logo" class="logo" />
+      <router-link to="/" class="nav-link">
+        <img v-if="isMobile" :src="homeIcon" alt="Home" class="icon-mobile" />
+        <span v-if="!isMobile">Home</span>
+      </router-link>
+      <router-link to="/m/new?ref=nav" class="nav-link">
+        <img
+          v-if="isMobile"
+          :src="messageIcon"
+          alt="New Message"
+          class="icon-mobile"
+        />
+        <span v-if="!isMobile">New Message</span>
+      </router-link>
+      <router-link to="/the-story" class="nav-link">
+        <img
+          v-if="isMobile"
+          :src="storyIcon"
+          alt="The Story"
+          class="icon-mobile"
+        />
+        <span v-if="!isMobile">The Story</span>
+      </router-link>
+      <router-link to="/code" class="nav-link">
+        <img v-if="isMobile" :src="codeIcon" alt="Code" class="icon-mobile" />
+        <span v-if="!isMobile">Code</span>
+      </router-link>
+      <router-link to="/contact" class="nav-link">
+        <img
+          v-if="isMobile"
+          :src="contactIcon"
+          alt="Contact"
+          class="icon-mobile"
+        />
+        <span v-if="!isMobile">Contact</span>
+      </router-link>
     </nav>
   </div>
 </template>
-
 <script>
 import Vue from "vue";
+
+import homeIcon from "@/assets/icons/home.svg";
+import messageIcon from "@/assets/icons/message.svg";
+import storyIcon from "@/assets/icons/the-story.svg";
+import codeIcon from "@/assets/icons/code.svg";
+import contactIcon from "@/assets/icons/contact.svg";
+
 export default Vue.extend({
   name: "AppHeader",
+  data() {
+    return {
+      homeIcon,
+      messageIcon,
+      storyIcon,
+      codeIcon,
+      contactIcon,
+      isMobile: window.innerWidth <= 480,
+    };
+  },
+  mounted() {
+    window.addEventListener("resize", this.handleResize);
+  },
+  methods: {
+    handleResize() {
+      this.isMobile = window.innerWidth <= 480;
+    },
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.handleResize);
+  },
 });
 </script>
 
@@ -23,9 +79,14 @@ export default Vue.extend({
 @import "@/assets/scss/app.scss";
 
 .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background-color: $background-color;
   color: white;
   text-align: center;
+  position: sticky;
+  top: 0;
   width: 100%;
   z-index: 1000;
   height: $header-height;
@@ -46,7 +107,6 @@ export default Vue.extend({
   padding: 20px;
   background-color: rgba(0, 0, 0, 0.7);
   text-align: left;
-
   $min-width: 80vw;
   $optimal-view-width: 150vw;
   min-width: $min-width;
@@ -89,6 +149,16 @@ export default Vue.extend({
     &:hover,
     &.router-link-exact-active {
       opacity: 1;
+    }
+  }
+  .logo {
+    max-height: 35px;
+    margin-right: 20px;
+  }
+
+  @media (max-width: 480px) {
+    .icon-mobile {
+      font-size: 28px; /* Adjust the font size as needed for larger icons */
     }
   }
 }

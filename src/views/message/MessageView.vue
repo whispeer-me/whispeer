@@ -84,7 +84,7 @@ export default {
   },
   computed: {
     fullImageUrl() {
-      return window.location.origin + "/whispeer-me-og-image.png";
+      return window.location.origin + "/logo.png";
     },
   },
   async mounted() {

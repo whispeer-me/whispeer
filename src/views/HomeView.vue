@@ -119,17 +119,22 @@ export default {
 
   .statistics {
     text-align: center;
-    margin-top: 60px;
+    margin-top: 80px;
     color: $primary-color;
 
     .stats-title {
-      font-size: 2em;
-      margin-bottom: 20px;
+      font-size: xx-large;
+      margin-bottom: 40px;
     }
 
     .stat-groups {
       display: flex;
       justify-content: center;
+
+      @media (max-width: 480px) {
+        width: 80%;
+        margin: 0 auto;
+      }
 
       .stat-item {
         margin: 0 20px;
@@ -144,6 +149,9 @@ export default {
         p {
           font-size: $text-font-size;
           color: $secondary-color;
+          @media (max-width: 480px) {
+            font-size: 20px;
+          }
         }
       }
     }

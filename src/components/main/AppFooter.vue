@@ -8,7 +8,7 @@
       © 2024 Whispeer.me
       <router-link to="/privacy-policy" class="footer-link"
         >Privacy Policy</router-link
-      >.
+      >
     </p>
   </footer>
 </template>
@@ -41,10 +41,8 @@ export default Vue.extend({
   color: $primary-color;
   padding: 10px;
   text-align: center;
-  position: fixed;
   bottom: 0;
   width: 100%;
-  z-index: 1000;
 
   .footer-text {
     margin: 10px;

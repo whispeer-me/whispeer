@@ -25,6 +25,7 @@ export default {
       asciiStart: 33,
       asciiEnd: 126,
       randomLocation: 0,
+      randomCharsCount: 2000,
       startMatching: false,
       isBoardReady: false,
     };
@@ -84,7 +85,7 @@ export default {
 
     createRandomChars() {
       const chars = [];
-      for (let r = 0; r < 1000; r++) {
+      for (let r = 0; r < this.randomCharsCount; r++) {
         chars.push({
           char: this.getRandomChar(),
           class: "",
@@ -148,6 +149,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+$char-font-size: 12px;
+$char-size: 18px;
+$matched-char-size: 14px;
+
 #board {
   background-color: #000;
   width: 100%;
@@ -159,15 +164,16 @@ export default {
   opacity: 0.3 !important;
 }
 
-$char-size: 36px;
-
 .char {
   display: inline-block;
-  font-size: $char-size;
+  font-size: $char-font-size;
   width: $char-size;
   height: $char-size;
-  margin: 10px;
   font-family: "LCD-Solid" sans-serif;
   color: #c4872b;
+}
+
+.char.matched {
+  width: $matched-char-size;
 }
 </style>
