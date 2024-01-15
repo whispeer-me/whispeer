@@ -151,14 +151,16 @@ export default Vue.extend({
       opacity: 1;
     }
   }
+
   .logo {
     max-height: 35px;
     margin-right: 20px;
+    margin-left: 20px;
   }
 
   @media (max-width: 480px) {
     .icon-mobile {
-      font-size: 28px; /* Adjust the font size as needed for larger icons */
+      font-size: 28px;
     }
   }
 }
