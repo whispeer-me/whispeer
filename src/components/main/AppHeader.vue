@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <nav class="main-nav">
-      <img src="/img/logo.png" alt="Whisper Logo" class="logo" />
+      <img src="/logo.png" alt="Whisper Logo" class="logo" />
       <router-link to="/" class="nav-link">
         <img v-if="isMobile" :src="homeIcon" alt="Home" class="icon-mobile" />
         <span v-if="!isMobile">Home</span>
