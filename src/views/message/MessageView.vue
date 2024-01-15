@@ -7,7 +7,8 @@
 
     <div v-if="message.content">
       <p class="expire-info">
-        This message will <span class="highlight"> {{ expireMessage }}</span>
+        This message will expire in
+        <span class="highlight"> {{ message.expires_in }}</span>
       </p>
       <p class="view-count">
         View Count: <span class="highlight"> {{ message.view_count + 1 }}</span>
@@ -87,6 +88,7 @@ export default {
         content: null,
         view_count: 0,
         created_at: null,
+        expires_in: null,
       },
       errorMessage: null,
       isLoading: true,
@@ -98,21 +100,6 @@ export default {
   computed: {
     fullImageUrl() {
       return window.location.origin + "/logo.png";
-    },
-    expireMessage() {
-      if (this.message && this.message.created_at) {
-        const createdAt = new Date(this.message.created_at);
-        // 24 hours later should expire
-        const expireAt = new Date(createdAt.getTime() + 24 * 60 * 60 * 1000);
-
-        const now = Date.UTC();
-        const timeLeft = expireAt - now;
-
-        const hours = Math.floor(timeLeft / (1000 * 60 * 60));
-        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-        return `expire in ${hours} hour(s) ${minutes} min(s)`;
-      }
-      return "";
     },
   },
   async mounted() {
@@ -158,6 +145,7 @@ export default {
 
       this.message.created_at = message.created_at;
       this.message.view_count = message.view_count || 0;
+      this.message.expires_in = message.expires_in;
 
       if (message.is_private) {
         // Wait for passphrase submission
