@@ -3,7 +3,7 @@
     <h1>Welcome to Whispeer</h1>
 
     <p class="intro">
-      Create and share secure, encrypted messages that auto-expires in 24 hours.
+      Create and share secure, encrypted messages that auto-expire in 24 hours.
     </p>
 
     <button class="cta-button" @click="redirectToCreateMessagePage">
