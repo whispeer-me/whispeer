@@ -119,12 +119,12 @@ export default {
 
   .statistics {
     text-align: center;
-    margin-top: 100px;
+    margin-top: 80px;
     color: $primary-color;
 
     .stats-title {
-      font-size: 2em;
-      margin-bottom: 20px;
+      font-size: xx-large;
+      margin-bottom: 40px;
     }
 
     .stat-groups {
@@ -132,8 +132,8 @@ export default {
       justify-content: center;
 
       @media (max-width: 480px) {
-        width: 80%; /* Adjust the width as needed for smaller screens */
-        margin: 0 auto; /* Center the stat-groups container */
+        width: 80%;
+        margin: 0 auto;
       }
 
       .stat-item {
