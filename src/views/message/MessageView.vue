@@ -4,7 +4,16 @@
     <p v-if="errorMessage != null" class="error-message">
       {{ errorMessage }}
     </p>
-    <ChiperDisplay v-if="message" :message="message" class="chiper-display" />
+
+    <div v-if="message.content">
+      <p class="expire-info">
+        This message will <span class="highlight"> {{ expireMessage }}</span>
+      </p>
+      <p class="view-count">
+        View Count: <span class="highlight"> {{ message.view_count + 1 }}</span>
+      </p>
+      <ChiperDisplay :message="message.content" class="chiper-display" />
+    </div>
 
     <SimpleModal ref="simpleModal" class="passphrase-modal">
       <h3>Enter Passphrase</h3>
@@ -74,7 +83,11 @@ export default {
   },
   data() {
     return {
-      message: null,
+      message: {
+        content: null,
+        view_count: 0,
+        created_at: null,
+      },
       errorMessage: null,
       isLoading: true,
       passphrase: null,
@@ -85,6 +98,22 @@ export default {
   computed: {
     fullImageUrl() {
       return window.location.origin + "/logo.png";
+    },
+    expireMessage() {
+      if (this.message && this.message.created_at) {
+        const now = new Date();
+        const utcNow = new Date(
+          now.getTime() + now.getTimezoneOffset() * 60000
+        );
+        const createdAt = new Date(this.message.created_at);
+        const expireAt = new Date(createdAt.getTime() + 24 * 60 * 60 * 1000);
+        const timeLeft = expireAt - utcNow;
+
+        const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        return `expire in ${hours} hour(s) ${minutes} min(s)`;
+      }
+      return "";
     },
   },
   async mounted() {
@@ -99,18 +128,18 @@ export default {
   },
   methods: {
     async processHashChange(hash) {
+      this.message.content = null;
       const messageId = hash.substring(1); // Removes the '#' from the hash
       if (messageId) {
-        await this.getTheMessage(messageId);
+        await this.fetchTheMessage(messageId);
       } else {
         this.errorMessage =
           "No message ID provided in the url. Please ensure the url includes # followed by the message ID";
       }
     },
-    async getTheMessage(messageId) {
+    async fetchTheMessage(messageId) {
       this.isLoading = true;
       this.errorMessage = null;
-      this.message = null;
       try {
         const message = (await MessageService.getMessage(messageId)).data;
         await this.handleMessageRetrieval(message);
@@ -128,12 +157,15 @@ export default {
         return;
       }
 
+      this.message.created_at = message.created_at;
+      this.message.view_count = message.view_count || 0;
+
       if (message.is_private) {
         // Wait for passphrase submission
         const passphrase = await this.showPassphraseModal();
-        this.decryptMessage(message, passphrase);
+        this.message.content = await this.decryptMessage(message, passphrase);
       } else {
-        this.message = message.content;
+        this.message.content = message.content;
       }
     },
 
@@ -144,12 +176,13 @@ export default {
       }
 
       try {
-        this.message = await CryptoService.decrypt(
+        const decryptedContent = await CryptoService.decrypt(
           message.content,
           passphrase,
           message.salt,
           message.iv
         );
+        return decryptedContent;
       } catch (error) {
         this.errorMessage = "Decryption failed. Please check the passphrase.";
       }
@@ -234,5 +267,15 @@ export default {
   button {
     margin-left: 8px;
   }
+}
+
+.expire-info,
+.view-count {
+  color: $secondary-color;
+  margin-bottom: 10px;
+}
+
+.highlight {
+  color: white;
 }
 </style>
