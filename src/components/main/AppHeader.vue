@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <nav class="main-nav">
-      <img :src="logo" alt="Logo" class="logo" />
+      <img src="/img/logo.png" alt="Whisper Logo" class="logo" />
       <router-link to="/" class="nav-link">
         <img v-if="isMobile" :src="homeIcon" alt="Home" class="icon-mobile" />
         <span v-if="!isMobile">Home</span>
@@ -42,7 +42,6 @@
 </template>
 <script>
 import Vue from "vue";
-import logo from "/src/assets/logo.png";
 
 import homeIcon from "@/assets/icons/home.svg";
 import messageIcon from "@/assets/icons/message.svg";
@@ -54,7 +53,6 @@ export default Vue.extend({
   name: "AppHeader",
   data() {
     return {
-      logo: logo,
       homeIcon,
       messageIcon,
       storyIcon,
