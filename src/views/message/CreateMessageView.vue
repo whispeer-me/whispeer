@@ -54,12 +54,6 @@
         </p>
       </div>
 
-      <div class="submit-button">
-        <button type="submit" :disabled="requestProcessing">
-          {{ submitButtonTitle }}
-        </button>
-      </div>
-
       <div v-if="messageLink" class="message-link">
         <p>Share this link with your friends:</p>
         <p
@@ -75,6 +69,12 @@
         <p v-if="messageCopiedToClipboardFailed" class="link-copied-error">
           Can NOT copied to clipboard!
         </p>
+      </div>
+
+      <div class="submit-button">
+        <button type="submit" :disabled="requestProcessing">
+          {{ submitButtonTitle }}
+        </button>
       </div>
     </form>
   </div>
