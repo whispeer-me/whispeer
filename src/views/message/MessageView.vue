@@ -101,13 +101,12 @@ export default {
     },
     expireMessage() {
       if (this.message && this.message.created_at) {
-        const now = new Date();
-        const utcNow = new Date(
-          now.getTime() + now.getTimezoneOffset() * 60000
-        );
         const createdAt = new Date(this.message.created_at);
+        // 24 hours later should expire
         const expireAt = new Date(createdAt.getTime() + 24 * 60 * 60 * 1000);
-        const timeLeft = expireAt - utcNow;
+
+        const now = Date.UTC();
+        const timeLeft = expireAt - now;
 
         const hours = Math.floor(timeLeft / (1000 * 60 * 60));
         const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
