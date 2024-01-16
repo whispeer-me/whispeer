@@ -2,9 +2,8 @@
 
 # Adjust NODE_VERSION as desired
 ARG NODE_VERSION=16.20.2
+ARG APP_VERSION=latest
 FROM node:${NODE_VERSION}-slim as base
-
-LABEL fly_launch_runtime="NodeJS"
 
 # NodeJS app lives here
 WORKDIR /app
