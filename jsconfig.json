@@ -9,6 +9,7 @@
         "src/*"
       ]
     },
+    "sourceMap": false,
     "lib": [
       "esnext",
       "dom",
