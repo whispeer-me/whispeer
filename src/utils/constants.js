@@ -7,3 +7,5 @@ export const TOOLTIP_VIEWS_META_ENTER_KEY = "tooltipViewsMetaEnter";
 
 // How many time to show to user
 export const TOOLTIP_SHOW_TIME = 5;
+
+export const DISCLAIMER_VIEWS_META_ENTER_KEY = "seenDisclaimer";

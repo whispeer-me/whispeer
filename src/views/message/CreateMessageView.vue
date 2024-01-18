@@ -49,7 +49,7 @@
           </p>
         </div>
 
-        <div v-if="!messageLink" class="security-disclaimer">
+        <div v-if="!hasSeenDisclaimer" class="security-disclaimer">
           <p>
             Please note that while Whispeer provides enhanced encryption for
             messaging, <br />
@@ -131,6 +131,7 @@ export default {
       warningCharsLeft: 20,
       requestProcessing: false,
       showTooltip: false,
+      hasSeenDisclaimer: false,
     };
   },
   metaInfo() {
@@ -168,6 +169,7 @@ export default {
   },
   mounted() {
     this.maybeShowTooltip();
+    this.maybeShowDisclaimer();
   },
   methods: {
     async submitMessage() {
@@ -232,6 +234,7 @@ export default {
         this.messageLink = `${window.location.origin}/m/#${newlyCreatedMessage.id}`;
         this.resetForm();
         this.logMessageCreation();
+        this.stopShowingDisclaimer();
       }
     },
 
@@ -315,6 +318,17 @@ export default {
       setTimeout(() => {
         this.showTooltip = false;
       }, 10000);
+    },
+
+    maybeShowDisclaimer() {
+      this.hasSeenDisclaimer = PreferencesService.hasSeenDisclaimer();
+    },
+
+    stopShowingDisclaimer() {
+      if (!this.hasSeenDisclaimer) {
+        PreferencesService.setDisclaimerSeen();
+        this.hasSeenDisclaimer = true;
+      }
     },
   },
 };

@@ -50,4 +50,14 @@ export default {
 
     this.setTooltipViews(key, ++newCount);
   },
+
+  hasSeenDisclaimer() {
+    return (
+      localStorage.getItem(Constants.DISCLAIMER_VIEWS_META_ENTER_KEY) === "true"
+    );
+  },
+
+  setDisclaimerSeen() {
+    localStorage.setItem(Constants.DISCLAIMER_VIEWS_META_ENTER_KEY, "true");
+  },
 };
