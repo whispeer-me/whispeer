@@ -6,6 +6,9 @@
 
     <div v-if="newMessage">
       <h1>New Message</h1>
+      <p v-if="showTooltip" class="shortcut-hint">
+        ⌨️ Press (CMD / Ctrl + Enter) to submit message
+      </p>
       <form @submit.prevent="submitMessage" @keydown.meta.enter="submitMessage">
         <textarea
           v-model="message.content"
@@ -61,6 +64,7 @@
 
         <div class="submit-button">
           <button
+            title="Submit (CMD / Ctrl + Enter)"
             type="submit"
             ref="submitButton"
             :disabled="requestProcessing"
@@ -78,12 +82,15 @@
         friends.
       </p>
 
-      <p
-        title="Click to copy link"
-        class="copyable-link"
-        @click="copyLinkToClipboard"
-      >
-        {{ messageLink }}
+      <p title="Click to copy link">
+        <a
+          href="messageLink"
+          class="copyable-link"
+          @click.prevent="copyLinkToClipboard"
+          @keyup.enter="copyLinkToClipboard"
+        >
+          {{ messageLink }}
+        </a>
       </p>
       <p v-if="messageCopiedToClipboard" class="link-copied">
         Copied to clipboard!
@@ -102,6 +109,8 @@
 import ToggleSwitch from "@/components/common/ToggleSwitch.vue";
 import CryptoService from "@/services/CryptoService";
 import MessageService from "@/services/MessageService";
+import PreferencesService from "@/services/PreferenceService";
+import * as Constants from "@/utils/constants";
 
 export default {
   name: "CreateMessageView",
@@ -121,6 +130,7 @@ export default {
       maxCharsAllowed: 256,
       warningCharsLeft: 20,
       requestProcessing: false,
+      showTooltip: false,
     };
   },
   metaInfo() {
@@ -155,6 +165,9 @@ export default {
         ? "Create Secure Message"
         : "Create Message";
     },
+  },
+  mounted() {
+    this.maybeShowTooltip();
   },
   methods: {
     async submitMessage() {
@@ -286,6 +299,23 @@ export default {
         this.$refs.submitButton.focus();
       }
     },
+
+    maybeShowTooltip() {
+      if (
+        PreferencesService.shouldShowTooltip(
+          Constants.TOOLTIP_VIEWS_META_ENTER_KEY
+        )
+      ) {
+        this.showTooltip = true;
+        this.hideTooltip();
+      }
+    },
+
+    hideTooltip() {
+      setTimeout(() => {
+        this.showTooltip = false;
+      }, 10000);
+    },
   },
 };
 </script>
@@ -382,6 +412,13 @@ export default {
     .link-copied-error {
       color: $error-color;
     }
+  }
+
+  .shortcut-hint {
+    font-size: small;
+    font-family: $secondary-font;
+    color: $secondary-color;
+    font-style: italic;
   }
 }
 </style>
