@@ -6,7 +6,7 @@
 
     <div v-if="newMessage">
       <h1>New Message</h1>
-      <form @submit.prevent="submitMessage">
+      <form @submit.prevent="submitMessage" @keydown.meta.enter="submitMessage">
         <textarea
           v-model="message.content"
           placeholder="Type your message here ..."
@@ -93,7 +93,7 @@
       </p>
     </div>
     <div v-if="!newMessage" class="submit-button new-message">
-      <button type="button" @click="toggleMessageCompose">New Message</button>
+      <button type="button" @click="composeNewMessage">New Message</button>
     </div>
   </div>
 </template>
@@ -163,6 +163,11 @@ export default {
         return;
       }
 
+      if (this.message.is_private && !this.message.passphrase) {
+        this.focusToPassphraseInput();
+        return;
+      }
+
       this.errorMessage = "";
       let newMessage;
       this.requestProcessing = true;
@@ -213,7 +218,6 @@ export default {
       if (newlyCreatedMessage.id) {
         this.messageLink = `${window.location.origin}/m/#${newlyCreatedMessage.id}`;
         this.resetForm();
-        this.toggleMessageCompose();
         this.logAnalytics();
       }
     },
@@ -229,6 +233,7 @@ export default {
       this.errorMessage = null;
       this.message.content = "";
       this.message.passphrase = "";
+      this.newMessage = false;
 
       // Due to Toggle Switch problem let's not change the state of the switch
     },
@@ -264,8 +269,8 @@ export default {
         });
     },
 
-    toggleMessageCompose() {
-      this.newMessage = !this.newMessage;
+    composeNewMessage() {
+      this.newMessage = true;
     },
 
     focusToPassphraseInput(e) {
