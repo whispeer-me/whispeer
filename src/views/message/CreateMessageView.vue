@@ -1,82 +1,93 @@
 <template>
   <div class="create-message-view">
-    <h1>New Message</h1>
     <div v-if="errorMessage" class="error-message">
       <p>{{ errorMessage }}</p>
     </div>
 
-    <form @submit.prevent="submitMessage">
-      <textarea
-        v-model="message.content"
-        placeholder="Type your message here ..."
-        :maxlength="maxCharsAllowed"
-        required
-      ></textarea>
+    <div v-if="newMessage">
+      <h1>New Message</h1>
+      <form @submit.prevent="submitMessage">
+        <textarea
+          v-model="message.content"
+          placeholder="Type your message here ..."
+          :maxlength="maxCharsAllowed"
+          required
+        ></textarea>
 
-      <p>Maximum characters allowed: {{ maxCharsAllowed }}.</p>
+        <p>Maximum characters allowed: {{ maxCharsAllowed }}.</p>
 
-      <p v-if="shouldWarn" class="warning">
-        {{ this.maxCharsAllowed - this.message.content.length }} characters
-        left.
+        <p v-if="shouldWarn" class="warning">
+          {{ this.maxCharsAllowed - this.message.content.length }} characters
+          left.
+        </p>
+
+        <div class="privacy-settings">
+          <ToggleSwitch
+            title="Secure Message"
+            :value="message.is_private"
+            @change="handleToggleChange"
+          />
+        </div>
+
+        <div v-if="message.is_private" class="passphrase">
+          <input
+            class="passphrase-input"
+            type="password"
+            v-model="message.passphrase"
+            placeholder="Enter a passphrase to encrypt"
+            required
+          />
+          <p class="passphrase-warning">
+            Handle passphrase with care: never share it where the message link
+            is visible.
+          </p>
+        </div>
+
+        <div v-if="!messageLink" class="security-disclaimer">
+          <p>
+            Please note that while Whispeer provides enhanced encryption for
+            messaging, <br />
+            <b
+              >it has not been audited by experts, and it is not made by
+              security experts. </b
+            ><br />
+            It should not be solely relied upon for complete privacy or
+            anonymity.
+          </p>
+        </div>
+
+        <div class="submit-button">
+          <button type="submit" :disabled="requestProcessing">
+            {{ submitButtonTitle }}
+          </button>
+        </div>
+      </form>
+    </div>
+    <div v-if="messageLink && !newMessage" class="message-link">
+      <p>
+        Your
+        <span class="highlight" v-if="message.is_private">secure </span> message
+        has been created. Click to copy the link and safely share it with your
+        friends.
       </p>
 
-      <div class="privacy-settings">
-        <ToggleSwitch
-          title="Secure Message"
-          :value="message.is_private"
-          @change="handleToggleChange"
-        />
-      </div>
-
-      <div v-if="message.is_private" class="passphrase">
-        <input
-          class="passphrase-input"
-          type="password"
-          v-model="message.passphrase"
-          placeholder="Enter a passphrase to encrypt"
-          required
-        />
-        <p class="passphrase-warning">
-          Handle passphrase with care: never share it where the message link is
-          visible.
-        </p>
-      </div>
-
-      <div v-if="!messageLink" class="security-disclaimer">
-        <p>
-          Please note that while Whispeer provides enhanced encryption for
-          messaging, <br />
-          <b
-            >it has not been audited by experts, and it is not made by security
-            experts. </b
-          ><br />
-          It should not be solely relied upon for complete privacy or anonymity.
-        </p>
-      </div>
-
-      <div v-if="messageLink" class="message-link">
-        <p>Share this link with your friends:</p>
-        <p
-          title="Click to copy link"
-          class="copyable-link"
-          @click="copyLinkToClipboard"
-        >
-          {{ messageLink }}
-        </p>
-        <p v-if="messageCopiedToClipboard" class="link-copied">
-          Copied to clipboard!
-        </p>
-        <p v-if="messageCopiedToClipboardFailed" class="link-copied-error">
-          Can NOT copied to clipboard!
-        </p>
-      </div>
-
-      <div class="submit-button">
-        <button type="submit" :disabled="requestProcessing">
-          {{ submitButtonTitle }}
-        </button>
-      </div>
-    </form>
+      <p
+        title="Click to copy link"
+        class="copyable-link"
+        @click="copyLinkToClipboard"
+      >
+        {{ messageLink }}
+      </p>
+      <p v-if="messageCopiedToClipboard" class="link-copied">
+        Copied to clipboard!
+      </p>
+      <p v-if="messageCopiedToClipboardFailed" class="link-copied-error">
+        Can NOT copied to clipboard!
+      </p>
+    </div>
+    <div v-if="!newMessage" class="submit-button new-message">
+      <button type="button" @click="toggleMessageCompose">New Message</button>
+    </div>
   </div>
 </template>
 
@@ -95,6 +106,7 @@ export default {
         is_private: false,
         passphrase: "",
       },
+      newMessage: true,
       messageLink: null,
       errorMessage: null,
       messageCopiedToClipboard: false,
@@ -194,6 +206,7 @@ export default {
       if (newlyCreatedMessage.id) {
         this.messageLink = `${window.location.origin}/m/#${newlyCreatedMessage.id}`;
         this.resetForm();
+        this.toggleMessageCompose();
         this.logAnalytics();
       }
     },
@@ -242,6 +255,10 @@ export default {
           this.messageCopiedToClipboard = true;
           this.messageCopiedToClipboardFailed = true;
         });
+    },
+
+    toggleMessageCompose() {
+      this.newMessage = !this.newMessage;
     },
   },
 };
@@ -304,6 +321,10 @@ export default {
     }
   }
 
+  .new-message {
+    margin-top: 40px;
+  }
+
   .security-disclaimer {
     font-family: $secondary-font;
     color: $secondary-color;
@@ -318,8 +339,10 @@ export default {
   }
 
   .message-link {
+    font-family: $secondary-font;
     color: $secondary-color;
     margin-top: 20px;
+    min-height: 100px;
 
     .copyable-link {
       color: $primary-color;
