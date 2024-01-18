@@ -44,7 +44,7 @@
             @keydown.enter="submitMessage"
           />
           <p class="passphrase-warning">
-            Handle passphrase with care: never share it where the message link
+            Handle passphrase with care: Never share it where the message link
             is visible.
           </p>
         </div>
@@ -231,7 +231,7 @@ export default {
       if (newlyCreatedMessage.id) {
         this.messageLink = `${window.location.origin}/m/#${newlyCreatedMessage.id}`;
         this.resetForm();
-        this.logMessageCreations();
+        this.logMessageCreation();
       }
     },
 
