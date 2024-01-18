@@ -12,6 +12,7 @@
           placeholder="Type your message here ..."
           :maxlength="maxCharsAllowed"
           required
+          @keydown.tab="focusToPassphraseInput"
         ></textarea>
 
         <p>Maximum characters allowed: {{ maxCharsAllowed }}.</p>
@@ -31,6 +32,7 @@
 
         <div v-if="message.is_private" class="passphrase">
           <input
+            ref="passphraseInput"
             class="passphrase-input"
             type="password"
             v-model="message.passphrase"
@@ -57,7 +59,11 @@
         </div>
 
         <div class="submit-button">
-          <button type="submit" :disabled="requestProcessing">
+          <button
+            type="submit"
+            ref="submitButton"
+            :disabled="requestProcessing"
+          >
             {{ submitButtonTitle }}
           </button>
         </div>
@@ -259,6 +265,15 @@ export default {
 
     toggleMessageCompose() {
       this.newMessage = !this.newMessage;
+    },
+
+    focusToPassphraseInput(e) {
+      e.preventDefault();
+      if (this.message.is_private) {
+        this.$refs.passphraseInput.focus();
+      } else {
+        this.$refs.submitButton.focus();
+      }
     },
   },
 };
