@@ -218,7 +218,7 @@ export default {
       if (newlyCreatedMessage.id) {
         this.messageLink = `${window.location.origin}/m/#${newlyCreatedMessage.id}`;
         this.resetForm();
-        this.logAnalytics();
+        this.logMessageCreations();
       }
     },
 
@@ -242,10 +242,14 @@ export default {
       this.message.is_private = newValue;
     },
 
-    logAnalytics() {
+    logMessageCreation() {
       this.$analytics.trackEvent("message-created", {
         props: { is_private: this.message.is_private },
       });
+    },
+
+    logNewMessageCreation() {
+      this.$analytics.trackEvent("new-message");
     },
 
     copyLinkToClipboard() {
@@ -271,6 +275,7 @@ export default {
 
     composeNewMessage() {
       this.newMessage = true;
+      this.logNewMessageCreation();
     },
 
     focusToPassphraseInput(e) {
