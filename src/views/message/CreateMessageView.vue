@@ -38,6 +38,7 @@
             v-model="message.passphrase"
             placeholder="Enter a passphrase to encrypt"
             required
+            @keydown.enter="submitMessage"
           />
           <p class="passphrase-warning">
             Handle passphrase with care: never share it where the message link
