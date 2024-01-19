@@ -261,8 +261,4 @@ export default {
   color: $secondary-color;
   margin-bottom: 10px;
 }
-
-.highlight {
-  color: white;
-}
 </style>

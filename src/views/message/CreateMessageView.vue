@@ -1,82 +1,107 @@
 <template>
   <div class="create-message-view">
-    <h1>New Message</h1>
     <div v-if="errorMessage" class="error-message">
       <p>{{ errorMessage }}</p>
     </div>
 
-    <form @submit.prevent="submitMessage">
-      <textarea
-        v-model="message.content"
-        placeholder="Type your message here ..."
-        :maxlength="maxCharsAllowed"
-        required
-      ></textarea>
+    <div v-if="newMessage">
+      <h1>New Message</h1>
+      <p v-if="showTooltip" class="shortcut-hint">
+        ⌨️ Press (CMD / Ctrl + Enter) to submit message
+      </p>
+      <form @submit.prevent="submitMessage" @keydown.meta.enter="submitMessage">
+        <textarea
+          v-model="message.content"
+          placeholder="Type your message here ..."
+          :maxlength="maxCharsAllowed"
+          required
+          @keydown.tab="focusToPassphraseInput"
+        ></textarea>
 
-      <p>Maximum characters allowed: {{ maxCharsAllowed }}.</p>
+        <p>Maximum characters allowed: {{ maxCharsAllowed }}.</p>
 
-      <p v-if="shouldWarn" class="warning">
-        {{ this.maxCharsAllowed - this.message.content.length }} characters
-        left.
+        <p v-if="shouldWarn" class="warning">
+          {{ this.maxCharsAllowed - this.message.content.length }} characters
+          left.
+        </p>
+
+        <div class="privacy-settings">
+          <ToggleSwitch
+            title="Secure Message"
+            :value="message.is_private"
+            @change="handleToggleChange"
+          />
+        </div>
+
+        <div v-if="message.is_private" class="passphrase">
+          <input
+            ref="passphraseInput"
+            class="passphrase-input"
+            type="password"
+            v-model="message.passphrase"
+            placeholder="Enter a passphrase to encrypt"
+            required
+            @keydown.enter="submitMessage"
+          />
+          <p class="passphrase-warning">
+            Handle passphrase with care: Never share it where the message link
+            is visible.
+          </p>
+        </div>
+
+        <div v-if="showDisclaimer" class="security-disclaimer">
+          <p>
+            Please note that while Whispeer provides enhanced encryption for
+            messaging, <br />
+            <b
+              >it has not been audited by experts, and it is not made by
+              security experts. </b
+            ><br />
+            It should not be solely relied upon for complete privacy or
+            anonymity.
+          </p>
+        </div>
+
+        <div class="submit-button">
+          <button
+            title="Submit (CMD / Ctrl + Enter)"
+            type="submit"
+            ref="submitButton"
+            :disabled="requestProcessing"
+          >
+            {{ submitButtonTitle }}
+          </button>
+        </div>
+      </form>
+    </div>
+    <div v-if="messageLink && !newMessage" class="message-link">
+      <p>
+        Your
+        <span class="highlight" v-if="message.is_private">secure </span> message
+        has been created. Click to copy the link and safely share it with your
+        friends.
       </p>
 
-      <div class="privacy-settings">
-        <ToggleSwitch
-          title="Secure Message"
-          :value="message.is_private"
-          @change="handleToggleChange"
-        />
-      </div>
-
-      <div v-if="message.is_private" class="passphrase">
-        <input
-          class="passphrase-input"
-          type="password"
-          v-model="message.passphrase"
-          placeholder="Enter a passphrase to encrypt"
-          required
-        />
-        <p class="passphrase-warning">
-          Handle passphrase with care: never share it where the message link is
-          visible.
-        </p>
-      </div>
-
-      <div v-if="!messageLink" class="security-disclaimer">
-        <p>
-          Please note that while Whispeer provides enhanced encryption for
-          messaging, <br />
-          <b
-            >it has not been audited by experts, and it is not made by security
-            experts. </b
-          ><br />
-          It should not be solely relied upon for complete privacy or anonymity.
-        </p>
-      </div>
-
-      <div v-if="messageLink" class="message-link">
-        <p>Share this link with your friends:</p>
-        <p
-          title="Click to copy link"
+      <p title="Click to copy link">
+        <a
+          href="messageLink"
           class="copyable-link"
-          @click="copyLinkToClipboard"
+          @click.prevent="copyLinkToClipboard"
+          @keyup.enter="copyLinkToClipboard"
         >
           {{ messageLink }}
-        </p>
-        <p v-if="messageCopiedToClipboard" class="link-copied">
-          Copied to clipboard!
-        </p>
-        <p v-if="messageCopiedToClipboardFailed" class="link-copied-error">
-          Can NOT copied to clipboard!
-        </p>
-      </div>
-
-      <div class="submit-button">
-        <button type="submit" :disabled="requestProcessing">
-          {{ submitButtonTitle }}
-        </button>
-      </div>
-    </form>
+        </a>
+      </p>
+      <p v-if="messageCopiedToClipboard" class="link-copied">
+        Copied to clipboard!
+      </p>
+      <p v-if="messageCopiedToClipboardFailed" class="link-copied-error">
+        Can NOT copied to clipboard!
+      </p>
+    </div>
+    <div v-if="!newMessage" class="submit-button new-message">
+      <button type="button" @click="composeNewMessage">New Message</button>
+    </div>
   </div>
 </template>
 
@@ -84,6 +109,8 @@
 import ToggleSwitch from "@/components/common/ToggleSwitch.vue";
 import CryptoService from "@/services/CryptoService";
 import MessageService from "@/services/MessageService";
+import PreferencesService from "@/services/PreferenceService";
+import * as Constants from "@/utils/constants";
 
 export default {
   name: "CreateMessageView",
@@ -95,6 +122,7 @@ export default {
         is_private: false,
         passphrase: "",
       },
+      newMessage: true,
       messageLink: null,
       errorMessage: null,
       messageCopiedToClipboard: false,
@@ -102,6 +130,8 @@ export default {
       maxCharsAllowed: 256,
       warningCharsLeft: 20,
       requestProcessing: false,
+      showTooltip: false,
+      showDisclaimer: false,
     };
   },
   metaInfo() {
@@ -137,10 +167,19 @@ export default {
         : "Create Message";
     },
   },
+  mounted() {
+    this.maybeShowTooltip();
+    this.maybeShowDisclaimer();
+  },
   methods: {
     async submitMessage() {
       if (this.message.content.length > this.maxCharsAllowed) {
         this.errorMessage = `Message exceeds ${this.maxCharsAllowed} characters.`;
+        return;
+      }
+
+      if (this.message.is_private && !this.message.passphrase) {
+        this.focusToPassphraseInput();
         return;
       }
 
@@ -194,7 +233,8 @@ export default {
       if (newlyCreatedMessage.id) {
         this.messageLink = `${window.location.origin}/m/#${newlyCreatedMessage.id}`;
         this.resetForm();
-        this.logAnalytics();
+        this.logMessageCreation();
+        this.stopShowingDisclaimer();
       }
     },
 
@@ -209,6 +249,7 @@ export default {
       this.errorMessage = null;
       this.message.content = "";
       this.message.passphrase = "";
+      this.newMessage = false;
 
       // Due to Toggle Switch problem let's not change the state of the switch
     },
@@ -217,10 +258,14 @@ export default {
       this.message.is_private = newValue;
     },
 
-    logAnalytics() {
+    logMessageCreation() {
       this.$analytics.trackEvent("message-created", {
         props: { is_private: this.message.is_private },
       });
+    },
+
+    logNewMessageCreation() {
+      this.$analytics.trackEvent("new-message");
     },
 
     copyLinkToClipboard() {
@@ -242,6 +287,46 @@ export default {
           this.messageCopiedToClipboard = true;
           this.messageCopiedToClipboardFailed = true;
         });
+    },
+
+    composeNewMessage() {
+      this.newMessage = true;
+      this.logNewMessageCreation();
+    },
+
+    focusToPassphraseInput(e) {
+      e.preventDefault();
+      if (this.message.is_private) {
+        this.$refs.passphraseInput.focus();
+      } else {
+        this.$refs.submitButton.focus();
+      }
+    },
+
+    maybeShowTooltip() {
+      if (
+        PreferencesService.shouldShow(
+          Constants.TOOLTIP_META_ENTER_KEY_VIEWS_COUNT,
+          Constants.TOOLTIP_META_ENTER_KEY_VIEWS_MAX_COUNT
+        )
+      ) {
+        this.showTooltip = true;
+        this.hideTooltip();
+      }
+    },
+
+    hideTooltip() {
+      setTimeout(() => {
+        this.showTooltip = false;
+      }, 10000);
+    },
+
+    maybeShowDisclaimer() {
+      this.showDisclaimer = PreferencesService.shouldShow(
+        Constants.DISCLAIMER_VIEWS_COUNT,
+        Constants.DISCLAIMER_VIEWS_MAX_COUNT,
+        false
+      );
     },
   },
 };
@@ -304,6 +389,10 @@ export default {
     }
   }
 
+  .new-message {
+    margin-top: 40px;
+  }
+
   .security-disclaimer {
     font-family: $secondary-font;
     color: $secondary-color;
@@ -318,8 +407,10 @@ export default {
   }
 
   .message-link {
+    font-family: $secondary-font;
     color: $secondary-color;
     margin-top: 20px;
+    min-height: 100px;
 
     .copyable-link {
       color: $primary-color;
@@ -333,6 +424,13 @@ export default {
     .link-copied-error {
       color: $error-color;
     }
+  }
+
+  .shortcut-hint {
+    font-size: small;
+    font-family: $secondary-font;
+    color: $secondary-color;
+    font-style: italic;
   }
 }
 </style>
