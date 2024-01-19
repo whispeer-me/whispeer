@@ -49,7 +49,7 @@
           </p>
         </div>
 
-        <div v-if="!hasSeenDisclaimer" class="security-disclaimer">
+        <div v-if="showDisclaimer" class="security-disclaimer">
           <p>
             Please note that while Whispeer provides enhanced encryption for
             messaging, <br />
@@ -131,7 +131,7 @@ export default {
       warningCharsLeft: 20,
       requestProcessing: false,
       showTooltip: false,
-      hasSeenDisclaimer: false,
+      showDisclaimer: false,
     };
   },
   metaInfo() {
@@ -305,8 +305,9 @@ export default {
 
     maybeShowTooltip() {
       if (
-        PreferencesService.shouldShowTooltip(
-          Constants.TOOLTIP_VIEWS_META_ENTER_KEY
+        PreferencesService.shouldShow(
+          Constants.TOOLTIP_META_ENTER_KEY_VIEWS_COUNT,
+          Constants.TOOLTIP_META_ENTER_KEY_VIEWS_MAX_COUNT
         )
       ) {
         this.showTooltip = true;
@@ -321,14 +322,11 @@ export default {
     },
 
     maybeShowDisclaimer() {
-      this.hasSeenDisclaimer = PreferencesService.hasSeenDisclaimer();
-    },
-
-    stopShowingDisclaimer() {
-      if (!this.hasSeenDisclaimer) {
-        PreferencesService.setDisclaimerSeen();
-        this.hasSeenDisclaimer = true;
-      }
+      this.showDisclaimer = PreferencesService.shouldShow(
+        Constants.DISCLAIMER_VIEWS_COUNT,
+        Constants.DISCLAIMER_VIEWS_MAX_COUNT,
+        false
+      );
     },
   },
 };

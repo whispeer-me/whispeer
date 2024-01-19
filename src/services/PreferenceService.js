@@ -17,47 +17,41 @@ export default {
     return this.getAnalyticsConsent() === "true";
   },
 
-  shouldShowTooltip(key) {
-    let views = this.getToolTipViews(key) || 0;
+  /**
+   * Checks if a feature with the given key should be shown, based on:
+   * - maxCount: The maximum number of times to show it
+   * - randomChance: Whether to show randomly before reaching maxCount
+   * - viewCount: Fetched from localStorage for the key
+   *
+   * Increments the viewCount if it is shown.
+   * Returns a boolean indicating if it should be shown.
+   */
+  shouldShow(key, maxCount, randomChance = true) {
+    let viewCount = this.getViewsCount(key);
 
     let shouldShow = false;
 
     // Show randomly if we haven't show them enough.
-    if (views < Constants.TOOLTIP_SHOW_TIME) {
-      shouldShow = Math.random() < 0.5;
+    if (viewCount < maxCount) {
+      shouldShow = randomChance ? Math.random() < 0.5 : true;
       if (shouldShow) {
-        this.incrementToolTipViews(key);
+        this.incrementViewsCount(key);
       }
     }
 
     return shouldShow;
   },
 
-  getToolTipViews(key) {
-    return localStorage.getItem(key);
+  getViewsCount(key) {
+    return localStorage.getItem(key) || 0;
   },
 
-  setTooltipViews(key, value) {
+  setViewsCount(key, value) {
     localStorage.setItem(key, value);
   },
 
-  incrementToolTipViews(key) {
-    let newCount = 0;
-    const currentViews = this.getToolTipViews(key);
-    if (currentViews) {
-      newCount = parseInt(currentViews);
-    }
-
-    this.setTooltipViews(key, ++newCount);
-  },
-
-  hasSeenDisclaimer() {
-    return (
-      localStorage.getItem(Constants.DISCLAIMER_VIEWS_META_ENTER_KEY) === "true"
-    );
-  },
-
-  setDisclaimerSeen() {
-    localStorage.setItem(Constants.DISCLAIMER_VIEWS_META_ENTER_KEY, "true");
+  incrementViewsCount(key) {
+    let currentViewCount = this.getViewsCount(key);
+    this.setViewsCount(key, ++currentViewCount);
   },
 };
