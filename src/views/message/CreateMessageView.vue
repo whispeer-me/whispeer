@@ -173,40 +173,48 @@ export default {
   },
   methods: {
     async submitMessage() {
-      if (this.message.content.length > this.maxCharsAllowed) {
-        this.errorMessage = `Message exceeds ${this.maxCharsAllowed} characters.`;
+      this.resetErrorMessage();
+
+      if (!this.isMessageValid()) {
         return;
       }
 
-      if (this.message.is_private && !this.message.passphrase) {
-        this.focusToPassphraseInput();
-        return;
-      }
-
-      this.errorMessage = "";
-      let newMessage;
       this.requestProcessing = true;
 
       try {
-        newMessage = this.prepareAndMaybeEncryptTheMessage();
-      } catch (error) {
-        this.handleError(error, "Error occured during message encryption.");
-        return;
-      }
-
-      try {
+        const newMessage = this.prepareAndMaybeEncryptTheMessage();
         const newlyCreatedMessage = await MessageService.createMessage(
           newMessage
         );
         this.handleSuccessfulSubmission(newlyCreatedMessage);
       } catch (error) {
-        this.handleError(
-          error,
-          "Error occured while submitting the message to the server. Please try again."
-        );
+        this.handleError(error);
       } finally {
         this.requestProcessing = false;
       }
+    },
+
+    isMessageValid() {
+      return this.isLengthValid() && this.isPassphraseValidIfPrivate();
+    },
+
+    isLengthValid() {
+      if (this.message.content.length > this.maxCharsAllowed) {
+        this.errorMessage = `Message exceeds ${this.maxCharsAllowed} characters.`;
+        return false;
+      }
+      return true;
+    },
+
+    isPassphraseValidIfPrivate() {
+      if (this.message.is_private && !this.message.passphrase) {
+        this.focusToPassphraseInput();
+        return false;
+      }
+      return true;
+    },
+    resetErrorMessage() {
+      this.errorMessage = null;
     },
 
     prepareAndMaybeEncryptTheMessage() {
@@ -234,15 +242,12 @@ export default {
         this.messageLink = `${window.location.origin}/m/#${newlyCreatedMessage.id}`;
         this.resetForm();
         this.logMessageCreation();
-        this.stopShowingDisclaimer();
       }
     },
 
-    handleError(error, info) {
-      this.errorMessage =
-        error.response?.data?.data?.message ||
-        info ||
-        "An unexpected error occurred";
+    handleError(error) {
+      const defaultErrorMessage = "An unexpected error occurred";
+      this.errorMessage = error.message || defaultErrorMessage;
     },
 
     resetForm() {
@@ -270,23 +275,31 @@ export default {
 
     copyLinkToClipboard() {
       if (!navigator.clipboard) {
+        this.handleClipboardFailure();
         return;
       }
 
       navigator.clipboard
         .writeText(this.messageLink)
-        .then(() => {
-          this.messageCopiedToClipboard = true;
-          this.messageCopiedToClipboardFailed = false;
+        .then(this.handleClipboardSuccess)
+        .catch(this.handleClipboardFailure);
+    },
 
-          setTimeout(() => {
-            this.messageCopiedToClipboard = false;
-          }, 3000);
-        })
-        .catch(() => {
-          this.messageCopiedToClipboard = true;
-          this.messageCopiedToClipboardFailed = true;
-        });
+    handleClipboardSuccess() {
+      this.messageCopiedToClipboard = true;
+      this.messageCopiedToClipboardFailed = false;
+      setTimeout(
+        this.resetClipboardState,
+        Constants.CLIPBOARD_INFORM_MESSAGE_DURATION
+      );
+    },
+
+    handleClipboardFailure() {
+      this.messageCopiedToClipboardFailed = true;
+    },
+
+    resetClipboardState() {
+      this.messageCopiedToClipboard = false;
     },
 
     composeNewMessage() {

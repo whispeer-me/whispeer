@@ -2,24 +2,28 @@ import CryptoJS from "crypto-js";
 
 export default class CryptoService {
   static encrypt(message, passphrase) {
-    const salt = CryptoJS.lib.WordArray.random(128 / 8);
-    const iv = CryptoJS.lib.WordArray.random(128 / 8);
-    const key = CryptoJS.PBKDF2(passphrase, salt, {
-      keySize: 256 / 32,
-      iterations: 1000,
-    });
+    try {
+      const salt = CryptoJS.lib.WordArray.random(128 / 8);
+      const iv = CryptoJS.lib.WordArray.random(128 / 8);
+      const key = CryptoJS.PBKDF2(passphrase, salt, {
+        keySize: 256 / 32,
+        iterations: 1000,
+      });
 
-    const encrypted = CryptoJS.AES.encrypt(message, key, {
-      iv: iv,
-      mode: CryptoJS.mode.CBC,
-      padding: CryptoJS.pad.Pkcs7,
-    });
+      const encrypted = CryptoJS.AES.encrypt(message, key, {
+        iv: iv,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7,
+      });
 
-    return {
-      ciphertext: encrypted.toString(),
-      salt: salt.toString(),
-      iv: iv.toString(),
-    };
+      return {
+        ciphertext: encrypted.toString(),
+        salt: salt.toString(),
+        iv: iv.toString(),
+      };
+    } catch (error) {
+      throw { message: "Error occured during message encryption." };
+    }
   }
 
   static decrypt(ciphertext, passphrase, salt, iv) {
