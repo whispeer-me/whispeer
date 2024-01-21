@@ -7,6 +7,19 @@
        url("~/assets/fonts/LCD-Solid.ttf.eot?#iefix") format("embedded-opentype");
 }
 
+#app {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  min-height: 100vh;
+}
+
+.divider {
+  border: none;
+  height: 2px;
+  background-color: $divider-color;
+  margin: 0;
+}
 
 h1 {
   color: $primary-color;
