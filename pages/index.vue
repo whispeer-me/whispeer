@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, ref } from "vue";
-import MessageService from "@/services/MessageService";
 
 const createdCount = ref(0);
 const expiringSoonCount = ref(0);
@@ -10,7 +9,7 @@ const ctaButtonTitle = ref("Create a secure message");
 async function fetchData() {
   try {
     const { created_count, expiring_soon_count, view_count } = (
-      await MessageService.getStats()
+      await messageService.getStats()
     ).data;
     createdCount.value = created_count;
     expiringSoonCount.value = expiring_soon_count;
