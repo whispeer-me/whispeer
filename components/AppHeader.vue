@@ -25,7 +25,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="header">
+  <header class="header">
     <nav class="main-nav">
       <img src="/logo.png" alt="Whisper Logo" class="logo" />
       <NuxtLink to="/" class="nav-link">
@@ -64,7 +64,7 @@ onUnmounted(() => {
         <span v-if="!isMobile">Contact</span>
       </NuxtLink>
     </nav>
-  </div>
+  </header>
 </template>
 
 <style lang="scss">
