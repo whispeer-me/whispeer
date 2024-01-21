@@ -1,3 +1,29 @@
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted } from "vue";
+import homeIcon from "@/assets/icons/home.svg";
+import messageIcon from "@/assets/icons/message.svg";
+import storyIcon from "@/assets/icons/the-story.svg";
+import codeIcon from "@/assets/icons/code.svg";
+import contactIcon from "@/assets/icons/contact.svg";
+
+const isMobile = ref<boolean>(false);
+
+function handleResize() {
+  if (typeof window !== "undefined") {
+    isMobile.value = window.innerWidth <= 480;
+  }
+}
+
+onMounted(() => {
+  handleResize();
+  window.addEventListener("resize", handleResize);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("resize", handleResize);
+});
+</script>
+
 <template>
   <div class="header">
     <nav class="main-nav">
@@ -40,32 +66,6 @@
     </nav>
   </div>
 </template>
-
-<script setup>
-import { ref, onMounted, onUnmounted } from "vue";
-import homeIcon from "@/assets/icons/home.svg";
-import messageIcon from "@/assets/icons/message.svg";
-import storyIcon from "@/assets/icons/the-story.svg";
-import codeIcon from "@/assets/icons/code.svg";
-import contactIcon from "@/assets/icons/contact.svg";
-
-const isMobile = ref(false);
-
-function handleResize() {
-  if (typeof window !== "undefined") {
-    isMobile.value = window.innerWidth <= 480;
-  }
-}
-
-onMounted(() => {
-  handleResize();
-  window.addEventListener("resize", handleResize);
-});
-
-onUnmounted(() => {
-  window.removeEventListener("resize", handleResize);
-});
-</script>
 
 <style lang="scss">
 @import url("~/assets/scss/header.scss");
