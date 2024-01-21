@@ -1,4 +1,3 @@
-const baseURL: string = process.env.VUE_APP_API_BASE_URL || "";
 const contentType: string = "application/json";
 const commonHeaders: HeadersInit = {
   Pragma: "no-cache",
@@ -64,4 +63,4 @@ class Api {
   }
 }
 
-export default new Api(baseURL);
+export default new Api("/api/");
