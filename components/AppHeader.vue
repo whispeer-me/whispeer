@@ -28,11 +28,11 @@ onUnmounted(() => {
   <div class="header">
     <nav class="main-nav">
       <img src="/logo.png" alt="Whisper Logo" class="logo" />
-      <router-link to="/" class="nav-link">
+      <NuxtLink to="/" class="nav-link">
         <img v-if="isMobile" :src="homeIcon" alt="Home" class="icon-mobile" />
         <span v-if="!isMobile">Home</span>
-      </router-link>
-      <router-link to="/m/new?ref=nav" class="nav-link">
+      </NuxtLink>
+      <NuxtLink to="/m/new?ref=nav" class="nav-link">
         <img
           v-if="isMobile"
           :src="messageIcon"
@@ -40,8 +40,8 @@ onUnmounted(() => {
           class="icon-mobile"
         />
         <span v-if="!isMobile">New Message</span>
-      </router-link>
-      <router-link to="/the-story" class="nav-link">
+      </NuxtLink>
+      <NuxtLink to="/the-story" class="nav-link">
         <img
           v-if="isMobile"
           :src="storyIcon"
@@ -49,12 +49,12 @@ onUnmounted(() => {
           class="icon-mobile"
         />
         <span v-if="!isMobile">The Story</span>
-      </router-link>
-      <router-link to="/code" class="nav-link">
+      </NuxtLink>
+      <NuxtLink to="/code" class="nav-link">
         <img v-if="isMobile" :src="codeIcon" alt="Code" class="icon-mobile" />
         <span v-if="!isMobile">Code</span>
-      </router-link>
-      <router-link to="/contact" class="nav-link">
+      </NuxtLink>
+      <NuxtLink to="/contact" class="nav-link">
         <img
           v-if="isMobile"
           :src="contactIcon"
@@ -62,7 +62,7 @@ onUnmounted(() => {
           class="icon-mobile"
         />
         <span v-if="!isMobile">Contact</span>
-      </router-link>
+      </NuxtLink>
     </nav>
   </div>
 </template>
