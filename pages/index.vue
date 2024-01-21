@@ -36,10 +36,7 @@ function formatNumber(num: number): string {
 }
 
 function redirectToCreateMessagePage() {
-  // In Vue 3 with TypeScript, you might need to type the router usage.
-  // For example, if using Vue Router 4, you could do something like this:
-  // useRouter().push({ name: "new-message", query: { ref: "cta" } });
-  // This example assumes you've set up Vue Router 4 with named routes.
+  navigateTo({ path: "/m/new", query: { ref: "cta" } });
 }
 </script>
 
