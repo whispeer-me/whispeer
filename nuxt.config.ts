@@ -58,4 +58,9 @@ export default defineNuxtConfig({
       },
     },
   },
+  runtimeConfig: {
+    public: {
+      analyticsDomain: process.env.ANALYTICS_DOMAIN,
+    },
+  },
 });

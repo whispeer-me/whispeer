@@ -1,3 +1,7 @@
+<script setup lang="ts">
+useAnalytics();
+</script>
+
 <template>
   <div id="app" class="page-wrapper">
     <AppHeader />
