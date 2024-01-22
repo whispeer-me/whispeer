@@ -1,7 +1,13 @@
 import CryptoJS from "crypto-js";
 
+interface EncryptReturn {
+  ciphertext: string;
+  salt: string;
+  iv: string;
+}
+
 export default class CryptoService {
-  static encrypt(message, passphrase) {
+  static encrypt(message: string, passphrase: string): EncryptReturn {
     try {
       const salt = CryptoJS.lib.WordArray.random(128 / 8);
       const iv = CryptoJS.lib.WordArray.random(128 / 8);
@@ -22,11 +28,16 @@ export default class CryptoService {
         iv: iv.toString(),
       };
     } catch (error) {
-      throw { message: "Error occured during message encryption." };
+      throw new Error("Error occurred during message encryption.");
     }
   }
 
-  static decrypt(ciphertext, passphrase, salt, iv) {
+  static decrypt(
+    ciphertext: string,
+    passphrase: string,
+    salt: string,
+    iv: string
+  ): string {
     const key = CryptoJS.PBKDF2(passphrase, CryptoJS.enc.Hex.parse(salt), {
       keySize: 256 / 32,
       iterations: 1000,
