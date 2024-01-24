@@ -1,25 +1,4 @@
-import * as Constants from "@/utils/constants";
-
 export default {
-  async updateAnalyticsConsent(consentGiven: boolean) {
-    localStorage.setItem(
-      Constants.ANALYTICS_CONSENT_KEY,
-      consentGiven.toString()
-    );
-  },
-
-  async getAnalyticsConsent(): Promise<string | null> {
-    return localStorage.getItem(Constants.ANALYTICS_CONSENT_KEY);
-  },
-
-  async shouldShowAnalyticsBanner(): Promise<boolean> {
-    return this.getAnalyticsConsent() === null;
-  },
-
-  async shouldTrackAnalytics(): Promise<boolean> {
-    return (await this.getAnalyticsConsent()) === "true";
-  },
-
   /**
    * Checks if a feature with the given key should be shown, based on:
    * - maxCount: The maximum number of times to show it

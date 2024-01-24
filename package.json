@@ -24,7 +24,6 @@
     "vue-router": "^4.2.5"
   },
   "dependencies": {
-    "crypto-js": "^4.2.0",
-    "plausible-tracker": "^0.3.8"
+    "crypto-js": "^4.2.0"
   }
 }

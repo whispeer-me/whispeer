@@ -2,20 +2,14 @@
   <div class="privacy-policy">
     <h1>Privacy Policy</h1>
 
-    <h2>Analytics and User Consent</h2>
+    <h2>Analytics</h2>
     <p>
       <b>Anonymous Analytics:</b> We use
       <a href="https://plausible.io/">Plausible.io</a> for analytics to improve
-      Whispeer. However, we only track anonymized events such as
-      "message-created" and "message-viewed" without logging any personal data.
-      This helps us understand app usage while fully respecting your privacy.
-    </p>
-    <p>
-      <b>User Consent for Analytics:</b> Whispeer respects your choice regarding
-      analytics tracking. Our analytics system is designed to honor the "Do Not
-      Track" settings and user consents. We provide clear options for users to
-      opt in or opt out of analytics tracking. Your preferences in this regard
-      are paramount and fully respected.
+      Whispeer. Plausible is GDPR compliant and tracks anonymized events such
+      as "message-created" and "message-viewed" without logging any personal
+      data. This helps us understand app usage while fully respecting your
+      privacy and does not require user consent for tracking.
     </p>
 
     <h3>Aggregate Data Collection</h3>
