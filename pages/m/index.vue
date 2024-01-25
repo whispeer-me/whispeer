@@ -8,14 +8,11 @@
       <ChiperDisplay :message="message.content" class="chiper-display" />
     </div>
 
-    <SimpleModal
-      :isVisible="isModalVisible"
-      @close="closeModal"
-      class="passphrase-modal"
-    >
+    <SimpleModal :isVisible="isModalVisible" class="passphrase-modal">
       <PassphraseInput
         :passphrase="passphrase"
         @update:passphrase="passphrase = $event"
+        @close="closeModal"
         @submit="onModalSubmit"
       />
     </SimpleModal>

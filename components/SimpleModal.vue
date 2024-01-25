@@ -13,10 +13,6 @@ defineProps({
     default: false,
   },
 });
-
-const closeModal = () => {
-  isVisible.value = false;
-};
 </script>
 
 <style scoped lang="scss">

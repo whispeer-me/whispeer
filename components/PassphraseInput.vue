@@ -12,14 +12,14 @@
     />
 
     <div class="modal-buttons">
-      <button @click="onModalSubmit">Decrypt the message</button>
-      <button @click="closeModal">Cancel</button>
+      <button @click="handleSubmit">Decrypt the message</button>
+      <button type="button" @click="closeModal">Cancel</button>
     </div>
   </form>
 </template>
 
 <script setup>
-const emit = defineEmits(["update:passphrase", "submit"]);
+const emit = defineEmits(["update:passphrase", "submit", "close"]);
 
 const props = defineProps({
   passphrase: String,
@@ -27,5 +27,9 @@ const props = defineProps({
 
 const handleSubmit = () => {
   emit("submit", props.passphrase);
+};
+
+const closeModal = () => {
+  emit("close");
 };
 </script>
