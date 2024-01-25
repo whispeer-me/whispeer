@@ -25,3 +25,34 @@ $matched-char-size: 14px;
 .char.matched {
   width: $matched-char-size;
 }
+
+.chiper-display {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.passphrase-modal {
+  font-family: $secondary-font;
+}
+
+.passphrase-input {
+  width: 80%;
+  margin: 20px;
+  padding: 10px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+
+  button {
+    margin-left: 8px;
+  }
+}
+
+.expire-info,
+.view-count {
+  color: $secondary-color;
+  margin-bottom: 10px;
+}

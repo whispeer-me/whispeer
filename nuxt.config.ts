@@ -44,6 +44,9 @@ export default defineNuxtConfig({
     "~/assets/scss/app.scss",
     "~/assets/scss/header.scss",
     "~/assets/scss/footer.scss",
+    "~/assets/scss/home.scss",
+    "~/assets/scss/message.scss",
+    "~/assets/scss/modal.scss",
   ],
   vite: {
     css: {

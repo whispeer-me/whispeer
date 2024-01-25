@@ -39,9 +39,6 @@ a {
 }
 
 // Common Styles
-%lcd-font {
-  font-family: "LCD-Solid", sans-serif;
-}
 
 .page-wrapper {
   display: flex;
@@ -56,7 +53,7 @@ body, html {
 
 body {
   background-color: $background-color;
-  @extend %lcd-font;
+  font-family: $primary-font;
 }
 
 .content {
@@ -71,8 +68,6 @@ body {
   color: $error-color;
   margin-top: 10px;
 }
-
-
 
 a {
   color: $secondary-color;
@@ -178,9 +173,9 @@ button {
   @extend %button-style;
 }
 
-.modal-passphrase-input {
-  @extend %input-style;
-}
+// .modal-passphrase-input {
+//   @extend %input-style;
+// }
 
 .icon-mobile {
   filter: invert(51%) sepia(34%) saturate(862%) hue-rotate(357deg) brightness(101%) contrast(94%);
