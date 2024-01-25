@@ -4,29 +4,27 @@
     <p>Please enter the passphrase to decrypt the message.</p>
     <input
       type="password"
-      :value="passphrase"
-      @input="$emit('update:passphrase', $event.target.value)"
+      v-model="localPassphrase"
       placeholder="Enter the passphrase"
       class="input-style passphrase-input"
       required
     />
-
     <div class="modal-buttons">
-      <button @click="handleSubmit">Decrypt the message</button>
+      <button type="submit">Decrypt the message</button>
       <button type="button" @click="closeModal">Cancel</button>
     </div>
   </form>
 </template>
 
 <script setup>
-const emit = defineEmits(["update:passphrase", "submit", "close"]);
+const emit = defineEmits(["submit", "close"]);
 
-const props = defineProps({
-  passphrase: String,
-});
+const localPassphrase = ref("");
 
 const handleSubmit = () => {
-  emit("submit", props.passphrase);
+  if (localPassphrase.value) {
+    emit("submit", localPassphrase.value);
+  }
 };
 
 const closeModal = () => {
