@@ -34,9 +34,9 @@ export default class CryptoService {
 
   static decrypt(
     ciphertext: string,
-    passphrase: string,
     salt: string,
-    iv: string
+    iv: string,
+    passphrase: string
   ): string {
     const key = CryptoJS.PBKDF2(passphrase, CryptoJS.enc.Hex.parse(salt), {
       keySize: 256 / 32,

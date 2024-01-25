@@ -10,7 +10,6 @@
 
     <SimpleModal :isVisible="isModalVisible" class="passphrase-modal">
       <PassphraseInput
-        :passphrase="passphrase"
         @update:passphrase="passphrase = $event"
         @close="closeModal"
         @submit="onModalSubmit"
@@ -26,6 +25,9 @@ import { useRoute } from "vue-router";
 const route = useRoute();
 
 const message = ref({
+  encryptedContent: null,
+  salt: null,
+  iv: null,
   content: null,
   view_count: 0,
   created_at: null,
@@ -34,7 +36,6 @@ const message = ref({
 
 const errorMessage = ref(null);
 const isLoading = ref(true);
-const passphrase = ref("");
 const isModalVisible = ref(false);
 
 const config = useRuntimeConfig();
@@ -78,7 +79,7 @@ watch(
 );
 
 onMounted(() => {
-  if (route.hash) {
+  if (route.hash !== undefined) {
     processHashChange(route.hash);
   }
 });
@@ -129,19 +130,22 @@ const handleMessageRetrieval = async (retrievedMessage) => {
   message.value.expires_in = retrievedMessage.expires_in;
 
   if (retrievedMessage.is_private) {
+    message.value.salt = retrievedMessage.salt;
+    message.value.iv = retrievedMessage.iv;
+    message.value.encryptedContent = retrievedMessage.content;
     showModal();
   } else {
     message.value.content = retrievedMessage.content;
   }
 };
 
-const decryptMessage = async (retrievedMessage, passphrase) => {
+const decryptMessage = async (passphrase) => {
   try {
     const decryptedContent = cryptoService.decrypt(
-      retrievedMessage.content,
-      passphrase,
-      retrievedMessage.salt,
-      retrievedMessage.iv
+      message.value.encryptedContent,
+      message.value.salt,
+      message.value.iv,
+      passphrase
     );
     return decryptedContent;
   } catch (error) {
@@ -158,12 +162,9 @@ const closeModal = () => {
 };
 
 const onModalSubmit = async (submittedPassphrase) => {
-  passphrase.value = submittedPassphrase;
-  const decryptedContent = await decryptMessage(
-    message.value,
-    passphrase.value
-  );
+  const decryptedContent = await decryptMessage(submittedPassphrase);
   if (decryptedContent) {
+    console.log("decryptedContent", decryptedContent);
     message.value.content = decryptedContent;
     closeModal();
   } else {
