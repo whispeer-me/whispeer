@@ -9,7 +9,7 @@
     </div>
 
     <SimpleModal
-      v-if="isModalVisible"
+      :isVisible="isModalVisible"
       @close="closeModal"
       class="passphrase-modal"
     >

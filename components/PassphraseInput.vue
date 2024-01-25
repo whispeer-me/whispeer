@@ -1,5 +1,7 @@
 <template>
   <form @submit.prevent="handleSubmit">
+    <h3>Enter Passphrase</h3>
+    <p>Please enter the passphrase to decrypt the message.</p>
     <input
       type="password"
       :value="passphrase"
@@ -8,7 +10,11 @@
       class="input-style passphrase-input"
       required
     />
-    <button type="submit">Decrypt the message</button>
+
+    <div class="modal-buttons">
+      <button @click="onModalSubmit">Decrypt the message</button>
+      <button @click="closeModal">Cancel</button>
+    </div>
   </form>
 </template>
 

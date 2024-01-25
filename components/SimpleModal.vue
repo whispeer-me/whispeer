@@ -20,6 +20,5 @@ const closeModal = () => {
 </script>
 
 <style scoped lang="scss">
-@import "@/assets/scss/app.scss";
 @import "@/assets/scss/modal.scss";
 </style>
