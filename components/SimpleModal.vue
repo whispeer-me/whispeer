@@ -7,14 +7,15 @@
 </template>
 
 <script setup>
-const isVisible = false;
-
-const openModal = () => {
-  isVisible = true;
-};
+defineProps({
+  isVisible: {
+    type: Boolean,
+    default: false,
+  },
+});
 
 const closeModal = () => {
-  isVisible = false;
+  isVisible.value = false;
 };
 </script>
 
