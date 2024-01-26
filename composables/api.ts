@@ -1,3 +1,5 @@
+import type { ApiResponse } from "~/types/api.response";
+
 const contentType: string = "application/json";
 const commonHeaders: HeadersInit = {
   Pragma: "no-cache",
@@ -5,12 +7,6 @@ const commonHeaders: HeadersInit = {
   "Content-Type": contentType,
   "Cache-Control": "no-cache, no-store, must-revalidate",
 };
-
-interface ApiResponse<T = any> {
-  status: number;
-  data?: T;
-  message?: string;
-}
 
 class Api {
   private baseURL: string;

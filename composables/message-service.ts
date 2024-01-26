@@ -1,7 +1,12 @@
+import type { ApiResponse } from "~/types/api.response";
+import type { Message } from "~/types/message";
+
 export default {
-  async getMessage(id: string | number) {
+  async getMessage(id: string) {
     try {
-      const response = await api.get<{ message: any }>(`/message/${id}`);
+      const response = await api.get<ApiResponse<{ message: Message }>>(
+        `/message/${id}`
+      );
       return response.data;
     } catch (error) {
       console.error(error);
