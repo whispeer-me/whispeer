@@ -1,13 +1,13 @@
 import CryptoJS from "crypto-js";
 
-interface EncryptReturn {
+interface EncryptedMessage {
   ciphertext: string;
   salt: string;
   iv: string;
 }
 
 export default class CryptoService {
-  static encrypt(message: string, passphrase: string): EncryptReturn {
+  static encrypt(message: string, passphrase: string): EncryptedMessage {
     try {
       const salt = CryptoJS.lib.WordArray.random(128 / 8);
       const iv = CryptoJS.lib.WordArray.random(128 / 8);
