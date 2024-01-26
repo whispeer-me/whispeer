@@ -11,7 +11,6 @@
     <SimpleModal :isVisible="isModalVisible" class="passphrase-modal">
       <Error :errorMessage="message.is_private && errorMessage" />
       <PassphraseInput
-        @update:passphrase="passphrase = $event"
         @close="closeModal"
         @submit="onModalSubmit"
       />
