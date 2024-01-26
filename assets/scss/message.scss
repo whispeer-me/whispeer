@@ -1,6 +1,10 @@
 $char-font-size: 12px;
-$char-size: 18px;
-$matched-char-size: 14px;
+$char-size: 16px;
+$matched-char-size: 16px;
+
+.content {
+  padding: 0px !important;
+}
 
 #board {
   background-color: #000;
@@ -18,18 +22,29 @@ $matched-char-size: 14px;
   font-size: $char-font-size;
   width: $char-size;
   height: $char-size;
-  font-family: "LCD-Solid" sans-serif;
+  font-family: $primary-font;
   color: #c4872b;
+  padding: 4px;
 }
 
 .char.matched {
+  display: inline-block;
   width: $matched-char-size;
+  padding: 1px;
+  font-size: 20px;
 }
 
 .chiper-display {
-  margin-top: 16px;
-  margin-bottom: 16px;
+  padding: 16px 0px 16px 0px;
 }
+
+.expire-info,
+.view-count {
+  color: $secondary-color;
+  margin-bottom: 10px;
+}
+
+//  Modal
 
 .passphrase-modal {
   font-family: $secondary-font;
@@ -49,10 +64,4 @@ $matched-char-size: 14px;
   button {
     margin-left: 8px;
   }
-}
-
-.expire-info,
-.view-count {
-  color: $secondary-color;
-  margin-bottom: 10px;
 }
