@@ -10,10 +10,7 @@
 
     <SimpleModal :isVisible="isModalVisible" class="passphrase-modal">
       <Error :errorMessage="message.is_private && errorMessage" />
-      <PassphraseInput
-        @close="closeModal"
-        @submit="onModalSubmit"
-      />
+      <PassphraseInput @close="closeModal" @submit="onModalSubmit" />
     </SimpleModal>
   </div>
 </template>
@@ -38,11 +35,8 @@ const message = ref({
 const errorMessage = ref(null);
 const isLoading = ref(true);
 const isModalVisible = ref(false);
-
 const config = useRuntimeConfig();
-
-const fullImageUrl = `${config.app.analyticsDomain}/logo.png`;
-
+const ogImageUrl = `${config.app.analyticsDomain}/logo.png`;
 const pageTitle = "Whispeer - Private Message";
 
 useHead({
@@ -59,7 +53,7 @@ useHead({
     },
     {
       property: "og:image",
-      content: fullImageUrl,
+      content: ogImageUrl,
     },
     {
       property: "og:type",
@@ -87,7 +81,7 @@ onMounted(() => {
 
 const processHashChange = async (hash) => {
   message.value.content = null;
-  const messageId = hash.substring(1); // Removes the '#' from the hash
+  const messageId = hash.substring(1); // Remove the '#' from the hash
   if (messageId) {
     await fetchTheMessage(messageId);
   } else {
@@ -104,6 +98,7 @@ const fetchTheMessage = async (messageId) => {
 
     if (!fetchedMessage) {
       errorMessage.value = "No message data received.";
+
       return;
     }
 
