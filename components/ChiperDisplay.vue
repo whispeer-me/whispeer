@@ -5,7 +5,6 @@
       v-for="(char, index) in characters"
       :class="char.class"
       :key="index"
-      :ref="index"
       >{{ char.char }}</span
     >
   </div>
@@ -26,7 +25,6 @@ const asciiStart = 33;
 const asciiEnd = 126;
 const randomCharsCount = 2000;
 const isBoardReady = ref(false);
-const refs = ref({});
 
 let randomLocation = 0;
 let randomizer = null;
@@ -69,12 +67,16 @@ const display = () => {
 
 const scrollToMessage = async () => {
   await nextTick();
-  const messageStartElement = refs.value[randomLocation];
-  messageStartElement?.scrollIntoView({
-    behavior: "smooth",
-    block: "center",
-    inline: "center",
-  });
+  const selector = `.char.matched`;
+  const matchedElements = document.querySelectorAll(selector);
+  if (matchedElements.length > 0) {
+    const messageStartElement = matchedElements[0];
+    messageStartElement?.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "center",
+    });
+  }
 };
 
 const randomize = () => {
