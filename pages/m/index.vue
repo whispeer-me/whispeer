@@ -1,7 +1,7 @@
 <template>
   <div class="message">
     <LoadingIndicator :isLoading="isLoading" />
-    <Error :errorMessage="errorMessage" />
+    <Error :errorMessage="!message.is_private && errorMessage" />
 
     <div v-if="message.content">
       <MessageInfo :message="message" />
@@ -9,6 +9,7 @@
     </div>
 
     <SimpleModal :isVisible="isModalVisible" class="passphrase-modal">
+      <Error :errorMessage="message.is_private && errorMessage" />
       <PassphraseInput
         @update:passphrase="passphrase = $event"
         @close="closeModal"
@@ -25,6 +26,7 @@ import { useRoute } from "vue-router";
 const route = useRoute();
 
 const message = ref({
+  is_private: false,
   encryptedContent: null,
   salt: null,
   iv: null,
@@ -85,7 +87,7 @@ onMounted(() => {
 });
 
 const processHashChange = async (hash) => {
-  message.content = null;
+  message.value.content = null;
   const messageId = hash.substring(1); // Removes the '#' from the hash
   if (messageId) {
     await fetchTheMessage(messageId);
@@ -108,7 +110,7 @@ const fetchTheMessage = async (messageId) => {
 
     if (!fetchedMessage.content) {
       if (fetchedMessage.is_private) {
-        errorMessage.value = "No message content available for  decryption.";
+        errorMessage.value = "No message content available for decryption.";
       } else {
         errorMessage.value = "No message content available to display";
       }
@@ -125,18 +127,27 @@ const fetchTheMessage = async (messageId) => {
 };
 
 const handleMessageRetrieval = async (retrievedMessage) => {
-  message.value.created_at = retrievedMessage.created_at;
-  message.value.view_count = retrievedMessage.view_count || 0;
-  message.value.expires_in = retrievedMessage.expires_in;
+  extractMessage(retrievedMessage);
 
   if (retrievedMessage.is_private) {
-    message.value.salt = retrievedMessage.salt;
-    message.value.iv = retrievedMessage.iv;
-    message.value.encryptedContent = retrievedMessage.content;
     showModal();
-  } else {
-    message.value.content = retrievedMessage.content;
   }
+};
+
+const extractMessage = (retrievedMessage) => {
+  Object.assign(message.value, {
+    created_at: retrievedMessage.created_at,
+    view_count: retrievedMessage.view_count || 0,
+    expires_in: retrievedMessage.expires_in,
+    is_private: retrievedMessage.is_private,
+    salt: retrievedMessage.salt || null,
+    iv: retrievedMessage.iv || null,
+    content:
+      retrievedMessage.is_private === false ? retrievedMessage.content : null,
+    encryptedContent: retrievedMessage.is_private
+      ? retrievedMessage.content
+      : null,
+  });
 };
 
 const decryptMessage = async (passphrase) => {
@@ -164,12 +175,8 @@ const closeModal = () => {
 const onModalSubmit = async (submittedPassphrase) => {
   const decryptedContent = await decryptMessage(submittedPassphrase);
   if (decryptedContent) {
-    console.log("decryptedContent", decryptedContent);
     message.value.content = decryptedContent;
     closeModal();
-  } else {
-    // Handle decryption failure, perhaps by setting an error message state that your modal can display
-    // This keeps the modal open with an error message displayed
   }
 };
 </script>
