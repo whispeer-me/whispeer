@@ -154,7 +154,10 @@ const submitButtonTitle = computed(() => {
   return message.value.is_private ? "Create Secure Message" : "Create Message";
 });
 
-onMounted(() => {});
+onMounted(() => {
+  showTooltip = maybeShowTooltip();
+  showDisclaimer = maybeShowDisclaimer();
+});
 
 const submitMessage = async () => {
   resetErrorMessage();
@@ -273,7 +276,7 @@ const copyLinkToClipboard = () => {
 const handleClipboardSuccess = () => {
   messageCopiedToClipboard = true;
   messageCopiedToClipboardFailed = false;
-  setTimeout(resetClipboardState, Constants.CLIPBOARD_INFORM_MESSAGE_DURATION);
+  setTimeout(resetClipboardState, constants.CLIPBOARD_INFORM_MESSAGE_DURATION);
 };
 
 const handleClipboardFailure = () => {
@@ -300,9 +303,9 @@ const focusToPassphraseInput = (e) => {
 
 const maybeShowTooltip = () => {
   if (
-    preferencesService.shouldShow(
-      Constants.TOOLTIP_META_ENTER_KEY_VIEWS_COUNT,
-      Constants.TOOLTIP_META_ENTER_KEY_VIEWS_MAX_COUNT
+    preferenceService.shouldShow(
+      constants.TOOLTIP_META_ENTER_KEY_VIEWS_COUNT,
+      constants.TOOLTIP_META_ENTER_KEY_VIEWS_MAX_COUNT
     )
   ) {
     showTooltip.value = true;
@@ -317,9 +320,9 @@ const hideTooltip = () => {
 };
 
 const maybeShowDisclaimer = () => {
-  showDisclaimer.value = preferencesService.shouldShow(
-    Constants.DISCLAIMER_VIEWS_COUNT,
-    Constants.DISCLAIMER_VIEWS_MAX_COUNT,
+  showDisclaimer.value = preferenceService.shouldShow(
+    constants.DISCLAIMER_VIEWS_COUNT,
+    constants.DISCLAIMER_VIEWS_MAX_COUNT,
     false
   );
 };

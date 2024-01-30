@@ -1,9 +1,13 @@
-// Meta Key (CMD / Ctrl + Enter) key
-export const TOOLTIP_META_ENTER_KEY_VIEWS_COUNT = "tooltipMetaEnter";
-// How many time to show to user
-export const TOOLTIP_META_ENTER_KEY_VIEWS_MAX_COUNT = 10;
+class Constants {
+  // Meta Key (CMD / Ctrl + Enter) key
+  TOOLTIP_META_ENTER_KEY_VIEWS_COUNT = "tooltipMetaEnter";
+  // How many time to show to user
+  TOOLTIP_META_ENTER_KEY_VIEWS_MAX_COUNT = 10;
 
-export const DISCLAIMER_VIEWS_COUNT = "disclaimerViewsCount";
-export const DISCLAIMER_VIEWS_MAX_COUNT = 10;
+  DISCLAIMER_VIEWS_COUNT = "disclaimerViewsCount";
+  DISCLAIMER_VIEWS_MAX_COUNT = 10;
 
-export const CLIPBOARD_INFORM_MESSAGE_DURATION = 3000; // 3 seconds
+  CLIPBOARD_INFORM_MESSAGE_DURATION = 3000; // 3 seconds
+}
+
+export default new Constants();
