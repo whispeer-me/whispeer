@@ -155,8 +155,8 @@ const submitButtonTitle = computed(() => {
 });
 
 onMounted(() => {
-  showTooltip = maybeShowTooltip();
-  showDisclaimer = maybeShowDisclaimer();
+  maybeShowTooltip();
+  maybeShowDisclaimer();
 });
 
 const submitMessage = async () => {

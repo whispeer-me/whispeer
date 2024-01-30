@@ -25,11 +25,20 @@ export default {
   },
 
   getViewsCount(key: string): number {
-    return Number(localStorage.getItem(key)) || 0;
+    try {
+      return Number(localStorage.getItem(key)) || 0;
+    } catch (error) {
+      console.error("Error accessing localStorage:", error);
+      return 0;
+    }
   },
 
   setViewsCount(key: string, value: number) {
-    localStorage.setItem(key, value.toString());
+    try {
+      localStorage.setItem(key, value.toString());
+    } catch (error) {
+      console.error("Error accessing localStorage:", error);
+    }
   },
 
   incrementViewsCount(key: string) {
