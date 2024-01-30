@@ -1,8 +1,6 @@
 <template>
   <div class="create-message-view">
-    <div v-if="errorMessage" class="error-message">
-      <p>{{ errorMessage }}</p>
-    </div>
+    <Error :errorMessage="errorMessage" />
 
     <div v-if="newMessage">
       <h1>New Message</h1>
