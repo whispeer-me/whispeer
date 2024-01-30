@@ -173,10 +173,25 @@ button {
   @extend %button-style;
 }
 
-// .modal-passphrase-input {
-//   @extend %input-style;
-// }
+.modal-passphrase-input {
+  @extend %input-style;
+}
 
 .icon-mobile {
   filter: invert(51%) sepia(34%) saturate(862%) hue-rotate(357deg) brightness(101%) contrast(94%);
+}
+
+.new-message-textarea {
+  @extend %textarea-style;
+  width: 80%;
+  height: 100px;
+  margin: 10px 0;
+  padding: $input-padding;
+}
+
+.new-message-passphrase-input {
+  @extend %input-style;
+  width: 80%;
+  margin-top: 20px;
+  padding: 10px;
 }

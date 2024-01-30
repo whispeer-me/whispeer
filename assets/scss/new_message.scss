@@ -1,0 +1,84 @@
+
+.create-message-view {
+  text-align: center;
+
+  p {
+    color: $secondary-color;
+  }
+
+  p.warning {
+    color: $primary-color;
+  }
+
+  .privacy-settings {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span {
+      margin-right: 10px;
+    }
+
+    .passphrase {
+      width: 80%;
+      margin: 10px auto;
+    }
+  }
+
+  .submit-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+
+    button {
+      &:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  .new-message {
+    margin-top: 40px;
+  }
+
+  .security-disclaimer {
+    font-family: $secondary-font;
+    color: $secondary-color;
+    margin: 16px;
+    line-height: 1.5;
+  }
+
+  .passphrase-warning {
+    color: $warning-color;
+    margin-top: 10px;
+    font-family: $secondary-font;
+  }
+
+  .message-link {
+    font-family: $secondary-font;
+    color: $secondary-color;
+    margin-top: 20px;
+    min-height: 100px;
+
+    .copyable-link {
+      color: $primary-color;
+      cursor: pointer;
+    }
+
+    .link-copied {
+      color: $success-color;
+    }
+
+    .link-copied-error {
+      color: $error-color;
+    }
+  }
+
+  .shortcut-hint {
+    font-size: small;
+    font-family: $secondary-font;
+    color: $secondary-color;
+    font-style: italic;
+  }
+}
