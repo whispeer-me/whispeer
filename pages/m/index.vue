@@ -1,17 +1,17 @@
 <template>
   <div class="message">
-    <LoadingIndicator :isLoading="isLoading" />
-    <Error :errorMessage="!message.is_private && errorMessage" />
+    <CommonLoadingIndicator :isLoading="isLoading" />
+    <CommonError :errorMessage="!message.is_private && errorMessage" />
 
     <div v-if="message.content">
       <MessageInfo :message="message" />
       <ChiperDisplay :message="message.content" class="chiper-display" />
     </div>
 
-    <SimpleModal :isVisible="isModalVisible" class="passphrase-modal">
-      <Error :errorMessage="message.is_private && errorMessage" />
+    <CommonModal :isVisible="isModalVisible" class="passphrase-modal">
+      <CommonError :errorMessage="message.is_private && errorMessage" />
       <PassphraseInput @close="closeModal" @submit="onModalSubmit" />
-    </SimpleModal>
+    </CommonModal>
   </div>
 </template>
 

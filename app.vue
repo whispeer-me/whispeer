@@ -1,11 +1,11 @@
 <template>
   <div id="app" class="page-wrapper">
-    <AppHeader />
+    <LayoutHeader />
     <hr class="divider" />
     <div class="content">
       <NuxtPage />
     </div>
-    <AppFooter />
+    <LayoutFooter />
   </div>
 </template>
 <style scoped lang="scss">

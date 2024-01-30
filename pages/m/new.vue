@@ -1,6 +1,6 @@
 <template>
   <div class="create-message-view">
-    <Error :errorMessage="errorMessage" />
+    <CommonError :errorMessage="errorMessage" />
 
     <div v-if="newMessage">
       <h1>New Message</h1>
@@ -25,7 +25,7 @@
         </p>
 
         <div class="privacy-settings">
-          <ToggleSwitch
+          <CommonSwitch
             title="Secure Message"
             :value="message.is_private"
             @change="handleToggleChange"
