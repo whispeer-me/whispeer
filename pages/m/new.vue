@@ -182,7 +182,7 @@ const isMessageValid = () => {
 };
 
 const isLengthValid = () => {
-  if (message.content.value.length > maxCharsAllowed) {
+  if (message.value.content.length > maxCharsAllowed) {
     errorMessage.value = `Message exceeds ${maxCharsAllowed} characters.`;
     return false;
   }
@@ -203,8 +203,8 @@ const resetErrorMessage = () => {
 
 const prepareAndMaybeEncryptTheMessage = () => {
   let newMessage = {
-    content: message.value.value.content,
-    is_private: message.value.value.is_private,
+    content: message.value.content,
+    is_private: message.value.is_private,
   };
 
   if (message.value.is_private && message.value.passphrase) {
@@ -272,8 +272,8 @@ const copyLinkToClipboard = () => {
 };
 
 const handleClipboardSuccess = () => {
-  messageCopiedToClipboard = true;
-  messageCopiedToClipboardFailed = false;
+  messageCopiedToClipboard.value = true;
+  messageCopiedToClipboardFailed.value = false;
   setTimeout(resetClipboardState, constants.CLIPBOARD_INFORM_MESSAGE_DURATION);
 };
 

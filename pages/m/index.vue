@@ -5,12 +5,12 @@
 
     <div v-if="message.content">
       <MessageInfo :message="message" />
-      <ChiperDisplay :message="message.content" class="chiper-display" />
+      <MessageChiperDisplay :message="message.content" class="chiper-display" />
     </div>
 
     <CommonModal :isVisible="isModalVisible" class="passphrase-modal">
       <CommonError :errorMessage="message.is_private && errorMessage" />
-      <PassphraseInput @close="closeModal" @submit="onModalSubmit" />
+      <MessagePassphraseInput @close="closeModal" @submit="onModalSubmit" />
     </CommonModal>
   </div>
 </template>
