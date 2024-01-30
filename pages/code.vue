@@ -53,8 +53,6 @@ useHead({
 </script>
 
 <style scoped lang="scss">
-@import "@/assets/scss/app.scss";
-
 .repo-section {
   margin-bottom: 20px;
 }

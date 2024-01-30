@@ -48,8 +48,6 @@ useHead({
 </script>
 
 <style scoped lang="scss">
-@import "@/assets/scss/app.scss";
-
 .the-story {
   color: $secondary-color;
   font-family: $secondary-font;

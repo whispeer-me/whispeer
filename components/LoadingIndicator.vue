@@ -15,6 +15,4 @@ const props = defineProps({
 });
 </script>
 
-<style scoped lang="scss">
-@import "@/assets/scss/app.scss";
-</style>
+<style scoped lang="scss"></style>
