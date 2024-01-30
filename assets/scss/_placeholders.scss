@@ -12,12 +12,6 @@
   }
 }
 
-$color-on: $primary-color;
-$color-off: #ccc;
-
-$border-radius: 5px;
-$input-padding: 10px;
-
 %input-style {
   font-size: 1em;
   border-radius: $border-radius;
