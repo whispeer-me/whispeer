@@ -82,3 +82,18 @@
     font-style: italic;
   }
 }
+
+.new-message-textarea {
+  @extend %textarea-style;
+  width: 80%;
+  height: 100px;
+  margin: 10px 0;
+  padding: $input-padding;
+}
+
+.new-message-passphrase-input {
+  @extend %input-style;
+  width: 80%;
+  margin-top: 20px;
+  padding: 10px;
+}
