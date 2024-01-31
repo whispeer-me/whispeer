@@ -20,8 +20,7 @@
         <p>Maximum characters allowed: {{ maxCharsAllowed }}.</p>
 
         <p v-if="shouldWarn" class="warning">
-          {{ this.maxCharsAllowed - this.message.content.length }} characters
-          left.
+          {{ maxCharsAllowed - message.content.length }} characters left.
         </p>
 
         <div class="privacy-settings">
@@ -145,7 +144,7 @@ const charsLeft = computed(() => {
 });
 
 const shouldWarn = computed(() => {
-  return charsLeft < warningCharsLeft.value;
+  return charsLeft.value < warningCharsLeft.value;
 });
 
 const submitButtonTitle = computed(() => {
