@@ -82,7 +82,7 @@
 
       <p title="Click to copy link">
         <a
-          href="messageLink"
+          :href="messageLink"
           class="copyable-link"
           @click.prevent="copyLinkToClipboard"
           @keyup.enter="copyLinkToClipboard"
