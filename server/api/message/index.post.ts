@@ -10,5 +10,7 @@ export default defineEventHandler(async (event) => {
   const createMessageUseCase = new CreateMessage(messageRepository);
   const message = await createMessageUseCase.execute(receivedMessage);
 
+  setResponseStatus(event, 201);
+
   return message;
 });
