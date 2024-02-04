@@ -1,14 +1,16 @@
-import CryptoService from "@/services/CryptoService";
+import { describe, it, expect, beforeAll } from "vitest";
+
+import CryptoService from "~/composables/crypto-service";
+import type EncryptedMessage from "~/types/encrypted.message";
 
 describe("CryptoService", () => {
   const message = "Hello, World!";
   const passphrase = "secret";
 
   describe("encrypt and decrypt", () => {
-    let encryptedResult;
+    let encryptedResult: EncryptedMessage;
 
     beforeAll(() => {
-      // Encrypt the message first
       encryptedResult = CryptoService.encrypt(message, passphrase);
     });
 
@@ -21,9 +23,9 @@ describe("CryptoService", () => {
     it("should decrypt the ciphertext with the correct passphrase, salt, and iv", () => {
       const decryptedMessage = CryptoService.decrypt(
         encryptedResult.ciphertext,
-        passphrase,
         encryptedResult.salt,
-        encryptedResult.iv
+        encryptedResult.iv,
+        passphrase
       );
 
       expect(decryptedMessage).toBe(message);
@@ -33,9 +35,9 @@ describe("CryptoService", () => {
       expect(() => {
         CryptoService.decrypt(
           encryptedResult.ciphertext,
-          "wrong passphrase",
           encryptedResult.salt,
-          encryptedResult.iv
+          encryptedResult.iv,
+          "wrong passphrase"
         );
       }).toThrowError("Incorrect passphrase");
     });

@@ -1,10 +1,5 @@
 import CryptoJS from "crypto-js";
-
-interface EncryptedMessage {
-  ciphertext: string;
-  salt: string;
-  iv: string;
-}
+import type EncryptedMessage from "~/types/encrypted.message";
 
 export default class CryptoService {
   static encrypt(message: string, passphrase: string): EncryptedMessage {
