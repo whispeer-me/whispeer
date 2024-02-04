@@ -1,15 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
-import databaseModule from "./di/database.module";
-import dependencyInjectionModule from "./di/dependency-injection.module";
-
 export default defineNuxtConfig({
   devtools: { enabled: false },
-  modules: [
-    "@nuxt/test-utils/module",
-    databaseModule,
-    dependencyInjectionModule,
-  ],
+  modules: ["@nuxt/test-utils/module"],
   ssr: true,
   app: {
     head: {
