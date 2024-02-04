@@ -1,11 +1,10 @@
 import { CreateMessage } from "~/server/usecases/message/create";
 import { MessageRepository } from "~/server/repositories/message.repository";
-import { PgPool } from "~/server/lib/pg.pool";
+import db from "~/server/utils/db";
 
 export default defineEventHandler(async (event) => {
   const receivedMessage = await readBody(event);
 
-  const db = new PgPool(process.env.DATABASE_URL || "");
   const messageRepository = new MessageRepository(db);
 
   const createMessageUseCase = new CreateMessage(messageRepository);
