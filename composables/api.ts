@@ -21,11 +21,17 @@ class Api {
   ): Promise<ApiResponse<T>> {
     try {
       const response = await fetch(`${this.baseURL}${url}`, options);
-      const data = await response.json();
+      let data;
+      // For patch cases when there's no content returned
+      if (response.status === 204) {
+        data = null;
+      } else {
+        data = await response.json();
+      }
       if (!response.ok) {
         throw {
           status: response.status,
-          message: data.message || "An error occurred",
+          message: data?.message || "An error occurred",
         };
       }
       return { status: response.status, data };
@@ -55,6 +61,17 @@ class Api {
       method: "POST",
       headers: commonHeaders,
       body: JSON.stringify(data),
+    });
+  }
+
+  public patch<T, U = any>(
+    url: string,
+    data?: U
+  ): Promise<ApiResponse<T> | void> {
+    return this.fetchWrapper<T>(url, {
+      method: "PATCH",
+      headers: commonHeaders,
+      body: data ? JSON.stringify(data) : undefined,
     });
   }
 }
