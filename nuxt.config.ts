@@ -1,7 +1,15 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
+import databaseModule from "./di/database.module";
+import dependencyInjectionModule from "./di/dependency-injection.module";
+
 export default defineNuxtConfig({
   devtools: { enabled: false },
-  modules: ["@nuxt/test-utils/module"],
+  modules: [
+    "@nuxt/test-utils/module",
+    databaseModule,
+    dependencyInjectionModule,
+  ],
   ssr: true,
   app: {
     head: {
@@ -63,6 +71,9 @@ export default defineNuxtConfig({
     },
   },
   runtimeConfig: {
+    private: {
+      databaseURL: process.env.DATABASE_URL,
+    },
     public: {
       analyticsDomain: process.env.ANALYTICS_DOMAIN,
     },
