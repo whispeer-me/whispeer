@@ -128,6 +128,10 @@ const handleMessageRetrieval = async (retrievedMessage) => {
   }
 };
 
+const handleError = (error) => {
+  errorMessage.value = error.message;
+};
+
 const extractMessage = (retrievedMessage) => {
   Object.assign(message.value, {
     created_at: retrievedMessage.created_at,

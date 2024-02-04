@@ -8,7 +8,7 @@ export class FindMessage {
   }
 
   async execute(id: string): Promise<Message | null> {
-    let message = await this.messageRepo.findById(id);
+    const message = await this.messageRepo.findById(id);
 
     if (message) {
       message.expires_in = TimeUtils.createExpireTimeMessage(

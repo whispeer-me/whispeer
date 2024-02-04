@@ -3,23 +3,25 @@ import type { Message } from "~/types/message";
 
 export default {
   async getMessage(id: string) {
-    try {
-      const response = await api.get<ApiResponse<{ message: Message }>>(
-        `/message/${id}`
-      );
-      return response.data;
-    } catch (error) {
-      console.error(error);
-      throw new Error("Failed to fetch message.");
-    }
+    return api
+      .get<ApiResponse<{ message: Message }>>(`message/${id}`)
+      .then((data) => {
+        return data;
+      })
+      .catch((error) => {
+        if (error.status === 404) {
+          throw new Error(error.message);
+        }
+
+        throw new Error("Failed to fetch message.");
+      });
   },
 
   async createMessage(message: any) {
     try {
-      const response = await api.post<{ data: any }>("/message", message);
+      const response = await api.post<{ data: any }>("message", message);
       return response.data;
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
       throw new Error(
         "Error occurred while submitting the message to the server. Please try again."
       );
@@ -28,10 +30,9 @@ export default {
 
   async getStats(): Promise<any> {
     try {
-      const response = await api.get<{ stats: any }>("/message/stats");
+      const response = await api.get<{ stats: any }>("message/stats");
       return response.data;
-    } catch (error) {
-      console.error(error);
+    } catch (_error) {
       throw new Error("Failed to fetch message stats.");
     }
   },
