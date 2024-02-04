@@ -8,6 +8,7 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "test": "vitest",
+    "test:debug": "node --inspect-brk node_modules/vitest/dist/cli.js --run",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
