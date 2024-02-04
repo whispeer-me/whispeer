@@ -10,7 +10,28 @@ export class MessageRepository implements IMessageRepository {
   }
 
   async increaseViewCount(id: string): Promise<void> {
-    throw new Error("Method not implemented.");
+    const updateMessageQuery = `
+    UPDATE messages
+    SET view_count = view_count + 1
+    WHERE id = $1;
+  `;
+
+    const updateStatsQuery = `
+    UPDATE message_stats
+    SET view_count = view_count + 1
+    WHERE id = 1;
+  `;
+
+    await this.pool.query("BEGIN");
+
+    try {
+      await this.pool.query(updateMessageQuery, [id]);
+      await this.pool.query(updateStatsQuery);
+      await this.pool.query("COMMIT");
+    } catch (err) {
+      await this.pool.query("ROLLBACK");
+      throw err;
+    }
   }
 
   async deleteExpiredMessages(): Promise<void> {
