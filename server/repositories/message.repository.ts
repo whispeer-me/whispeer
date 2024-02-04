@@ -9,6 +9,14 @@ export class MessageRepository implements IMessageRepository {
     this.pool = pool;
   }
 
+  async increaseViewCount(id: string): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
+
+  async deleteExpiredMessages(): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
+
   async save(messageData: Message): Promise<Message> {
     let id = await this.createUniqueIdForMessage();
     const insertMessageQuery = `
@@ -78,8 +86,9 @@ export class MessageRepository implements IMessageRepository {
   }
 
   async findById(id: string): Promise<Message | null> {
-    return null;
+    const query =
+      "SELECT * FROM messages WHERE id = $1 and created_at > NOW() - INTERVAL '24 hours'";
+    const { rows } = await this.pool.query(query, [id]);
+    return rows.length ? rows[0] : null;
   }
-
-  async delete(id: string): Promise<void> {}
 }
