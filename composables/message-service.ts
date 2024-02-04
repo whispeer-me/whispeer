@@ -17,6 +17,10 @@ export default {
       });
   },
 
+  async increaseViewCount(id: string) {
+    return api.patch<ApiResponse>(`message/${id}`);
+  },
+
   async createMessage(message: any) {
     try {
       const response = await api.post<{ data: any }>("message", message);

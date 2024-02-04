@@ -22,6 +22,7 @@ import { useRoute } from "vue-router";
 const route = useRoute();
 
 const message = ref({
+  id: "",
   is_private: false,
   encryptedContent: null,
   salt: null,
@@ -125,6 +126,16 @@ const handleMessageRetrieval = async (retrievedMessage) => {
 
   if (retrievedMessage.is_private) {
     showModal();
+  } else {
+    increaseViewCount(retrievedMessage.id);
+  }
+};
+
+const increaseViewCount = async (id) => {
+  try {
+    await messageService.increaseViewCount(id);
+  } catch (error) {
+    handleError(error);
   }
 };
 
@@ -134,6 +145,7 @@ const handleError = (error) => {
 
 const extractMessage = (retrievedMessage) => {
   Object.assign(message.value, {
+    id: retrievedMessage.id,
     created_at: retrievedMessage.created_at,
     view_count: retrievedMessage.view_count || 0,
     expires_in: retrievedMessage.expires_in,
@@ -175,6 +187,7 @@ const onModalSubmit = async (submittedPassphrase) => {
   if (decryptedContent) {
     message.value.content = decryptedContent;
     closeModal();
+    increaseViewCount(message.value.id);
   }
 };
 </script>
