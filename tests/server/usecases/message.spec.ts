@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 
 import type { Message } from "~/server/entities/message";
 import type { IMessageRepository } from "~/server/interfaces/repositories/IMessageRepository";
@@ -6,6 +6,8 @@ import { IDGenerator } from "~/server/utils/id.generator";
 
 import { CreateMessage } from "~/server/usecases/message/create";
 import { FindMessage } from "~/server/usecases/message/find.message";
+
+vi.useFakeTimers();
 
 const randomIdLength = 10;
 
@@ -60,7 +62,7 @@ class MockMessageRepository implements IMessageRepository {
       ...message,
       id: IDGenerator.generate(randomIdLength),
       view_count: 0,
-      created_at: new Date(),
+      created_at: new Date("2024-01-01T12:00:00Z"),
     };
 
     this.messages.push(newMessage);
@@ -110,10 +112,13 @@ describe("Message Use Cases", () => {
   });
 
   it("returns message when it exists with expiration time string", async () => {
+    const now = new Date("2024-01-01T12:01:00Z");
+    vi.useFakeTimers().setSystemTime(now);
+
     const content = "Hello, World!";
     const message: Message = createTestMessage(content);
 
-    // To ensure message exists let's create a one.
+    // To ensure message exists let's create one.
     const createdMessage = await createMessageUseCase.execute(message);
 
     expect(createdMessage.id).not.toBeUndefined();
@@ -131,8 +136,6 @@ describe("Message Use Cases", () => {
 
   it("return null when message the message doesn't expired or has expired", async () => {
     const nonExistId = "0123456789";
-
-    // Find the message
     const existedMessage = await findMessageUseCase.execute(nonExistId);
 
     expect(existedMessage).toBeNull();
