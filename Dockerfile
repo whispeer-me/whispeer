@@ -1,44 +1,30 @@
-# syntax = docker/dockerfile:1
+FROM node as builder
 
-# Adjust NODE_VERSION as desired
-ARG NODE_VERSION=16.20.2
 ARG APP_VERSION=latest
-FROM node:${NODE_VERSION}-slim as base
+ENV NODE_ENV build
 
-# NodeJS app lives here
-WORKDIR /app
+# USER node
+WORKDIR /home/node
 
-# Set production environment
-ENV NODE_ENV=production
+COPY package*.json ./
+RUN npm ci
 
+COPY --chown=node:node . .
+RUN npm run build \
+    && npm prune --production \
+    && npm install node-pg-migrate # Ensure node-pg-migrate is installed
 
-# Throw-away build stage to reduce size of final image
-FROM base as build
+FROM node
 
-# Install packages needed to build node modules
-# Using 'python3' and 'python3-pip' instead of 'python-is-python3'
-RUN apt-get update -qq && \
-    apt-get install -y python3 python3-pip pkg-config build-essential 
+ENV NODE_ENV production
 
-# Install node modules
-COPY --link package.json package-lock.json ./
-RUN npm install --production=false
+WORKDIR /home/node
 
-# Copy application code
-COPY --link . .
+COPY --from=builder --chown=node:node /home/node/entrypoint.sh ./
+COPY --from=builder --chown=node:node /home/node/package*.json ./
+COPY --from=builder --chown=node:node /home/node/node_modules/ ./node_modules/
+COPY --from=builder --chown=node:node /home/node/dist/src ./
+COPY --from=builder --chown=node:node /home/node/migrations ./migrations/
 
-# Build application
-RUN npm run build
-
-# Remove development dependencies
-RUN npm prune --production
-
-
-# Final stage for app image
-FROM base
-
-# Copy built application
-COPY --from=build /app /app
-
-# Start the server by default, this can be overwritten at runtime
-CMD [ "npm", "run", "start" ]
+USER node
+ENTRYPOINT ["./entrypoint.sh"]
