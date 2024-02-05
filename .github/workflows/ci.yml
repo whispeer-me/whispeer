@@ -17,5 +17,6 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: "18"
-      - run: npm i
+      - run: npm cache clean --force
+      - run: npm i          
       - run: npm test
