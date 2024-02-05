@@ -18,22 +18,18 @@ Help us make Whispeer even better! We're always looking for new contributors to 
   ```
 - **Going Live?** Get your code ready for showtime:
   ```
-  npm run build
+  npm run dev
   ```
 
 ### Testing and Keeping It Clean
 - **Testing Made Easy:** Run your tests with:
   ```
-  npm run test:unit
-  ```
-- **Stay Neat and Tidy:** Fix up your code:
-  ```
-  npm run lint
+  npm run test
   ```
 
 # Environment Variables
 
-Update `VUE_APP_API_URL` and `VUE_APP_ANALYTICS_DOMAIN` in `.env.production` file accordingly.
+Update `ANALYTICS_DOMAIN` in `.env` file accordingly.
 
 ## Client-Side Encryption
 
