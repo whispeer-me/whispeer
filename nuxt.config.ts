@@ -3,6 +3,7 @@
 export default defineNuxtConfig({
   devtools: { enabled: false },
   modules: ["@nuxt/test-utils/module"],
+  plugins: ["~/plugins/analytics.ts"],
   ssr: true,
   app: {
     head: {
