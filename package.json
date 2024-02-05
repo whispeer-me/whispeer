@@ -31,5 +31,8 @@
   "dependencies": {
     "crypto-js": "^4.2.0",
     "nuxt-scheduler": "^0.1.9"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "^4.9.6"
   }
 }
