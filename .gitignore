@@ -27,5 +27,3 @@ fly.toml
 .env
 .env.*
 !.env.example
-
-bun.lockb
