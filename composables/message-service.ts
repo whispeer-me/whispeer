@@ -33,11 +33,8 @@ export default {
   },
 
   async getStats(): Promise<any> {
-    try {
-      const response = await api.get<{ stats: any }>("message/stats");
-      return response.data;
-    } catch (_error) {
+    return api.get<{ stats: any }>("message/stats").catch((_error) => {
       throw new Error("Failed to fetch message stats.");
-    }
+    });
   },
 };

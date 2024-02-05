@@ -116,4 +116,41 @@ export class MessageRepository implements IMessageRepository {
     const { rows } = await this.pool.query(query, [id]);
     return rows.length ? rows[0] : null;
   }
+
+  async getStats(): Promise<{
+    created_count: number;
+    view_count: number;
+    expiring_soon_count: number;
+  }> {
+    const getMessageStats = async (): Promise<{
+      created_count: number;
+      view_count: number;
+    }> => {
+      const query = `SELECT created_count, view_count FROM message_stats where id = 1`;
+      const result = await this.pool.query(query);
+      let row = result.rows[0];
+      return {
+        created_count: row.created_count,
+        view_count: row.view_count,
+      };
+    };
+
+    const getExpiringCount = async (): Promise<number> => {
+      const query = `SELECT COUNT(*) FROM messages`;
+      const result = await this.pool.query(query);
+      if (result.rows.length === 0) {
+        return 0;
+      }
+      return parseInt(result.rows[0].count);
+    };
+
+    const { created_count, view_count } = await getMessageStats();
+    const expiring_soon_count = await getExpiringCount();
+
+    return {
+      created_count,
+      view_count,
+      expiring_soon_count,
+    };
+  }
 }

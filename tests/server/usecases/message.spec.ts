@@ -14,6 +14,18 @@ const randomIdLength = 10;
 class MockMessageRepository implements IMessageRepository {
   private messages: Message[] = [];
 
+  getStats(): Promise<{
+    created_count: number;
+    view_count: number;
+    expiring_soon_count: number;
+  }> {
+    return Promise.resolve({
+      created_count: this.messages.length,
+      view_count: 1,
+      expiring_soon_count: this.messages.length,
+    });
+  }
+
   increaseViewCount(id: string): Promise<void> {
     const existedMessage = this.messages.find((message) => message.id === id);
 
