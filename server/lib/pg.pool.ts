@@ -12,6 +12,6 @@ export class PgPool implements IDatabasePool {
     text: string,
     params?: any[]
   ): Promise<{ rows: any[]; rowCount: number | null }> {
-    return this.pool.query(text, params);
+    return await this.pool.query(text, params);
   }
 }

@@ -3,7 +3,7 @@ import type { Message } from "~/types/message";
 
 export default {
   async getMessage(id: string) {
-    return api
+    return await api
       .get<ApiResponse<{ message: Message }>>(`message/${id}`)
       .then((data) => {
         return data;
@@ -18,7 +18,7 @@ export default {
   },
 
   async increaseViewCount(id: string) {
-    return api.patch<ApiResponse>(`message/${id}`);
+    return await api.patch<ApiResponse>(`message/${id}`);
   },
 
   async createMessage(message: any) {
@@ -33,7 +33,7 @@ export default {
   },
 
   async getStats(): Promise<any> {
-    return api.get<{ stats: any }>("message/stats").catch((_error) => {
+    return await api.get<{ stats: any }>("message/stats").catch((_error) => {
       throw new Error("Failed to fetch message stats.");
     });
   },

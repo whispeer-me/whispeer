@@ -6,6 +6,6 @@ export class PatchMessage {
   }
 
   async execute(id: string): Promise<void> {
-    this.messageRepo.increaseViewCount(id);
+    await this.messageRepo.increaseViewCount(id);
   }
 }

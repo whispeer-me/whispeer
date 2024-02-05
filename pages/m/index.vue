@@ -127,7 +127,7 @@ const handleMessageRetrieval = async (retrievedMessage) => {
   if (retrievedMessage.is_private) {
     showModal();
   } else {
-    increaseViewCount(retrievedMessage.id);
+    await increaseViewCount(retrievedMessage.id);
   }
 };
 
@@ -160,7 +160,7 @@ const extractMessage = (retrievedMessage) => {
   });
 };
 
-const decryptMessage = async (passphrase) => {
+const decryptMessage = (passphrase) => {
   try {
     const decryptedContent = cryptoService.decrypt(
       message.value.encryptedContent,
@@ -183,11 +183,11 @@ const closeModal = () => {
 };
 
 const onModalSubmit = async (submittedPassphrase) => {
-  const decryptedContent = await decryptMessage(submittedPassphrase);
+  const decryptedContent = decryptMessage(submittedPassphrase);
   if (decryptedContent) {
     message.value.content = decryptedContent;
     closeModal();
-    increaseViewCount(message.value.id);
+    await increaseViewCount(message.value.id);
   }
 };
 </script>
