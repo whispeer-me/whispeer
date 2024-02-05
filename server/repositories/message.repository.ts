@@ -35,7 +35,11 @@ export class MessageRepository implements IMessageRepository {
   }
 
   async deleteExpiredMessages(): Promise<void> {
-    throw new Error("Method not implemented.");
+    const query = `
+    DELETE FROM messages
+    WHERE created_at < NOW() - INTERVAL '24 hours';
+  `;
+    await this.pool.query(query);
   }
 
   async save(messageData: Message): Promise<Message> {
