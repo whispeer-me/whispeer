@@ -37,7 +37,7 @@ const errorMessage = ref(null);
 const isLoading = ref(true);
 const isModalVisible = ref(false);
 const config = useRuntimeConfig();
-const ogImageUrl = `${config.app.analyticsDomain}/logo.png`;
+const ogImageUrl = `https://${config.public.analyticsDomain}/logo.png`;
 const pageTitle = "Whispeer - Private Message";
 
 useHead({

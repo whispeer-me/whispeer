@@ -69,7 +69,7 @@ export default defineNuxtConfig({
       databaseURL: process.env.DATABASE_URL,
     },
     public: {
-      analyticsDomain: process.env.ANALYTICS_DOMAIN,
+      analyticsDomain: "",
     },
   },
 });

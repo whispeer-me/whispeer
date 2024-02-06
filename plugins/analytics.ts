@@ -1,7 +1,6 @@
 export default defineNuxtPlugin((_nuxtApp) => {
-  const {
-    public: { analyticsDomain },
-  } = useRuntimeConfig();
+  const config = useRuntimeConfig();
+  const analyticsDomain = config.public.analyticsDomain;
   if (process.env.NODE_ENV === "production" && analyticsDomain) {
     useHead({
       script: [
