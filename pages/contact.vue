@@ -35,7 +35,7 @@ useHead({
 .contact-page {
   text-align: center;
   color: $secondary-color;
-
+  margin: 0px 20px 0px 20px;
   font-family: $secondary-font;
 
   .intro,

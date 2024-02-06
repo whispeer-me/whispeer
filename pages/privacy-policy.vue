@@ -127,7 +127,7 @@ useHead({
   color: $secondary-color;
   font-family: $secondary-font;
   text-align: left;
-  margin-bottom: 100px;
+  margin: 0px 20px 100px 20px;
 
   h1 {
     text-align: center;
