@@ -1,0 +1,67 @@
+$char-font-size: 12px;
+$char-size: 16px;
+$matched-char-size: 16px;
+
+.content {
+  padding: 0px !important;
+}
+
+#board {
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.unmatched {
+  opacity: 0.3 !important;
+}
+
+.char {
+  display: inline-block;
+  font-size: $char-font-size;
+  width: $char-size;
+  height: $char-size;
+  font-family: $primary-font;
+  color: #c4872b;
+  padding: 4px;
+}
+
+.char.matched {
+  display: inline-block;
+  width: $matched-char-size;
+  padding: 1px;
+  font-size: 20px;
+}
+
+.chiper-display {
+  padding: 16px 0px 16px 0px;
+}
+
+.expire-info,
+.view-count {
+  color: $secondary-color;
+  margin-bottom: 10px;
+}
+
+//  Modal
+
+.passphrase-modal {
+  font-family: $secondary-font;
+}
+
+.passphrase-input {
+  width: 80%;
+  margin: 20px;
+  padding: 10px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+
+  button {
+    margin-left: 8px;
+  }
+}

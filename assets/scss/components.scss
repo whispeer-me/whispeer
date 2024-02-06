@@ -1,0 +1,14 @@
+.toggle-switch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  span {
+    margin-right: 10px;
+    color: $primary-color;
+  }
+
+  .switch {
+    @extend %switch-style;
+  }
+}

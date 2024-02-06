@@ -1,0 +1,107 @@
+// Fonts
+@font-face {
+  font-family: "LCD-Solid";
+  src: url("~/assets/fonts/LCD-Solid.ttf.woff") format("woff"),
+       url("~/assets/fonts/LCD-Solid.ttf.svg#LCD-Solid") format("svg"),
+       url("~/assets/fonts/LCD-Solid.ttf.eot"),
+       url("~/assets/fonts/LCD-Solid.ttf.eot?#iefix") format("embedded-opentype");
+}
+
+#app {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  min-height: 100vh;
+}
+
+.divider {
+  border: none;
+  height: 2px;
+  background-color: $divider-color;
+  margin: 0;
+}
+
+h1 {
+  color: $primary-color;
+  font-size: large;
+}
+
+h2 {
+  color: $primary-color;
+  font-size: medium;
+}
+
+a {
+  color: $secondary-color;
+  &:hover {
+    color: $hover-color;
+  }
+}
+
+// Common Styles
+
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+body, html {
+  overflow-x: hidden;
+  margin: 0;
+}
+
+body {
+  background-color: $background-color;
+  font-family: $primary-font;
+}
+
+.content {
+  flex: 1;
+  box-sizing: border-box;
+  padding: 20px;
+  padding-bottom: 10px;
+  overflow-y: auto;
+}
+
+.error-message {
+  color: $error-color;
+  margin-top: 10px;
+}
+
+a {
+  color: $secondary-color;
+  text-decoration: none;
+  font-weight: bold;
+
+  &:hover {
+    color: $hover-color;
+  }
+}
+
+.loading-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #c4872b;
+  text-align: center;
+  font-family: "LCD-Solid";
+}
+
+.highlight {
+  color: white;
+  font-weight: 600;
+}
+
+button {
+  @extend %button-style;
+}
+
+.modal-passphrase-input {
+  @extend %input-style;
+}
+
+.icon-mobile {
+  filter: invert(51%) sepia(34%) saturate(862%) hue-rotate(357deg) brightness(101%) contrast(94%);
+}

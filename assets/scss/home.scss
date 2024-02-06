@@ -1,0 +1,68 @@
+.home {
+  text-align: center;
+  color: #ffffff;
+
+  .intro {
+    margin: 20px auto;
+    max-width: 600px;
+    line-height: 1.6;
+    font-size: $text-font-size;
+    color: $secondary-color;
+    font-family: $secondary-font;
+  }
+
+  .cta-button {
+    @extend %button-style;
+    margin-top: 20px;
+  }
+
+  .statistics {
+    text-align: center;
+    margin-top: 80px;
+    color: $primary-color;
+
+    .stats-title {
+      font-size: xx-large;
+      margin-bottom: 40px;
+    }
+
+    .stat-groups {
+      display: flex;
+      justify-content: center;
+
+      @media (max-width: 480px) {
+        width: 80%;
+        margin: 0 auto;
+      }
+
+      .stat-item {
+        margin: 0 20px;
+        text-align: center;
+
+        .stat-value {
+          font-size: $heading-font-size;
+          margin-bottom: 0.5em;
+          transition: transform 0.5s ease-in-out;
+        }
+
+        p {
+          font-size: $text-font-size;
+          color: $secondary-color;
+          @media (max-width: 480px) {
+            font-size: 20px;
+          }
+        }
+      }
+    }
+  }
+
+  @keyframes pop {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+  }
+}

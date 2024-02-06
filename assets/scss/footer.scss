@@ -1,0 +1,19 @@
+.app-footer {
+  background-color: rgba(0, 0, 0, 0.7);
+  color: $primary-color;
+  padding: 10px;
+  text-align: center;
+  bottom: 0;
+  width: 100%;
+
+  .footer-text {
+    margin: 10px;
+  }
+
+  .footer-link {
+    color: $primary-color;
+    &:hover {
+      color: $hover-color;
+    }
+  }
+}
