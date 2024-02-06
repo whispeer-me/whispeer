@@ -20,7 +20,7 @@
     "@vue/test-utils": "^2.4.4",
     "happy-dom": "^13.3.8",
     "node-pg-migrate": "^6.2.2",
-    "nuxt": "^3.9.3",
+    "nuxt": "^3.10.1",
     "sass": "^1.70.0",
     "sass-loader": "^14.0.0",
     "vite-tsconfig-paths": "^4.3.1",
