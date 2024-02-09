@@ -1,11 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
-import homeIcon from "@/assets/icons/home.svg";
-import messageIcon from "@/assets/icons/message.svg";
-import storyIcon from "@/assets/icons/the-story.svg";
-import codeIcon from "@/assets/icons/code.svg";
-import contactIcon from "@/assets/icons/contact.svg";
-import blogIcon from "@/assets/icons/blog.svg";
+
 const isMobile = ref<boolean>(false);
 
 function handleResize() {
@@ -27,17 +22,35 @@ onUnmounted(() => {
 <template>
   <header class="header">
     <nav class="main-nav">
-      <img src="/logo.png" alt="Whisper Logo" class="logo" />
+      <NuxtImg
+        src="/logo.png"
+        alt="Whisper Logo"
+        class="logo"
+        width="36"
+        height="36"
+        loading="lazy"
+      />
       <NuxtLink to="/" class="nav-link">
-        <img v-if="isMobile" :src="homeIcon" alt="Home" class="icon-mobile" />
+        <NuxtImg
+          v-if="isMobile"
+          src="/icons/home.svg"
+          alt="Home"
+          class="icon-mobile"
+          width="24"
+          height="24"
+          loading="lazy"
+        />
         <span v-if="!isMobile">Home</span>
       </NuxtLink>
       <NuxtLink to="/m/new?ref=nav" class="nav-link">
-        <img
+        <NuxtImg
           v-if="isMobile"
-          :src="messageIcon"
+          src="/icons/message.svg"
           alt="New Message"
           class="icon-mobile"
+          width="24"
+          height="24"
+          loading="lazy"
         />
         <span v-if="!isMobile">New Message</span>
       </NuxtLink>
@@ -47,28 +60,50 @@ onUnmounted(() => {
         target="_blank"
         rel="noopener noreferrer"
       >
-        <img v-if="isMobile" :src="blogIcon" alt="Blog" class="icon-mobile" />
+        <NuxtImg
+          v-if="isMobile"
+          src="/icons/blog.svg"
+          alt="Blog"
+          class="icon-mobile"
+          width="24"
+          height="24"
+          loading="lazy"
+        />
         <span v-if="!isMobile">Blog</span>
       </a>
       <NuxtLink to="/the-story" class="nav-link">
-        <img
+        <NuxtImg
           v-if="isMobile"
-          :src="storyIcon"
+          src="/icons/the-story.svg"
           alt="The Story"
           class="icon-mobile"
+          width="24"
+          height="24"
+          loading="lazy"
         />
         <span v-if="!isMobile">The Story</span>
       </NuxtLink>
       <NuxtLink to="/code" class="nav-link">
-        <img v-if="isMobile" :src="codeIcon" alt="Code" class="icon-mobile" />
+        <NuxtImg
+          v-if="isMobile"
+          src="/icons/code.svg"
+          alt="Code"
+          class="icon-mobile"
+          width="24"
+          height="24"
+          loading="lazy"
+        />
         <span v-if="!isMobile">Code</span>
       </NuxtLink>
       <NuxtLink to="/contact" class="nav-link">
-        <img
+        <NuxtImg
           v-if="isMobile"
-          :src="contactIcon"
+          src="/icons/contact.svg"
           alt="Contact"
           class="icon-mobile"
+          width="24"
+          height="24"
+          loading="lazy"
         />
         <span v-if="!isMobile">Contact</span>
       </NuxtLink>
