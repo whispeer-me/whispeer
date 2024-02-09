@@ -2,6 +2,7 @@
 import { ref, onMounted, onUnmounted } from "vue";
 
 const isMobile = ref<boolean>(false);
+const hasMounted = ref<boolean>(false);
 
 function handleResize() {
   if (typeof window !== "undefined") {
@@ -12,6 +13,7 @@ function handleResize() {
 onMounted(() => {
   handleResize();
   window.addEventListener("resize", handleResize);
+  hasMounted.value = true;
 });
 
 onUnmounted(() => {
@@ -21,10 +23,10 @@ onUnmounted(() => {
 
 <template>
   <header class="header">
-    <nav class="main-nav">
+    <nav v-if="hasMounted" class="main-nav">
       <NuxtImg
         src="/logo.png"
-        alt="Whisper Logo"
+        alt="Whispeer Logo"
         class="logo"
         width="36"
         height="36"
