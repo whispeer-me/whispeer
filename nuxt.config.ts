@@ -2,7 +2,7 @@
 
 export default defineNuxtConfig({
   devtools: { enabled: false },
-  modules: ["@nuxt/test-utils/module", "nuxt-scheduler"],
+  modules: ["@nuxt/test-utils/module", "nuxt-scheduler", "@nuxt/image"],
   plugins: ["~/plugins/analytics.ts"],
   ssr: true,
   app: {
