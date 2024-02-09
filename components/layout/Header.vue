@@ -5,7 +5,7 @@ import messageIcon from "@/assets/icons/message.svg";
 import storyIcon from "@/assets/icons/the-story.svg";
 import codeIcon from "@/assets/icons/code.svg";
 import contactIcon from "@/assets/icons/contact.svg";
-
+import blogIcon from "@/assets/icons/blog.svg";
 const isMobile = ref<boolean>(false);
 
 function handleResize() {
@@ -41,6 +41,15 @@ onUnmounted(() => {
         />
         <span v-if="!isMobile">New Message</span>
       </NuxtLink>
+      <a
+        href="https://blog.whispeer.me"
+        class="nav-link"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img v-if="isMobile" :src="blogIcon" alt="Blog" class="icon-mobile" />
+        <span v-if="!isMobile">Blog</span>
+      </a>
       <NuxtLink to="/the-story" class="nav-link">
         <img
           v-if="isMobile"
