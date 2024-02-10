@@ -1,6 +1,6 @@
 # Welcome to Whispeer!
 
-Hey there! Welcome to [Whispeer](https://whispeer.me), where we're all about keeping your messages safe and private. We've mixed some cool tech like PostgreSQL, Bun, Node.js (for testing and building) and Vue.js 3 to make sure your chats are not just fun and easy to use, but also super secure.
+Hey there! Welcome to [Whispeer](https://whispeer.me), where we're all about keeping your messages safe and private. We've mixed some cool tech like PostgreSQL, Node.js (for testing and building) and Vue.js 3 to make sure your chats are not just fun and easy to use, but also super secure.
 
 ## Contribute to the Project
 
@@ -9,12 +9,12 @@ Help us make Whispeer even better! We're always looking for new contributors to 
 ### Development
  - **Install the Packages"** Get all the dependencies:
    ```
-   bun i
+  npm i
    ```
 
 - **Making Changes?** Use this for a smooth coding ride:
   ```
-  bun run dev
+  npm run dev
   ```
 - **Going Live?** Get your code ready for showtime:
   ```
@@ -24,7 +24,6 @@ Help us make Whispeer even better! We're always looking for new contributors to 
 ### Testing and Keeping It Clean
 - **Testing Made Easy:** Run your tests with:
   ```
-  # Due to bun's limited `vitest` support we have to stick with `npm` for now.
   npm i && npm test
   ```
 

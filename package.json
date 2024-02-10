@@ -12,7 +12,8 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "migrate": "node-pg-migrate up"
+    "migrate": "node-pg-migrate up",
+    "start": "node .output/server/index.mjs"
   },
   "devDependencies": {
     "@nuxt/test-utils": "^3.11.0",

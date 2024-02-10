@@ -1,8 +1,6 @@
 #!/bin/sh
-
 # Run database migrations
-# `bun run migrate` is not working for some reason
-bun ./node_modules/node-pg-migrate/bin/node-pg-migrate up
+node ./node_modules/db-migrate/bin/db-migrate up
 
-# Run the server
-bun ./server/index.mjs
+# Start the application
+exec npm start
