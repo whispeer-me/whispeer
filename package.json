@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "prestart": "npm run migrate",
+    "prestart": "node ./node_modules/db-migrate/bin/db-migrate up",
     "build": "nuxt build",
     "dev": "nuxt dev",
     "test": "vitest",

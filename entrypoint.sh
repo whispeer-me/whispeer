@@ -1,6 +1,6 @@
 #!/bin/sh
 # Run database migrations
-node ./node_modules/db-migrate/bin/db-migrate up
+node ./node_modules/node-pg-migrate/bin/node-pg-migrate up
 
 # Start the application
-exec npm start
+node .output/server/index.mjs
