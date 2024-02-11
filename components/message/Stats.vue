@@ -2,18 +2,9 @@
   <div class="statistics">
     <h2 class="stats-title">Messages</h2>
     <div class="stat-groups">
-      <div class="stat-item">
-        <span class="stat-value">{{ formatNumber(stats.createdCount) }}</span>
-        <p>Created</p>
-      </div>
-      <div class="stat-item">
-        <span class="stat-value">{{ formatNumber(stats.viewCount) }}</span>
-        <p>Viewed</p>
-      </div>
-      <div class="stat-item">
-        <span class="stat-value">{{ formatNumber(stats.expiringSoonCount) }}</span>
-        <p>Expiring Soon</p>
-      </div>
+      <MessageStatItem title="Created" :value="stats.createdCount" />
+      <MessageStatItem title="Viewed" :value="stats.viewCount" />
+      <MessageStatItem title="Expiring Soon" :value="stats.expiringSoonCount" />
     </div>
   </div>
 </template>
@@ -69,26 +60,6 @@ onMounted(() => {
     @media (max-width: 480px) {
       width: 80%;
       margin: 0 auto;
-    }
-
-    .stat-item {
-      margin: 0 20px;
-      text-align: center;
-
-      .stat-value {
-        font-size: $heading-font-size;
-        margin-bottom: 0.5em;
-        transition: transform 0.5s ease-in-out;
-      }
-
-      p {
-        font-size: $text-font-size;
-        color: $secondary-color;
-
-        @media (max-width: 480px) {
-          font-size: 20px;
-        }
-      }
     }
   }
 }
