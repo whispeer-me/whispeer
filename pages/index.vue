@@ -6,10 +6,10 @@ function redirectToCreateMessagePage() {
 
 <template>
   <div class="home">
-    <h1>Welcome to Whispeer</h1>
+    <h1>Your Secrets Stay Safe with Whispeer</h1>
 
     <p class="intro">
-      Create secure, anonymous and encrypted messages that auto-expire in 24 hours.
+      Send messages that vanish after 24 hours. Powerful client-side encryption.
     </p>
 
     <button class="cta-button" @click="redirectToCreateMessagePage">
