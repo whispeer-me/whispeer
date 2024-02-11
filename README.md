@@ -9,7 +9,7 @@ Help us make Whispeer even better! We're always looking for new contributors to 
 ### Development
  - **Install the Packages"** Get all the dependencies:
    ```
-  npm i
+   npm i
    ```
 
 - **Making Changes?** Use this for a smooth coding ride:
