@@ -10,17 +10,17 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: "en",
       },
-      title: "Whispeer - Secure, Private Messaging",
+      title: "Whispeer - Secure, Expiring Messages",
       meta: [
         {
           name: "description",
           content:
-            "Whispeer offers a secure way to create and share encrypted messages that auto-expire in 24 hours. Send temporary, anonymous message to anyone. Send Peer To Peer (P2P) secure, encrypted messages.",
+            "Send confidential messages that vanish after 24 hours with Whispeer. Client-side encryption for ultimate privacy. Try it now",
         },
         {
           name: "keywords",
           content:
-            "secure messaging, private communication, encrypted messaging, message encryption, auto-expiring messages, data security, privacy, anonymous messaging, temp message, temp messaging",
+            "client-side encryption, privacy-focused messaging, ephemeral messaging, self-destructing messages, secure note sharing",
         },
       ],
       link: [
