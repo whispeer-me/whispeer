@@ -2,9 +2,9 @@
   <div class="statistics">
     <h2 class="stats-title">Messages</h2>
     <div class="stat-groups">
-      <MessageStatItem title="Created" :value="stats.createdCount" />
-      <MessageStatItem title="Viewed" :value="stats.viewCount" />
-      <MessageStatItem title="Expiring Soon" :value="stats.expiringSoonCount" />
+      <MessageStatsItem title="Created" :value="stats.createdCount" />
+      <MessageStatsItem title="Viewed" :value="stats.viewCount" />
+      <MessageStatsItem title="Expiring Soon" :value="stats.expiringSoonCount" />
     </div>
   </div>
 </template>
