@@ -54,7 +54,7 @@ useHead({
   .content {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-evenly;
   }
 
   h1 {
