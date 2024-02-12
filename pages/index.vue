@@ -24,10 +24,7 @@ function redirectToCreateMessagePage() {
       Learn More
     </button>
 
-    <MessageStats />
-
     <HowItWorks />
-
   </div>
 </template>
 
