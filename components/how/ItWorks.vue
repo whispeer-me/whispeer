@@ -55,7 +55,7 @@ useHead({
   }
 
   h1 {
-    font-size: 42px;
+    font-size: 36px;
   }
 }
 </style>

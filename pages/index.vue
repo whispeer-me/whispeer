@@ -25,4 +25,8 @@ function redirectToCreateMessagePage() {
 
 <style scoped lang="scss">
 @import "@/assets/scss/home.scss";
+
+h1 {
+  font-size: 36px;
+}
 </style>

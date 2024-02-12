@@ -41,7 +41,7 @@ defineProps({
   overflow: hidden;
 
   &:hover {
-    transform: translateY(-5px);
+    transform: translateY(5px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
     border-color: $hover-color;
   }
@@ -56,19 +56,21 @@ defineProps({
   h2 {
     color: $primary-color;
     font-family: $secondary-font;
+    font-size: 18px;
   }
 
   p, ul, li {
     font-family: $secondary-font;
     color: $secondary-color;
+    padding: 1em;
   }
 
   ul {
      list-style-type: none;
+     text-align: left;
 
     li {
       position: relative;
-      padding-left: 1.5em;
 
       &:before {
         content: '•';
