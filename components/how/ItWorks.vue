@@ -14,12 +14,16 @@
       <HowSection title="Disappearing Messages"
         description="Every message on Whispeer has a lifespan of 24 hours. After that, it's automatically and permanently deleted from our servers. You don't have to worry about old messages hanging around." />
 
-      <HowSection title="Understanding Usage"
-        description="To make Whispeer better, we use anonymized analytics. This means we track overall usage patterns, but without collecting any personal information about you. We'll never compromise your privacy for data." />
-
       <HowSection title="Strong Passphrases Are The Key"
         description="When you choose to encrypt a message, your passphrase is vital. Here's how to make strong passphrases:"
         :items="['Use a mix of letters, numbers, and symbols.', 'Make them at least 12 characters long.', 'Never reuse passphrases on other websites or services.']" />
+
+      <HowSection title="Secure Message Sharing"
+        description="Whispeer ensures that your communications are not just encrypted, but also easily shareable. Create a message, set an optional passphrase for added security, and receive a unique URL. Share this URL with your intended recipient, and rest assured that only they can view and decrypt the message if a passphrase is provided. It's secure messaging made simple and effective." />
+
+      <HowSection title="Understanding Usage"
+        description="To make Whispeer better, we use anonymized analytics. This means we track overall usage patterns, but without collecting any personal information about you. We'll never compromise your privacy for data." />
+
     </div>
   </section>
 </template>
