@@ -31,6 +31,12 @@
 
 <style scoped lang="scss">
 .section {
+
+  width: 90vh;
+  height: 80vh;
+  max-width: 90vw;
+  margin: auto;
+
   h2 {
     font-family: $secondary-font;
   }

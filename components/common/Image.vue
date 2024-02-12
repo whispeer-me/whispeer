@@ -11,9 +11,10 @@ defineProps({
 
 <style scoped lang="scss">
 .image {
-  width: 90vw;
-  height: 56.25vw;
-  max-height: 100vh;
+  width: auto;
+  height: 80vh;
+  max-width: 90vw;
   object-fit: cover;
+  margin: auto;
 }
 </style>
