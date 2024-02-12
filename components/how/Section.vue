@@ -1,11 +1,11 @@
 <template>
 <section class="section">
-<div v-if="image" class="image-container">
-  <CommonImage :src="image" :alt="title" />
-</div>
+  <div v-if="image" class="image-container">
+    <CommonImage :src="image" :alt="title" />
+  </div>
   <h2>{{ title }}</h2>
   <p>
-   {{ description }}
+    {{ description }}
   </p>
   <ul v-if="items">
     <li v-for="(item, index) in items" :key="index"> {{ item }} </li>
@@ -14,38 +14,69 @@
 </template>
 
 <script setup lang="ts">
-  defineProps({
-    title: String,
-    description: String,
-    image: {
-      type: String,
-      required: false,
-    },
-    items: {
-      type: Array as PropType<string[]>,
-      required: false,
-      default: () => [],
-    }
-  })
+defineProps({
+  title: String,
+  description: String,
+  image: {
+    type: String,
+    required: false,
+  },
+  items: {
+    type: Array as PropType<string[]>,
+    required: false,
+    default: () => [],
+  }
+})
 </script>
 
 <style scoped lang="scss">
 .section {
   width: 50vh;
+  background-color: $background-color;
+  color: $secondary-color;
+  border: 1px solid $divider-color;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
 
-  p {
-    font-family: $secondary-font;
-    font-size: large;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    border-color: $hover-color;
+  }
+
+  .image-container img {
+    transition: opacity 0.3s ease;
+    &:hover {
+      opacity: 0.9;
+    }
   }
 
   h2 {
+    color: $primary-color;
     font-family: $secondary-font;
   }
 
-  ul {
-    list-style-type: square;
+  p, ul, li {
     font-family: $secondary-font;
-    text-align: left;
+    color: $secondary-color;
+  }
+
+  ul {
+     list-style-type: none;
+
+    li {
+      position: relative;
+      padding-left: 1.5em;
+
+      &:before {
+        content: '•';
+        color: $primary-color;
+        position: absolute;
+        left: 0;
+      }
+    }
   }
 }
 </style>
