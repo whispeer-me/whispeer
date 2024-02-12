@@ -1,9 +1,9 @@
 <template>
 <section class="section">
+<div v-if="image" class="image-container">
+  <CommonImage :src="image" :alt="title" />
+</div>
   <h2>{{ title }}</h2>
-  <div v-if="image" class="image-container">
-    <CommonImage :src="image" :alt="title" />
-  </div>
   <p>
    {{ description }}
   </p>
@@ -31,22 +31,21 @@
 
 <style scoped lang="scss">
 .section {
+  width: 50vh;
 
-  width: 90vh;
-  height: 80vh;
-  max-width: 90vw;
-  margin: auto;
+  p {
+    font-family: $secondary-font;
+    font-size: large;
+  }
 
   h2 {
     font-family: $secondary-font;
   }
 
-  p {
-    font-size: large;
-  }
-
   ul {
-    list-style-type: none;
+    list-style-type: square;
+    font-family: $secondary-font;
+    text-align: left;
   }
 }
 </style>
