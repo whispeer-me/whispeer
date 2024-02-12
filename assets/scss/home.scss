@@ -12,6 +12,10 @@
     font-family: $secondary-font;
   }
 
+  h1 {
+    font-size: 36px;
+  }
+
   .cta-button,
   .learn-more-button {
     @extend %button-style;
