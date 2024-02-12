@@ -17,7 +17,7 @@ function redirectToCreateMessagePage() {
     </p>
 
     <button class="cta-button" @click="redirectToCreateMessagePage">
-      Create a secure message
+      Send message
     </button>
 
     <button class="learn-more-button" @click="scrollToHowItWorks">
