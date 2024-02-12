@@ -1,4 +1,5 @@
 .home {
+  position: relative;
   text-align: center;
   color: #ffffff;
 
@@ -11,9 +12,13 @@
     font-family: $secondary-font;
   }
 
-  .cta-button {
+  .cta-button,
+  .learn-more-button {
     @extend %button-style;
-    margin-top: 20px;
+    margin: 20px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
   }
 
   @keyframes pop {

@@ -1,4 +1,9 @@
 <script setup lang="ts">
+const scrollToHowItWorks = () => {
+  const howItWorksElement = document.querySelector('.how-it-works');
+  howItWorksElement?.scrollIntoView({ behavior: 'smooth' });
+};
+
 function redirectToCreateMessagePage() {
   navigateTo({ path: "/m/new", query: { ref: "cta" } });
 }
@@ -7,13 +12,16 @@ function redirectToCreateMessagePage() {
 <template>
   <div class="home">
     <h1>Your Secrets Stay Safe with Whispeer</h1>
-
     <p class="intro">
       Send messages that vanish after 24 hours. Powerful client-side encryption.
     </p>
 
     <button class="cta-button" @click="redirectToCreateMessagePage">
       Create a secure message
+    </button>
+
+    <button class="learn-more-button" @click="scrollToHowItWorks">
+      Learn More
     </button>
 
     <MessageStats />
@@ -25,8 +33,4 @@ function redirectToCreateMessagePage() {
 
 <style scoped lang="scss">
 @import "@/assets/scss/home.scss";
-
-h1 {
-  font-size: 36px;
-}
 </style>
