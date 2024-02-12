@@ -14,7 +14,7 @@
       <HowSection title="Disappearing Messages"
         description="Every message on Whispeer has a lifespan of 24 hours. After that, it's automatically and permanently deleted from our servers. You don't have to worry about old messages hanging around." />
 
-      <HowSection title="Strong Passphrase's' The Key"
+      <HowSection title="Strong Passphrase's The Key"
         description="When you choose to encrypt a message, your passphrase is vital. Here's how to make strong passphrases:"
         :items="['Use a mix of letters, numbers, and symbols.', 'Make them at least 12 characters long.', 'Never reuse passphrases on other websites or services.']" />
 
