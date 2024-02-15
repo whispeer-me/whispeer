@@ -1,15 +1,16 @@
 <template>
   <div class="chat-container">
-    <div id="messages">
-      <ul>
-        <li v-for="message in messages" :key="message.id" :class="getClass(message.id)">
-          <div class="item">
-            {{ message.content }}
-          </div>
-        </li>
-      </ul>
+    <div class="messages-container">
+      <div id="messages">
+        <ul>
+          <li v-for="message in messages" :key="message.id" :class="getClass(message.id)">
+            <div class="item">
+              {{ message.content }}
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
-
   </div>
 
   <div class="message-input">
@@ -51,6 +52,11 @@ const getClass = (id: number) => {
   height: 80vh;
 }
 
+.messages-container {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
 #messages {
   margin-bottom: 20px;
   flex-grow: 1;
@@ -86,6 +92,7 @@ const getClass = (id: number) => {
   display: flex;
   gap: 10px;
   margin: 0 20px;
+  align-self: flex-end;
 
   input {
     flex-grow: 1;
