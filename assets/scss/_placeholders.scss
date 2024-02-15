@@ -80,3 +80,9 @@
     border-radius: 50%;
   }
 }
+
+%message-style {
+  font-family: $secondary-font;
+  /* top | right | bottom | left */
+  margin: 10px 15px 10px 15px;
+}

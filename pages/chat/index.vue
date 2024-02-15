@@ -39,7 +39,7 @@ const sendMessage = async () => {
 }
 
 const getClass = (id: number) => {
-  return id % 2 == 0 ? "right" : "left"
+  return id % 2 == 0 ? "sender" : "receiver"
 }
 
 </script>
@@ -58,25 +58,28 @@ const getClass = (id: number) => {
   ul {
     list-style-type: none;
     padding: 0;
-
-    li {
-      color: $secondary-color;
-      font-family: $secondary-font;
-      /* top | right | bottom | left */
-      margin: 10px 15px 10px 15px;
-      text-align: right;
-
-      .item {
-        display: inline-block;
-        max-width: 80%;
-        border: 1px solid #fff;
-        border-radius: 30px;
-        padding: 15px;
-        background-color: $background-color;
-        word-wrap: break-word;
-      }
-    }
   }
+
+  .item {
+    display: inline-block;
+    max-width: 80%;
+    border: 1px solid;
+    border-radius: 30px;
+    padding: 15px;
+    background-color: #fff;
+    color: #000;
+    word-wrap: break-word;
+  }
+}
+
+.sender {
+  @extend %message-style;
+  text-align: right;
+}
+
+.receiver {
+  @extend %message-style;
+  text-align: left;
 }
 
 .message-input {
