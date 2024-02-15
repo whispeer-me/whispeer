@@ -14,7 +14,12 @@ export default function useChat() {
     const showNewMessageNotification = ref(false);
 
     const sendMessage = async () => {
-      messages.value.push(chatService.createMessage(message.value, passphrase));
+      const content = message.value.trim();
+      if (content.length === 0) {
+        return;
+      }
+
+      messages.value.push(chatService.createMessage(content, passphrase));
 
       message.value = "";
 
@@ -69,6 +74,8 @@ export default function useChat() {
       return id % 2 == 0 ? "sender" : "receiver";
     };
 
+    const maxCharsAllowed = constants.MESSAGE_MAX_CHARS_ALLOWED;
+
     return {
       message,
       messages,
@@ -78,6 +85,7 @@ export default function useChat() {
       showNewMessageNotification,
       messagesContainer,
       getMessageClass,
+      maxCharsAllowed,
     };
   }
 }

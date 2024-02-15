@@ -16,7 +16,8 @@
     🔔 New message 📨
   </div>
   <div class="message-input">
-    <input type="text" v-model="message" placeholder="Type your message here ..." @keyup.enter="sendMessage" />
+    <input type="text" v-model="message" placeholder="Type your message here ..." :maxlength="maxCharsAllowed" required
+      @keyup.enter="sendMessage" />
     <button type="submit" @click="sendMessage">Send</button>
   </div>
 </template>
@@ -33,6 +34,7 @@ const {
   showNewMessageNotification,
   messagesContainer,
   getMessageClass,
+  maxCharsAllowed,
 } = useChat();
 </script>
 

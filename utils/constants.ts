@@ -10,6 +10,8 @@ class Constants {
   DISCLAIMER_VIEWS_MAX_COUNT = 10;
 
   CLIPBOARD_INFORM_MESSAGE_DURATION = 3000; // 3 seconds
+
+  MESSAGE_MAX_CHARS_ALLOWED = 256;
 }
 
 export default new Constants();
