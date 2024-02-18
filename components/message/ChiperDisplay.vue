@@ -14,6 +14,7 @@
 
 <script setup lang="js">
 import { ref, onMounted, onBeforeUnmount } from "vue";
+import { createRandomChars  } from "~/composables/cipher/random-chars";
 
 const props = defineProps({
   message: {
@@ -23,27 +24,9 @@ const props = defineProps({
 });
 
 const characters = ref([]);
-const asciiStart = 33;
-const asciiEnd = 126;
-const randomCharsCount = 2000;
 const isBoardReady = ref(false);
 
 let randomizer = null;
-
-const getRandomInt = (min, max) => {
-  return randomNumber(min, max);
-};
-
-const getRandomChar = () =>
-  String.fromCharCode(getRandomInt(asciiStart, asciiEnd));
-
-const createRandomChars = () => {
-  return Array.from({ length: randomCharsCount }, () => ({
-    char: getRandomChar(),
-    class: "",
-    matched: false,
-  }));
-};
 
 const display = () => {
   let charIndex = 0;
