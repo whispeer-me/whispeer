@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="js">
-import { ref, onMounted, onBeforeUnmount, nextTick } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 
 const props = defineProps({
   message: {
@@ -28,7 +28,6 @@ const asciiEnd = 126;
 const randomCharsCount = 2000;
 const isBoardReady = ref(false);
 
-let randomLocation = 0;
 let randomizer = null;
 
 const getRandomInt = (min, max) => {
@@ -49,13 +48,9 @@ const createRandomChars = () => {
 };
 
 const display = () => {
-  let startLocation = characters.value.length / 4;
-  const endLocation = characters.value.length - 1 - props.message.length - 1;
-  randomLocation = getRandomInt(startLocation, endLocation);
-
   let charIndex = 0;
   characters.value.forEach((char, i) => {
-    if (i >= randomLocation && i < randomLocation + props.message.length) {
+    if (i < props.message.length) {
       char.matched = true;
       char.class = "matched";
       char.char = props.message[charIndex++];
@@ -64,21 +59,6 @@ const display = () => {
       char.matched = false;
     }
   });
-  scrollToMessage();
-};
-
-const scrollToMessage = async () => {
-  await nextTick();
-  const selector = `.char.matched`;
-  const matchedElements = document.querySelectorAll(selector);
-  if (matchedElements.length > 0) {
-    const messageStartElement = matchedElements[0];
-    messageStartElement?.scrollIntoView({
-      behavior: "smooth",
-      block: "center",
-      inline: "center",
-    });
-  }
 };
 
 const randomize = () => {
