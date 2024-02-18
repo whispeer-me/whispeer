@@ -1,6 +1,10 @@
 <template>
   <div class="chat-container">
-    <div class="messages-container" ref="messagesContainer" @scroll="checkScrollPosition">
+    <div
+      class="messages-container"
+      ref="messagesContainer"
+      @scroll="checkScrollPosition"
+    >
       <div id="messages">
         <ul>
           <li v-for="message in messages" :key="message.id" :class="getMessageClass(message.id)">
@@ -12,12 +16,22 @@
       </div>
     </div>
   </div>
-  <div v-if="showNewMessageNotification" class="new-message-notification" @click="scrollToBottom">
+  <div
+    v-if="showNewMessageNotification"
+    class="new-message-notification"
+    @click="scrollToBottom"
+  >
     🔔 New message 📨
   </div>
   <div class="message-input">
-    <input type="text" v-model="message" placeholder="Type your message here ..." :maxlength="maxCharsAllowed" required
-      @keyup.enter="sendMessage" />
+    <input
+      type="text"
+      v-model="message"
+      placeholder="Type your message here ..."
+      :maxlength="maxCharsAllowed"
+      required
+      @keyup.enter="sendMessage"
+    />
     <button type="submit" @click="sendMessage">Send</button>
   </div>
 </template>
