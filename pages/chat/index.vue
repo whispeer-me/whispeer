@@ -7,10 +7,12 @@
     >
       <div id="messages">
         <ul>
-          <li v-for="message in messages" :key="message.id" :class="getMessageClass(message.id)">
-            <div class="item">
-              {{ message.content }}
-            </div>
+          <li
+            v-for="message in messages"
+            :key="message.id"
+            :class="getMessageClass(message.id)"
+          >
+            <ChatMessageItem :message="message.content" />
           </li>
         </ul>
       </div>
