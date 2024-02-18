@@ -31,9 +31,7 @@ const isBoardReady = ref(false);
 let randomizer = null;
 
 const getRandomInt = (min, max) => {
-  min = Math.ceil(Math.max(0, min));
-  max = Math.floor(Math.max(min, max));
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+  return randomNumber(min, max);
 };
 
 const getRandomChar = () =>
