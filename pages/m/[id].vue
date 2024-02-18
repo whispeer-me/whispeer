@@ -7,7 +7,7 @@
 
     <div v-if="message.content">
       <MessageInfo :message="message" />
-      <MessageChiperDisplay :message="message.content" class="chiper-display" />
+      <MessageCipherDisplay :message="message.content" class="chiper-display" />
     </div>
 
     <LazyCommonModal :isVisible="isModalVisible" class="passphrase-modal">
