@@ -120,6 +120,10 @@ useHead({
     },
   ],
 });
+
+onMounted(() => {
+  useTrackPageview();
+});
 </script>
 
 <style scoped lang="scss">
