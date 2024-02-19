@@ -29,7 +29,7 @@ Help us make Whispeer even better! We're always looking for new contributors to 
 
 # Environment Variables
 
-Update `ANALYTICS_DOMAIN` in `.env` file accordingly.
+Update `DOMAIN` in `.env` file accordingly.
 
 ## Client-Side Encryption
 
