@@ -7,6 +7,10 @@ const scrollToHowItWorks = () => {
 function redirectToCreateMessagePage() {
   navigateTo({ path: "/m/new", query: { ref: "cta" } });
 }
+
+onMounted(() => {
+  useTrackPageview();
+});
 </script>
 
 <template>
