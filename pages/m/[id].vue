@@ -180,23 +180,36 @@ const onModalSubmit = async (submittedPassphrase) => {
   }
 };
 
-const logPageView = (id) => {
+const getCleanURL = (id) => {
   if (window) {
-    var url = window.location.href;
+    let url = window.location.href;
     // Do NOT log message id in analytics
     if (id) {
       url = url.replace(id, "")
     }
-
-    useTrackPageview({
-      url: url,
-    })
+    return url;
   }
+
+  return "";
+}
+
+const logPageView = (id) => {
+  let url = getCleanURL(id);
+  useTrackPageview({ url, referrer: null, });
 };
 
 const logAnalytics = () => {
-  useTrackEvent("message-viewed", {
-    props: { is_private: message.value.is_private },
+  const url =  getCleanURL(message.value.id)
+  useTrackEvent("message-viewed",
+  {
+    url,
+    referrer: null,
+  },
+  {
+    url,
+    referrer: null,
+    props: {
+      is_private: message.value.is_private },
   });
 }
 

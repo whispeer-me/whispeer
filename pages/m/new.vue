@@ -154,6 +154,7 @@ const submitButtonTitle = computed(() => {
 onMounted(() => {
   maybeShowTooltip();
   maybeShowDisclaimer();
+  useTrackPageview({ referrer: null });
 });
 
 const submitMessage = async () => {
