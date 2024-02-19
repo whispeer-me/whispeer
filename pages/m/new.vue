@@ -222,7 +222,7 @@ const prepareAndMaybeEncryptTheMessage = () => {
 
 const handleSuccessfulSubmission = (newlyCreatedMessage) => {
   if (newlyCreatedMessage.id) {
-    messageLink.value = `${window.location.origin}/m/#${newlyCreatedMessage.id}`;
+    messageLink.value = `${window.location.origin}/m/${newlyCreatedMessage.id}`;
     resetForm();
     logMessageCreation();
   }
@@ -247,15 +247,13 @@ const handleToggleChange = (newValue) => {
 };
 
 const logMessageCreation = () => {
-  // TODO: Fix here after integrate analytics
-  // this.$analytics.trackEvent("message-created", {
-  //   props: { is_private: this.message.is_private },
-  // });
+  useTrackEvent("message-created", {
+    props: { is_private: message.value.is_private },
+  });
 };
 
 const logNewMessageCreation = () => {
-  // TODO: Fix here after integrate analytics 2
-  // this.$analytics.trackEvent("new-message");
+  useTrackEvent("create-message", { props: { source: "after-create" } });
 };
 
 const copyLinkToClipboard = () => {

@@ -67,28 +67,15 @@ useHead({
   ],
 });
 
-watch(
-  () => route.hash,
-  (newHash) => {
-    processHashChange(newHash);
-  }
-);
-
-onMounted(() => {
-  if (route.hash !== undefined) {
-    processHashChange(route.hash);
-  }
-});
-
-const processHashChange = async (hash) => {
+const processIdChange = async (messageId) => {
   message.value.content = null;
-  const messageId = hash.substring(1); // Remove the '#' from the hash
   if (messageId) {
     await fetchTheMessage(messageId);
   } else {
     errorMessage.value =
-      "No message ID provided in the url. Please ensure the url includes # followed by the message ID";
+      "No message ID provided in the url. Please ensure the url includes message ID. ex: m/id";
   }
+  logPageView(messageId);
 };
 
 const fetchTheMessage = async (messageId) => {
@@ -127,15 +114,17 @@ const handleMessageRetrieval = async (retrievedMessage) => {
   if (retrievedMessage.is_private) {
     showModal();
   } else {
-    await increaseViewCount(retrievedMessage.id);
+    await increaseViewCountAndLogAnalytics(retrievedMessage.id);
   }
 };
 
-const increaseViewCount = async (id) => {
+const increaseViewCountAndLogAnalytics = async (id) => {
   try {
     await messageService.increaseViewCount(id);
   } catch (error) {
     handleError(error);
+  } finally {
+    logAnalytics();
   }
 };
 
@@ -187,9 +176,39 @@ const onModalSubmit = async (submittedPassphrase) => {
   if (decryptedContent) {
     message.value.content = decryptedContent;
     closeModal();
-    await increaseViewCount(message.value.id);
+    await increaseViewCountAndLogAnalytics(message.value.id);
   }
 };
+
+const logPageView = (id) => {
+  if (window) {
+    var url = window.location.href;
+    // Do NOT log message id in analytics
+    if (id) {
+      url = url.replace(id, "")
+    }
+
+    useTrackPageview({
+      url: url,
+    })
+  }
+};
+
+const logAnalytics = () => {
+  useTrackEvent("message-viewed", {
+    props: { is_private: message.value.is_private },
+  });
+}
+
+watch(
+  () => route.params.id,
+  async (newId, oldId) => {
+    if (newId !== oldId) {
+      await processIdChange(newId);
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <style lang="scss">
