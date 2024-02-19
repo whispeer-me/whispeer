@@ -2,8 +2,17 @@
 
 export default defineNuxtConfig({
   devtools: { enabled: false },
-  modules: ["@nuxt/test-utils/module", "nuxt-scheduler", "@nuxt/image"],
-  plugins: ["~/plugins/analytics.ts"],
+  modules: [
+    "@nuxt/test-utils/module",
+    "nuxt-scheduler",
+    "@nuxt/image",
+    "@nuxtjs/plausible",
+  ],
+  plausible: {
+    trackLocalhost: false,
+    autoPageviews: false,
+    autoOutboundTracking: true,
+  },
   ssr: true,
   app: {
     head: {
@@ -72,7 +81,7 @@ export default defineNuxtConfig({
       databaseURL: process.env.DATABASE_URL,
     },
     public: {
-      analyticsDomain: "",
+      domain: "",
     },
   },
 });
