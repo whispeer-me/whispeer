@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const { trackPageView } = useAnalytics();
+
 const scrollToHowItWorks = () => {
   const howItWorksElement = document.querySelector('.how-it-works');
   howItWorksElement?.scrollIntoView({ behavior: 'smooth' });
@@ -9,7 +11,7 @@ function redirectToCreateMessagePage() {
 }
 
 onMounted(() => {
-  useTrackPageview();
+  trackPageView();
 });
 </script>
 

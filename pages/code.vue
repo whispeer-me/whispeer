@@ -28,6 +28,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+const { trackPageView } = useAnalytics();
 
 const repositories = ref([
   {
@@ -52,7 +53,7 @@ useHead({
 });
 
 onMounted(() => {
-  useTrackPageview();
+  trackPageView();
 });
 </script>
 
