@@ -4,10 +4,10 @@ Hey there! Welcome to [Whispeer](https://whispeer.me), where we're all about kee
 
 ## Features
 ### Creating Message
-![Creating a Message](public/resources/CreatingMessage.gif)
+<img src="public/resources/CreatingMessage.gif" alt="Creating a Message" width="320"/>
 
 ### Viewing Message
-![Viewing a Message](public/resources/ViewingMessage.gif)
+<img src="public/resources/ViewingMessage.gif" alt="Viewing a Message" width="320"/>
 
 ## Contribute to the Project
 
