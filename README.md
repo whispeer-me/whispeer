@@ -1,6 +1,13 @@
 # Welcome to Whispeer!
 
-Hey there! Welcome to [Whispeer](https://whispeer.me), where we're all about keeping your messages safe and private. We've mixed some cool tech like PostgreSQL, Node.js (for testing and building) and Vue.js 3 to make sure your chats are not just fun and easy to use, but also super secure.
+Hey there! Welcome to [Whispeer](https://whispeer.me), where we're all about keeping your messages safe and private. We've mixed some cool tech like PostgreSQL, Node.js and Vue.js 3 to make sure your chats are not just fun and easy to use, but also super secure.
+
+## Features
+### Creating Message
+![Creating a Message](public/resources/CreatingMessage.gif)
+
+### Viewing Message
+![Viewing a Message](public/resources/ViewingMessage.gif)
 
 ## Contribute to the Project
 
