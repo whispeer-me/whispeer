@@ -151,10 +151,16 @@ const submitButtonTitle = computed(() => {
   return message.value.is_private ? "Create Secure Message" : "Create Message";
 });
 
+const logPageView = () => {
+  if (process.env.NODE_ENV === "production") {
+    useTrackPageview({ referrer: null });
+  }
+};
+
 onMounted(() => {
   maybeShowTooltip();
   maybeShowDisclaimer();
-  useTrackPageview({ referrer: null });
+  logPageView();
 });
 
 const submitMessage = async () => {
