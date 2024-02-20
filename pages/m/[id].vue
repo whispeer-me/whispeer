@@ -18,7 +18,7 @@
 <script setup lang="js">
 import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
-const { trackPageView, trackEvent } = useAnalytics();
+const { trackPageView, trackEventClean } = useAnalytics();
 
 const route = useRoute();
 
@@ -200,16 +200,10 @@ const logPageView = () => {
 
 const logAnalytics = () => {
   const url =  getCleanURL();
-  trackEvent("message-viewed", {
-    url,
-    referrer: null,
+  trackEventClean("message-viewed", url, {
     props: {
       is_private: message.value.is_private
     },
-  },
-  {
-    url,
-    referrer: null,
   });
 }
 
