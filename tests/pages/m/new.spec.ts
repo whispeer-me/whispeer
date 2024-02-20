@@ -1,11 +1,7 @@
 // @vitest-environment happy-dom
 import { describe, it, expect, vi } from "vitest";
 import { mount } from "@vue/test-utils";
-import { useHead } from "@unhead/vue";
 import NewMessage from "@/pages/m/new.vue";
-
-vi.mock("@unhead/vue");
-vi.mocked(useHead).mockImplementation(vi.fn());
 
 describe("Creating NewMessage", () => {
   const wrapper = mount(NewMessage);
