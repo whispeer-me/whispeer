@@ -16,8 +16,9 @@
 </template>
 
 <script setup lang="js">
-import { ref, watch, onMounted } from "vue";
+import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
+const { trackPageView, trackEvent } = useAnalytics();
 
 const route = useRoute();
 
@@ -67,6 +68,10 @@ useHead({
   ],
 });
 
+onMounted(() => {
+  logPageView();
+});
+
 const processIdChange = async (messageId) => {
   message.value.content = null;
   if (messageId) {
@@ -75,7 +80,6 @@ const processIdChange = async (messageId) => {
     errorMessage.value =
       "No message ID provided in the url. Please ensure the url includes message ID. ex: m/id";
   }
-  logPageView(messageId);
 };
 
 const fetchTheMessage = async (messageId) => {
@@ -180,36 +184,32 @@ const onModalSubmit = async (submittedPassphrase) => {
   }
 };
 
-const getCleanURL = (id) => {
+const getCleanURL = () => {
   if (window) {
-    let url = window.location.href;
-    // Do NOT log message id in analytics
-    if (id) {
-      url = url.replace(id, "")
-    }
-    return url;
+    let path = "/m/";
+    return window.location.href.split(path)[0] + path + window.location.search;
   }
 
-  return "";
+  return ""
 }
 
-const logPageView = (id) => {
-  let url = getCleanURL(id);
-  useTrackPageview({ url, referrer: null, });
+const logPageView = () => {
+  let url = getCleanURL();
+  trackPageView({url, useRef: false });
 };
 
 const logAnalytics = () => {
-  const url =  getCleanURL(message.value.id)
-  useTrackEvent("message-viewed",
-  {
+  const url =  getCleanURL();
+  trackEvent("message-viewed", {
     url,
     referrer: null,
+    props: {
+      is_private: message.value.is_private
+    },
   },
   {
     url,
     referrer: null,
-    props: {
-      is_private: message.value.is_private },
   });
 }
 
