@@ -1,6 +1,6 @@
 export default function useAnalytics() {
   const trackEvent = (event: string, data?: any, options?: any) => {
-    useTrackEvent(event, options, data);
+    useTrackEvent(event, { ...options, ...data });
   };
 
   const trackPageView = ({
