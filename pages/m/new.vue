@@ -105,6 +105,7 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
+const { trackPageView, trackEvent } = useAnalytics();
 
 const message = ref({
   content: "",
@@ -151,16 +152,10 @@ const submitButtonTitle = computed(() => {
   return message.value.is_private ? "Create Secure Message" : "Create Message";
 });
 
-const logPageView = () => {
-  if (process.env.NODE_ENV === "production") {
-    useTrackPageview({ referrer: null });
-  }
-};
-
 onMounted(() => {
   maybeShowTooltip();
   maybeShowDisclaimer();
-  logPageView();
+  trackPageView({ useRef: false });
 });
 
 const submitMessage = async () => {
@@ -254,13 +249,13 @@ const handleToggleChange = (newValue) => {
 };
 
 const logMessageCreation = () => {
-  useTrackEvent("message-created", {
+  trackEvent("message-created", {
     props: { is_private: message.value.is_private },
   });
 };
 
 const logNewMessageCreation = () => {
-  useTrackEvent("create-message", { props: { source: "after-create" } });
+  trackEvent("create-message", { props: { source: "after-create" } });
 };
 
 const copyLinkToClipboard = () => {
