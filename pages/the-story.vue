@@ -35,6 +35,8 @@
 </template>
 
 <script setup lang="ts">
+const { trackPageView } = useAnalytics();
+
 useHead({
   title: "The Story - Whispeer",
   meta: [
@@ -47,7 +49,7 @@ useHead({
 });
 
 onMounted(() => {
-  useTrackPageview();
+  trackPageView();
 });
 </script>
 
