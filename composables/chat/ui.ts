@@ -1,17 +1,37 @@
-import { ref, nextTick } from "vue";
+import { ref, nextTick, onMounted, onUnmounted } from "vue";
 import chatService from "@/composables/chat/service";
+import type EncryptedMessage from "~/types/encrypted.message";
 
 export default function useChat() {
   {
     // It will be prompted later
     const passphrase = "bla bla";
     const message = ref("");
-    const messages = ref([
-      chatService.createMessage("Hello, World!", passphrase),
-    ]);
+    const messages = ref([]);
     const messagesContainer = ref<HTMLElement | null>(null);
     const userHasScrolledUp = ref(false);
     const showNewMessageNotification = ref(false);
+
+    let socket: WebSocket;
+
+    onMounted(() => {
+      const websockerUrl = "ws://localhost:3001";
+      socket = new WebSocket(websockerUrl);
+      socket.onopen = () => {
+        console.log("Connected to the chat server");
+      };
+
+      socket.onmessage = (event) => {
+        console.log("Received message", event.data);
+        const message = JSON.parse(event.data) as EncryptedMessage;
+        console.log("message: ", message);
+        messages.value.push(message);
+      };
+    });
+
+    onUnmounted(() => {
+      socket.close();
+    });
 
     const sendMessage = async () => {
       const content = message.value.trim();
@@ -19,7 +39,8 @@ export default function useChat() {
         return;
       }
 
-      messages.value.push(chatService.createMessage(content, passphrase));
+      let encryptedMessage = chatService.createMessage(content, passphrase);
+      socket.send(JSON.stringify(encryptedMessage));
 
       message.value = "";
 
