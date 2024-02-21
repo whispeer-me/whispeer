@@ -24,8 +24,14 @@ export default function useChat() {
       socket.onmessage = (event) => {
         console.log("Received message", event.data);
         const message = JSON.parse(event.data) as EncryptedMessage;
+
+        const decryptedMessage = chatService.readTheMessage(
+          message,
+          passphrase
+        );
+
         console.log("message: ", message);
-        messages.value.push(message);
+        messages.value.push(decryptedMessage);
       };
     });
 
