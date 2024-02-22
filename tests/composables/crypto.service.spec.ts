@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll } from "vitest";
+import { describe, it, expect } from "vitest";
 
 import CryptoService from "~/composables/crypto-service";
 import type EncryptedMessage from "~/types/encrypted.message";
