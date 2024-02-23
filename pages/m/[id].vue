@@ -8,10 +8,10 @@
       <MessageChiperDisplay :message="message.content" class="chiper-display" />
     </div>
 
-    <CommonModal :isVisible="isModalVisible" class="passphrase-modal">
+    <LazyCommonModal :isVisible="isModalVisible" class="passphrase-modal">
       <CommonError :errorMessage="message.is_private && errorMessage" />
       <MessagePassphraseInput @close="closeModal" @submit="onModalSubmit" />
-    </CommonModal>
+    </LazyCommonModal>
   </div>
 </template>
 
