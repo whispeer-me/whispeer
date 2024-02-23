@@ -20,7 +20,7 @@ async function deleteExpiredMessages() {
 
     await messageDeleteUseCase.execute();
 
-    console.info(`${JOB_NAME} job completed successfully.`);
+    console.info(`${JOB_NAME} completed successfully.`);
   } catch (err) {
     console.error(`Error occured on ${JOB_NAME}.`, err);
   }
