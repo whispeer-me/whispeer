@@ -184,27 +184,18 @@ const onModalSubmit = async (submittedPassphrase) => {
   }
 };
 
-const getCleanURL = () => {
-  if (window) {
-    let path = "/m/";
-    return window.location.href.split(path)[0] + path + window.location.search;
-  }
-
-  return ""
-}
-
 const logPageView = () => {
-  let url = getCleanURL();
-  trackPageView({url, useRef: false });
+  trackPageView({ useRef: false });
 };
 
 const logAnalytics = () => {
-  const url =  getCleanURL();
-  trackEventClean("message-viewed", url, {
-    props: {
-      is_private: message.value.is_private
-    },
-  });
+  trackEventClean("message-viewed",
+    {
+      props: {
+        is_private: message.value.is_private
+      },
+    }
+  );
 }
 
 watch(

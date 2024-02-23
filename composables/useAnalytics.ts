@@ -3,8 +3,9 @@ export default function useAnalytics() {
     useTrackEvent(event, { ...options, ...data });
   };
 
-  const trackEventClean = (event: string, url: string, props?: any) => {
-    let sanitezedUrl = sanitizeUrl(url);
+  const trackEventClean = (event: string, props?: any) => {
+    let effectiveUrl = window.location.href;
+    let sanitezedUrl = sanitizeUrl(effectiveUrl);
     useTrackEvent(
       event,
       {
@@ -15,7 +16,7 @@ export default function useAnalytics() {
       {
         url: sanitezedUrl,
         referrer: null,
-      },
+      }
     );
   };
 
@@ -36,7 +37,7 @@ export default function useAnalytics() {
       effectiveReferrer = sanitizeUrl(effectiveReferrer);
     }
 
-    useTrackPageview({ url: sanitizedUrl, referrer: effectiveUrl });
+    useTrackPageview({ url: sanitizedUrl, referrer: effectiveReferrer });
   };
 
   return {
