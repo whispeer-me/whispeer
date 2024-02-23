@@ -33,19 +33,36 @@ export default class CryptoService {
     iv: string,
     passphrase: string
   ): string {
-    const key = CryptoJS.PBKDF2(passphrase, CryptoJS.enc.Hex.parse(salt), {
-      keySize: 256 / 32,
-      iterations: 1000,
-    });
+    const defaultException = new Error("Incorrect passphrase");
+    try {
+      const key = CryptoJS.PBKDF2(passphrase, CryptoJS.enc.Hex.parse(salt), {
+        keySize: 256 / 32,
+        iterations: 1000,
+      });
 
-    const decrypted = CryptoJS.AES.decrypt(ciphertext, key, {
-      iv: CryptoJS.enc.Hex.parse(iv),
-      mode: CryptoJS.mode.CBC,
-      padding: CryptoJS.pad.Pkcs7,
-    });
+      const decrypted = CryptoJS.AES.decrypt(ciphertext, key, {
+        iv: CryptoJS.enc.Hex.parse(iv),
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7,
+      });
 
-    const originalText = decrypted.toString(CryptoJS.enc.Utf8);
-    if (!originalText) throw new Error("Incorrect passphrase");
-    return originalText;
+      if (!decrypted) {
+        throw defaultException;
+      }
+
+      const decryptedText = decrypted.toString(CryptoJS.enc.Utf8);
+
+      if (
+        decryptedText === null ||
+        decryptedText === undefined ||
+        decryptedText === ""
+      ) {
+        throw new Error();
+      }
+
+      return decryptedText;
+    } catch (error) {
+      throw defaultException;
+    }
   }
 }

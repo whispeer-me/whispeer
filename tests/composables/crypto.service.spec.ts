@@ -34,11 +34,11 @@ describe("CryptoService", () => {
     });
 
     it("should throw an error if the passphrase is incorrect", () => {
+      let encryptedResult: EncryptedMessage = CryptoService.encrypt(
+        message,
+        passphrase
+      );
       expect(() => {
-        let encryptedResult: EncryptedMessage = CryptoService.encrypt(
-          message,
-          passphrase
-        );
         CryptoService.decrypt(
           encryptedResult.ciphertext,
           encryptedResult.salt,
