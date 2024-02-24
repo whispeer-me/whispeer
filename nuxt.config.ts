@@ -14,11 +14,6 @@ export default defineNuxtConfig({
     autoOutboundTracking: true,
   },
   ssr: true,
-  nitro: {
-    prerender: {
-      routes: ["/", "/code", "/contact", "/privacy-policy", "/the-story"],
-    },
-  },
   app: {
     head: {
       htmlAttrs: {
