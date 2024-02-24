@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
+import MenuItem from "./MenuItem.vue";
 
 const isMobile = ref<boolean>(false);
 const hasMounted = ref<boolean>(false);
@@ -32,83 +33,32 @@ onUnmounted(() => {
         height="36"
         loading="lazy"
       />
-      <NuxtLink to="/" class="nav-link">
-        <NuxtImg
-          v-if="isMobile"
-          src="/icons/home.svg"
-          alt="Home"
-          class="icon-mobile svg-color"
-          width="24"
-          height="24"
-          loading="lazy"
-        />
-        <span v-if="!isMobile">Home</span>
-      </NuxtLink>
-      <NuxtLink to="/m/new?ref=nav" class="nav-link">
-        <NuxtImg
-          v-if="isMobile"
-          src="/icons/message.svg"
-          alt="New Message"
-          class="icon-mobile svg-color"
-          width="24"
-          height="24"
-          loading="lazy"
-        />
-        <span v-if="!isMobile">New Message</span>
-      </NuxtLink>
-      <a
-        href="https://blog.whispeer.me"
-        class="nav-link"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <NuxtPicture
-          v-if="isMobile"
-          src="/icons/blog.svg"
-          alt="Blog"
-          class="icon-mobile svg-color"
-          width="24"
-          height="24"
-          loading="lazy"
-        />
-        <span v-if="!isMobile">Blog</span>
-      </a>
-      <NuxtLink to="/the-story" class="nav-link">
-        <NuxtPicture
-          v-if="isMobile"
-          src="/icons/the-story.svg"
-          alt="The Story"
-          class="icon-mobile svg-color"
-          width="24"
-          height="24"
-          loading="lazy"
-        />
-        <span v-if="!isMobile">The Story</span>
-      </NuxtLink>
-      <NuxtLink to="/code" class="nav-link">
-        <NuxtImg
-          v-if="isMobile"
-          src="/icons/code.svg"
-          alt="Code"
-          class="icon-mobile svg-color"
-          width="24"
-          height="24"
-          loading="lazy"
-        />
-        <span v-if="!isMobile">Code</span>
-      </NuxtLink>
-      <NuxtLink to="/contact" class="nav-link">
-        <NuxtPicture
-          v-if="isMobile"
-          src="/icons/contact.svg"
-          alt="Contact"
-          class="icon-mobile svg-color"
-          width="24"
-          height="24"
-          loading="lazy"
-        />
-        <span v-if="!isMobile">Contact</span>
-      </NuxtLink>
+      <MenuItem to="/" title="Home" icon="home.svg" :isMobile="isMobile" />
+      <MenuItem
+        to="/m/new?ref=nav"
+        title="New Message"
+        icon="message.svg"
+        :isMobile="isMobile"
+      />
+      <MenuItem
+        to="https://blog.whispeer.me"
+        title="Blog"
+        icon="blog.svg"
+        :isMobile="isMobile"
+      />
+      <MenuItem
+        to="/the-story"
+        title="The Story"
+        icon="the-story.svg"
+        :isMobile="isMobile"
+      />
+      <MenuItem to="/code" title="Code" icon="code.svg" :isMobile="isMobile" />
+      <MenuItem
+        to="/contact"
+        title="Contact"
+        icon="contact.svg"
+        :isMobile="isMobile"
+      />
     </nav>
   </header>
 </template>
