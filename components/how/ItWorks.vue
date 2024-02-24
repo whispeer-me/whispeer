@@ -1,46 +1,29 @@
 <template>
-  <section class="how-it-works">
-    <h1>How Whispeer Works</h1>
+  <div class="content">
+    <section class="how-it-works">
+      <h1>How Whispeer Works</h1>
+      <p class="intro">Whispeer makes secure messaging easy. Your privacy is our priority.</p>
 
-    <div class="content">
+      <div class="content">
+        <HowSection icon="shield-lock.svg" title="Strong Encryption"
+          description="Whispeer encrypts messages on your device – only you and the recipient can read them." />
 
-      <HowSection title="Whispeer Protects Your Privacy" description="Whispeer offers advanced security for your messages. We use client-side
-      encryption, automatic message deletion, and privacy-focused analytics to
-      guarantee that your conversations stay confidential." />
+        <HowSection icon="hourglass-bottom.svg" title="Messages Disappear"
+          description="Messages are automatically deleted after 24 hours for maximum security." />
 
-      <HowSection title="On Device Encryption"
-        description="When you create a secure message on Whispeer, it's encrypted right within your web browser or mobile device. This means that only you and the person you share the passphrase with can ever read the message – not even Whispeer can access it." />
+        <HowSection icon="key.svg" title="Passphrases are Key"
+          description="Use strong, unique passphrases to make your messages ultra-secure." />
 
-      <HowSection title="Disappearing Messages"
-        description="Every message on Whispeer has a lifespan of 24 hours. After that, it's automatically and permanently deleted from our servers. You don't have to worry about old messages hanging around." />
+        <HowSection icon="share.svg" title="Secure Sharing"
+          description="Share encrypted messages with unique links. Only the right person can unlock them." />
 
-      <HowSection title="Strong Passphrase's The Key"
-        description="When you choose to encrypt a message, your passphrase is vital. Here's how to make strong passphrases:"
-        :items="['Use a mix of letters, numbers, and symbols.', 'Make them at least 12 characters long.', 'Never reuse passphrases on other websites or services.']" />
+        <HowSection icon="eye-slash.svg" title="Privacy Focused"
+          description="We use anonymized analytics to improve Whispeer – never compromising your privacy." />
 
-      <HowSection title="Secure Message Sharing"
-        description="Whispeer ensures that your communications are not just encrypted, but also easily shareable. Create a message, set an optional passphrase for added security, and receive a unique URL. Share this URL with your intended recipient, and rest assured that only they can view and decrypt the message if a passphrase is provided. It's secure messaging made simple and effective." />
-
-      <HowSection title="Understanding Usage"
-        description="To make Whispeer better, we use anonymized analytics. This means we track overall usage patterns, but without collecting any personal information about you. We'll never compromise your privacy for data." />
-
-    </div>
-  </section>
+      </div>
+    </section>
+  </div>
 </template>
-
-<script setup lang="ts">
-useHead({
-  title: "How Whispeer Protects Your Privacy",
-  meta: [
-    {
-      name: "description",
-      content:
-        "Explore Whispeer's commitment to privacy. Read our privacy policy to understand how we handle and protect your data.",
-    },
-  ],
-});
-</script>
-
 
 <style scoped lang="scss">
 .how-it-works {

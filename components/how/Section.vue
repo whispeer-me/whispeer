@@ -1,35 +1,50 @@
 <template>
-<section class="section">
-  <div v-if="image" class="image-container">
-    <CommonImage :src="image" :alt="title" />
-  </div>
-  <h2>{{ title }}</h2>
-  <p>
-    {{ description }}
-  </p>
-  <ul v-if="items">
-    <li v-for="(item, index) in items" :key="index"> {{ item }} </li>
-  </ul>
-</section>
+  <section class="section">
+    <div class="icon">
+      <NuxtPicture preload :src="`/icons/how/${icon}`" :alt="title" width="64px" class="svg-color" loading="lazy" />
+    </div>
+
+    <h2>{{ title }}</h2>
+
+    <p>
+      {{ description }}
+    </p>
+    <ul v-if="items">
+      <li v-for="(item, index) in items" :key="index">{{ item }}</li>
+    </ul>
+  </section>
 </template>
 
 <script setup lang="ts">
 defineProps({
   title: String,
   description: String,
-  image: {
+  icon: {
     type: String,
-    required: false,
+    required: true,
   },
   items: {
     type: Array as PropType<string[]>,
     required: false,
     default: () => [],
-  }
-})
+  },
+});
 </script>
 
 <style scoped lang="scss">
+h2 {
+  color: $primary-color;
+  font-family: $secondary-font;
+  font-size: 18px;
+}
+
+p {
+  font-family: $secondary-font;
+  color: $secondary-color;
+  font-size: 18px;
+  padding: 1em;
+}
+
 .section {
   width: 50vh;
   background-color: $background-color;
@@ -41,50 +56,28 @@ defineProps({
   overflow: hidden;
 
   @media (max-width: 767px) {
-     width: calc(100vw - 20px);
-     margin: 10px;
-     box-sizing: border-box;
-   }
+    width: calc(100vw - 20px);
+    margin: 10px;
+    box-sizing: border-box;
+  }
 
   &:hover {
     transform: translateY(5px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
     border-color: $hover-color;
+
+    p {
+      color: #fff;
+    }
+
+    .icon {
+      opacity: 0.5;
+    }
   }
 
-  .image-container img {
+  .icon {
+    margin-top: 10px;
     transition: opacity 0.3s ease;
-    &:hover {
-      opacity: 0.9;
-    }
-  }
-
-  h2 {
-    color: $primary-color;
-    font-family: $secondary-font;
-    font-size: 18px;
-  }
-
-  p, ul, li {
-    font-family: $secondary-font;
-    color: $secondary-color;
-    padding: 1em;
-  }
-
-  ul {
-     list-style-type: none;
-     text-align: left;
-
-    li {
-      position: relative;
-
-      &:before {
-        content: '•';
-        color: $primary-color;
-        position: absolute;
-        left: 0;
-      }
-    }
   }
 }
 </style>
