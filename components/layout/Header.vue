@@ -37,7 +37,7 @@ onUnmounted(() => {
           v-if="isMobile"
           src="/icons/home.svg"
           alt="Home"
-          class="icon-mobile"
+          class="icon-mobile svg-color"
           width="24"
           height="24"
           loading="lazy"
@@ -49,7 +49,7 @@ onUnmounted(() => {
           v-if="isMobile"
           src="/icons/message.svg"
           alt="New Message"
-          class="icon-mobile"
+          class="icon-mobile svg-color"
           width="24"
           height="24"
           loading="lazy"
@@ -62,11 +62,11 @@ onUnmounted(() => {
         target="_blank"
         rel="noopener noreferrer"
       >
-        <NuxtImg
+        <NuxtPicture
           v-if="isMobile"
           src="/icons/blog.svg"
           alt="Blog"
-          class="icon-mobile"
+          class="icon-mobile svg-color"
           width="24"
           height="24"
           loading="lazy"
@@ -74,11 +74,11 @@ onUnmounted(() => {
         <span v-if="!isMobile">Blog</span>
       </a>
       <NuxtLink to="/the-story" class="nav-link">
-        <NuxtImg
+        <NuxtPicture
           v-if="isMobile"
           src="/icons/the-story.svg"
           alt="The Story"
-          class="icon-mobile"
+          class="icon-mobile svg-color"
           width="24"
           height="24"
           loading="lazy"
@@ -90,7 +90,7 @@ onUnmounted(() => {
           v-if="isMobile"
           src="/icons/code.svg"
           alt="Code"
-          class="icon-mobile"
+          class="icon-mobile svg-color"
           width="24"
           height="24"
           loading="lazy"
@@ -98,11 +98,11 @@ onUnmounted(() => {
         <span v-if="!isMobile">Code</span>
       </NuxtLink>
       <NuxtLink to="/contact" class="nav-link">
-        <NuxtImg
+        <NuxtPicture
           v-if="isMobile"
           src="/icons/contact.svg"
           alt="Contact"
-          class="icon-mobile"
+          class="icon-mobile svg-color"
           width="24"
           height="24"
           loading="lazy"
