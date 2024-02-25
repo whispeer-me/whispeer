@@ -11,6 +11,21 @@ Hey there! Welcome to [Whispeer](https://whispeer.me), where we're all about kee
 
 Help us make Whispeer even better! We're always looking for new contributors to help us build, design, and test our code. If you're interested in helping out, check out our [Contributing Guide](CONTRIBUTING.md) for more information.
 
+## LICENSE
+
+Whispeer: Secure Messaging Application
+
+Copyright (C) 2024 Nesim Tunc
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See t
+
 ### Development
  - **Install the Packages"** Get all the dependencies:
    ```
