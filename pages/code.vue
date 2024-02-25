@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+
 <template>
   <div class="code">
     <h1>Whispeer is Open Source</h1>

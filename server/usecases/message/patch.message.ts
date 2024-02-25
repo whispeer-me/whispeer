@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import { IMessageRepository } from "~/server/interfaces/repositories/IMessageRepository";
 
 export class PatchMessage {

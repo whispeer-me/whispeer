@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import { defineVitestConfig } from "@nuxt/test-utils/config";
 import tsconfigPaths from "vite-tsconfig-paths";
 

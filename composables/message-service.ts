@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import type { ApiResponse } from "~/types/api.response";
 import type { Message } from "~/types/message";
 

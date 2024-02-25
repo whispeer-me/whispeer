@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+
 /**
  * Sanitizes a URL by removing any part of the URL after the specified path.
  * If the URL does not contain the specified path, it is returned as is.

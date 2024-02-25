@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import { MessageRepository } from "~/server/repositories/message.repository";
 import { PatchMessage } from "~/server/usecases/message/patch.message";
 import db from "~/server/utils/db";

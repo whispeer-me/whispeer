@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+
 class Constants {
   // Meta Key (CMD / Ctrl + Enter) key
   TOOLTIP_META_ENTER_KEY_VIEWS_COUNT = "tooltipMetaEnter";

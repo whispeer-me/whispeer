@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+
 export class TimeUtils {
   static createExpireTimeMessage = (createdAt: Date | undefined, now: Date) => {
     if (!createdAt) {

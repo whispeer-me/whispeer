@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+
 <template>
   <div v-if="isVisible" class="modal-overlay">
     <div class="modal-content" @click.stop>

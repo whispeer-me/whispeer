@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import { Log } from "~/server/interfaces/utils/ILog";
 
 export class AppLogger implements Log {

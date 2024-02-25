@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import { useScheduler } from "#scheduler";
 import { MessageRepository } from "~/server/repositories/message.repository";
 import { DeleteExpiredMessages } from "../usecases/message/delete.expired.messages";

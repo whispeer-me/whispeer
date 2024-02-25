@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+
 <template>
   <form @submit.prevent="handleSubmit">
     <h3>Enter Passphrase</h3>

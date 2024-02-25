@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+
 <template>
   <div class="privacy-policy">
     <h1>Privacy Policy</h1>

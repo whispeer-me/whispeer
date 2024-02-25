@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+
 <template>
   <div class="stat-item">
     <span class="stat-value">{{ formatNumber(value) }}</span>

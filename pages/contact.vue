@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+
 <template>
   <div class="contact-page">
     <h1>Contact Us</h1>

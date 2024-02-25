@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+
 export interface Message {
   id: string | undefined;
   content: string;

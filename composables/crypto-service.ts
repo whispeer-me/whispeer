@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import CryptoJS from "crypto-js";
 import type EncryptedMessage from "~/types/encrypted.message";
 
