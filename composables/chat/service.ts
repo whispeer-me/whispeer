@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import type { ChatMessage } from "~/types/chat.message";
 
 import type EncryptedMessage from "~/types/encrypted.message";

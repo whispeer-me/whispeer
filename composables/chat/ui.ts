@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import { ref, nextTick, onMounted, onUnmounted } from "vue";
 import chatService from "@/composables/chat/service";
 import type EncryptedMessage from "~/types/encrypted.message";

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+
 import { ref, onMounted, onUnmounted } from "vue";
 import { getRandomChar } from "./random-chars";
 

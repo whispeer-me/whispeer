@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+
 export default function (min: number, max: number): number {
   min = Math.ceil(Math.max(0, min));
   max = Math.floor(Math.max(min, max));

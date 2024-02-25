@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+
 /// Logic for how to randomize characters
 const asciiStart = 33;
 const asciiEnd = 126;
