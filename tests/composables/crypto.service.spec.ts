@@ -11,7 +11,7 @@ describe("CryptoService", () => {
 
   describe("encrypt and decrypt", () => {
     it("should encrypt the message with the given passphrase", () => {
-      let encryptedResult: EncryptedMessage = CryptoService.encrypt(
+      const encryptedResult: EncryptedMessage = CryptoService.encrypt(
         message,
         passphrase,
       );
@@ -21,7 +21,7 @@ describe("CryptoService", () => {
     });
 
     it("should decrypt the ciphertext with the correct passphrase, salt, and iv", () => {
-      let encryptedResult: EncryptedMessage = CryptoService.encrypt(
+      const encryptedResult: EncryptedMessage = CryptoService.encrypt(
         message,
         passphrase,
       );
@@ -36,7 +36,7 @@ describe("CryptoService", () => {
     });
 
     it("should throw an error if the passphrase is incorrect", () => {
-      let encryptedResult: EncryptedMessage = CryptoService.encrypt(
+      const encryptedResult: EncryptedMessage = CryptoService.encrypt(
         message,
         passphrase,
       );

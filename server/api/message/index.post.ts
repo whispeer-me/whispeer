@@ -17,7 +17,6 @@ export default defineEventHandler(async (event) => {
 
     return message;
   } catch (error) {
-    console.error(error);
     setResponseStatus(event, 500);
     return { message: "Error occurred and logged." };
   }

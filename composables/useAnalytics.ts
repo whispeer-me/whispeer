@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
-export default function useAnalytics() {
+export default function useAnalytics () {
   const trackEvent = (event: string, data?: any, options?: any) => {
     useTrackEvent(event, { ...options, ...data });
   };
 
   const trackEventClean = (event: string, props?: any) => {
-    let effectiveUrl = window.location.href;
-    let sanitezedUrl = sanitizeUrl(effectiveUrl);
+    const effectiveUrl = window.location.href;
+    const sanitezedUrl = sanitizeUrl(effectiveUrl);
     useTrackEvent(
       event,
       {
@@ -18,7 +18,7 @@ export default function useAnalytics() {
       {
         url: sanitezedUrl,
         referrer: null,
-      }
+      },
     );
   };
 
@@ -31,8 +31,8 @@ export default function useAnalytics() {
     referrer?: string;
     useRef?: boolean;
   } = {}) => {
-    let effectiveUrl = url || window.location.href;
-    let sanitizedUrl = sanitizeUrl(effectiveUrl);
+    const effectiveUrl = url || window.location.href;
+    const sanitizedUrl = sanitizeUrl(effectiveUrl);
 
     let effectiveReferrer = useRef ? referrer || document.referrer : referrer;
     if (effectiveReferrer) {

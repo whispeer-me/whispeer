@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import CryptoJS from "crypto-js";
-import type EncryptedMessage from "~/types/encrypted.message";
+import type { EncryptedMessage } from "~/types/encrypted.message";
 
 export default class CryptoService {
-  static encrypt(message: string, passphrase: string): EncryptedMessage {
+  static encrypt (message: string, passphrase: string): EncryptedMessage {
     try {
       const salt = CryptoJS.lib.WordArray.random(128 / 8);
       const iv = CryptoJS.lib.WordArray.random(128 / 8);
@@ -14,7 +14,7 @@ export default class CryptoService {
       });
 
       const encrypted = CryptoJS.AES.encrypt(message, key, {
-        iv: iv,
+        iv,
         mode: CryptoJS.mode.CBC,
         padding: CryptoJS.pad.Pkcs7,
       });
@@ -29,11 +29,11 @@ export default class CryptoService {
     }
   }
 
-  static decrypt(
+  static decrypt (
     ciphertext: string,
     salt: string,
     iv: string,
-    passphrase: string
+    passphrase: string,
   ): string {
     const defaultException = new Error("Incorrect passphrase");
     try {
@@ -59,7 +59,7 @@ export default class CryptoService {
         decryptedText === undefined ||
         decryptedText === ""
       ) {
-        throw new Error();
+        throw new Error("Incorrect passphrase");
       }
 
       return decryptedText;

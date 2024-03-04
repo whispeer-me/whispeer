@@ -3,7 +3,7 @@
 import { randomInt } from "crypto";
 
 export class IDGenerator {
-  static generate(length: number): string {
+  static generate (length: number): string {
     let result = "";
     const characters =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

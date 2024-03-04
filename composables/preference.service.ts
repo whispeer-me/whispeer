@@ -10,8 +10,8 @@ export default {
    * Increments the viewCount if it is shown.
    * Returns a boolean indicating if it should be shown.
    */
-  shouldShow(key: string, maxCount: number, randomChance = true): boolean {
-    let viewCount = this.getViewsCount(key);
+  shouldShow (key: string, maxCount: number, randomChance = true): boolean {
+    const viewCount = this.getViewsCount(key);
 
     let shouldShow = false;
 
@@ -26,24 +26,22 @@ export default {
     return shouldShow;
   },
 
-  getViewsCount(key: string): number {
+  getViewsCount (key: string): number {
     try {
       return Number(localStorage.getItem(key)) || 0;
     } catch (error) {
-      console.error("Error accessing localStorage:", error);
       return 0;
     }
   },
 
-  setViewsCount(key: string, value: number) {
+  setViewsCount (key: string, value: number) {
     try {
       localStorage.setItem(key, value.toString());
     } catch (error) {
-      console.error("Error accessing localStorage:", error);
     }
   },
 
-  incrementViewsCount(key: string) {
+  incrementViewsCount (key: string) {
     let currentViewCount = this.getViewsCount(key);
     this.setViewsCount(key, ++currentViewCount);
   },

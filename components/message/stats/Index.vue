@@ -2,11 +2,16 @@
 
 <template>
   <div class="statistics">
-    <h2 class="stats-title">Messages</h2>
+    <h2 class="stats-title">
+      Messages
+    </h2>
     <div class="stat-groups">
       <MessageStatsItem title="Created" :value="stats.createdCount" />
       <MessageStatsItem title="Viewed" :value="stats.viewCount" />
-      <MessageStatsItem title="Expiring Soon" :value="stats.expiringSoonCount" />
+      <MessageStatsItem
+        title="Expiring Soon"
+        :value="stats.expiringSoonCount"
+      />
     </div>
   </div>
 </template>
@@ -17,10 +22,10 @@ import { onMounted, onBeforeUnmount, ref } from "vue";
 const stats = ref({
   createdCount: 0,
   viewCount: 0,
-  expiringSoonCount: 0
+  expiringSoonCount: 0,
 });
 
-async function fetchStats() {
+async function fetchStats () {
   try {
     const { created_count, expiring_soon_count, view_count } = (
       await messageService.getStats()

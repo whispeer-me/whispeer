@@ -20,6 +20,9 @@ describe("Chat Component", () => {
             id: new Date().getTime(),
             content: message.value,
           };
+
+          await new Promise(resolve => setTimeout(resolve, 100));
+
           messages.value.push(chatMessage);
         }),
         checkScrollPosition: vi.fn(),
@@ -40,9 +43,9 @@ describe("Chat Component", () => {
   it("sends a message and updates the messages list", async () => {
     const wrapper = mount(Chat);
 
-    const messageInput = wrapper.find('input[type="text"]');
+    const messageInput = wrapper.find("input[type=\"text\"]");
     await messageInput.setValue("Hello, World!");
-    const sendButton = wrapper.find('button[type="submit"]');
+    const sendButton = wrapper.find("button[type=\"submit\"]");
     await sendButton.trigger("click");
 
     await nextTick();

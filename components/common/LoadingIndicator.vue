@@ -1,11 +1,13 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 <template>
-  <div v-if="isLoading" class="loading-indicator">{{ text }}</div>
+  <div v-if="isLoading" class="loading-indicator">
+    {{ text }}
+  </div>
 </template>
 
 <script setup>
-const props = defineProps({
+defineProps({
   isLoading: {
     type: Boolean,
     default: false,

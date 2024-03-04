@@ -2,7 +2,7 @@
 
 <template>
   <div class="create-message-view">
-    <CommonError :errorMessage="errorMessage" />
+    <CommonError :error-message="errorMessage" />
 
     <div v-if="newMessage">
       <h1>New Message</h1>
@@ -11,13 +11,13 @@
       </p>
       <form @submit.prevent="submitMessage" @keydown.meta.enter="submitMessage">
         <textarea
-          class="new-message-textarea"
           v-model="message.content"
+          class="new-message-textarea"
           placeholder="Type your message here ..."
           :maxlength="maxCharsAllowed"
           required
           @keydown.tab="focusToPassphraseInput"
-        ></textarea>
+        />
 
         <p>Maximum characters allowed: {{ maxCharsAllowed }}.</p>
 
@@ -36,13 +36,13 @@
         <div v-if="message.is_private" class="passphrase">
           <input
             ref="passphraseInput"
+            v-model="message.passphrase"
             class="new-message-passphrase-input"
             type="password"
-            v-model="message.passphrase"
             placeholder="Enter a passphrase to encrypt"
             required
             @keydown.enter="submitMessage"
-          />
+          >
           <p class="passphrase-warning">
             Handle passphrase with care: Never share it where the message link
             is visible.
@@ -52,11 +52,9 @@
         <div v-if="showDisclaimer" class="security-disclaimer">
           <p>
             Please note that while Whispeer provides enhanced encryption for
-            messaging, <br />
-            <b
-              >it has not been audited by experts, and it is not made by
-              security experts. </b
-            ><br />
+            messaging, <br>
+            <b>it has not been audited by experts, and it is not made by
+              security experts. </b><br>
             It should not be solely relied upon for complete privacy or
             anonymity.
           </p>
@@ -64,9 +62,9 @@
 
         <div class="submit-button">
           <button
+            ref="submitButton"
             title="Submit (CMD / Ctrl + Enter)"
             type="submit"
-            ref="submitButton"
             :disabled="requestProcessing"
           >
             {{ submitButtonTitle }}
@@ -77,7 +75,7 @@
     <div v-if="messageLink && !newMessage" class="message-link">
       <p>
         Your
-        <span class="highlight" v-if="message.is_private">secure </span> message
+        <span v-if="message.is_private" class="highlight">secure </span> message
         has been created. Click to copy the link and safely share it with your
         friends.
       </p>
@@ -100,7 +98,9 @@
       </p>
     </div>
     <div v-if="!newMessage" class="submit-button new-message">
-      <button type="button" @click="composeNewMessage">New Message</button>
+      <button type="button" @click="composeNewMessage">
+        New Message
+      </button>
     </div>
   </div>
 </template>
@@ -185,8 +185,8 @@ const isMessageValid = () => {
 };
 
 const isLengthValid = () => {
-  if (message.value.content.length > maxCharsAllowed) {
-    errorMessage.value = `Message exceeds ${maxCharsAllowed} characters.`;
+  if (message.value.content.length > maxCharsAllowed.value) {
+    errorMessage.value = `Message exceeds ${maxCharsAllowed.value} characters.`;
     return false;
   }
   return true;
@@ -205,7 +205,7 @@ const resetErrorMessage = () => {
 };
 
 const prepareAndMaybeEncryptTheMessage = () => {
-  let newMessage = {
+  const newMessage = {
     content: message.value.content,
     is_private: message.value.is_private,
   };
@@ -213,7 +213,7 @@ const prepareAndMaybeEncryptTheMessage = () => {
   if (message.value.is_private && message.value.passphrase) {
     const encryptedMessage = cryptoService.encrypt(
       message.value.content,
-      message.value.passphrase
+      message.value.passphrase,
     );
 
     newMessage.content = encryptedMessage.ciphertext;
@@ -304,7 +304,7 @@ const maybeShowTooltip = () => {
   if (
     preferenceService.shouldShow(
       constants.TOOLTIP_META_ENTER_KEY_VIEWS_COUNT,
-      constants.TOOLTIP_META_ENTER_KEY_VIEWS_MAX_COUNT
+      constants.TOOLTIP_META_ENTER_KEY_VIEWS_MAX_COUNT,
     )
   ) {
     showTooltip.value = true;
@@ -322,7 +322,7 @@ const maybeShowDisclaimer = () => {
   showDisclaimer.value = preferenceService.shouldShow(
     constants.DISCLAIMER_VIEWS_COUNT,
     constants.DISCLAIMER_VIEWS_MAX_COUNT,
-    false
+    false,
   );
 };
 </script>

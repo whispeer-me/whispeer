@@ -3,11 +3,11 @@
 import { IMessageRepository } from "~/server/interfaces/repositories/IMessageRepository";
 
 export class PatchMessage {
-  constructor(private messageRepo: IMessageRepository) {
+  constructor (private messageRepo: IMessageRepository) {
     this.messageRepo = messageRepo;
   }
 
-  async execute(id: string): Promise<void> {
+  async execute (id: string): Promise<void> {
     await this.messageRepo.increaseViewCount(id);
   }
 }

@@ -8,8 +8,8 @@
         type="checkbox"
         :checked="value"
         @change="onChange($event.target.checked)"
-      />
-      <span class="slider round"></span>
+      >
+      <span class="slider round" />
     </label>
   </div>
 </template>

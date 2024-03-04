@@ -13,8 +13,7 @@
         <a
           href="https://www.imdb.com/title/tt5651844/?ref_=whispeer.me"
           target="_blank"
-          >"Travelers"</a
-        >
+        >"Travelers"</a>
         TV series, Whispeer brings a blend of art and technology to your
         messages. It's an open-source project built on the principles of
         privacy, openness, and collaboration.

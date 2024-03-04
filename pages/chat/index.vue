@@ -3,18 +3,18 @@
 <template>
   <div class="chat-container">
     <div
-      class="messages-container"
       ref="messagesContainer"
+      class="messages-container"
       @scroll="checkScrollPosition"
     >
       <div id="messages">
         <ul>
           <li
-            v-for="message in messages"
-            :key="message.id"
-            :class="getMessageClass(message.id)"
+            v-for="item in messages"
+            :key="item.id"
+            :class="getMessageClass(item.id)"
           >
-            <ChatMessageItem :message="message.content" />
+            <ChatMessageItem :message="item.content" />
           </li>
         </ul>
       </div>
@@ -29,14 +29,16 @@
   </div>
   <div class="message-input">
     <input
-      type="text"
       v-model="message"
+      type="text"
       placeholder="Type your message here ..."
       :maxlength="maxCharsAllowed"
       required
       @keyup.enter="sendMessage"
-    />
-    <button type="submit" @click="sendMessage">Send</button>
+    >
+    <button type="submit" @click="sendMessage">
+      Send
+    </button>
   </div>
 </template>
 

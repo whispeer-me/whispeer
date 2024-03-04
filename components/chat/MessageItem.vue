@@ -10,7 +10,7 @@
 import useAnimatedMessage from "@/composables/cipher/animate";
 
 const props = defineProps({
-  message: String,
+  message: { type: String, default: "" },
   animationDuration: {
     type: Number,
     default: 500,
@@ -19,7 +19,7 @@ const props = defineProps({
 
 const { displayMessage, isAnimating } = useAnimatedMessage(
   props.message,
-  props.animationDuration
+  props.animationDuration,
 );
 </script>
 

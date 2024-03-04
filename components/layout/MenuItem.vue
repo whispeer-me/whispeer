@@ -12,8 +12,8 @@ defineProps<{
 <template>
   <NuxtLink :to="to" class="nav-link">
     <NuxtPicture
-      preload
       v-if="isMobile"
+      preload
       :src="`/icons/menu/${icon}`"
       :alt="title"
       class="icon-mobile svg-color"

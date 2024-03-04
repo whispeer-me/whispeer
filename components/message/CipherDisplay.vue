@@ -1,14 +1,13 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 <template>
-  <div id="board" v-if="isBoardReady">
+  <div v-if="isBoardReady" id="board">
     <span
-      class="char"
       v-for="(char, index) in characters"
-      :class="char.class"
       :key="index"
-      >{{ char.char }}</span
-    >
+      class="char"
+      :class="char.class"
+    >{{ char.char }}</span>
   </div>
 </template>
 

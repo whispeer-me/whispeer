@@ -8,11 +8,11 @@
  * @param path - The path to remove from the URL. Defaults to "/m/".
  * @returns The sanitized URL.
  */
-export default function sanitizeUrl(url: string, path: string = "/m/"): string {
-  if (url.indexOf(path) > -1) {
+export default function sanitizeUrl (url: string, path: string = "/m/"): string {
+  if (url.includes(path)) {
     const firstPart = url.split(path)[0];
 
-    let sanitizedUrl = firstPart + path;
+    const sanitizedUrl = firstPart + path;
     return sanitizedUrl;
   }
 

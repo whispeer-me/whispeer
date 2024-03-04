@@ -4,11 +4,11 @@
 const { trackPageView } = useAnalytics();
 
 const scrollToHowItWorks = () => {
-  const howItWorksElement = document.querySelector('.how-it-works');
-  howItWorksElement?.scrollIntoView({ behavior: 'smooth' });
+  const howItWorksElement = document.querySelector(".how-it-works");
+  howItWorksElement?.scrollIntoView({ behavior: "smooth" });
 };
 
-function redirectToCreateMessagePage() {
+function redirectToCreateMessagePage () {
   navigateTo({ path: "/m/new", query: { ref: "cta" } });
 }
 

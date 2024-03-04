@@ -12,8 +12,7 @@ export default defineEventHandler(async () => {
 
     return stats;
   } catch (err) {
-    let error = err as Error;
-    console.error(error);
-    throw err;
+    const error = err as Error;
+    throw error;
   }
 });

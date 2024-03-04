@@ -3,7 +3,7 @@
 <template>
   <div v-if="isVisible" class="modal-overlay">
     <div class="modal-content" @click.stop>
-      <slot></slot>
+      <slot />
     </div>
   </div>
 </template>

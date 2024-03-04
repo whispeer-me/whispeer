@@ -16,7 +16,7 @@ const randomIdLength = 10;
 class MockMessageRepository implements IMessageRepository {
   private messages: Message[] = [];
 
-  getStats(): Promise<{
+  getStats (): Promise<{
     created_count: number;
     view_count: number;
     expiring_soon_count: number;
@@ -28,8 +28,8 @@ class MockMessageRepository implements IMessageRepository {
     });
   }
 
-  increaseViewCount(id: string): Promise<void> {
-    const existedMessage = this.messages.find((message) => message.id === id);
+  increaseViewCount (id: string): Promise<void> {
+    const existedMessage = this.messages.find(message => message.id === id);
 
     if (!existedMessage) {
       throw new Error("Message not found or has expired.");
@@ -42,16 +42,16 @@ class MockMessageRepository implements IMessageRepository {
     return Promise.resolve();
   }
 
-  deleteExpiredMessages(): Promise<void> {
+  deleteExpiredMessages (): Promise<void> {
     this.messages = this.messages.filter(
-      (message) =>
-        message.created_at !== undefined && message.created_at > new Date()
+      message =>
+        message.created_at !== undefined && message.created_at > new Date(),
     );
     return Promise.resolve();
   }
 
-  findById(id: string): Promise<Message | null> {
-    const existedMessage = this.messages.find((message) => message.id === id);
+  findById (id: string): Promise<Message | null> {
+    const existedMessage = this.messages.find(message => message.id === id);
     if (existedMessage) {
       return Promise.resolve(existedMessage);
     } else {
@@ -59,19 +59,19 @@ class MockMessageRepository implements IMessageRepository {
     }
   }
 
-  delete(id: string): Promise<void> {
-    const existedMessage = this.messages.find((message) => message.id === id);
+  delete (id: string): Promise<void> {
+    const existedMessage = this.messages.find(message => message.id === id);
 
     if (!existedMessage) {
       throw new Error("Message not found or has expired.");
     }
 
     // Delete the message from the list by filtering the existing message via id
-    this.messages = this.messages.filter((message) => message.id !== id);
+    this.messages = this.messages.filter(message => message.id !== id);
     return Promise.resolve();
   }
 
-  async save(message: Message): Promise<Message> {
+  async save (message: Message): Promise<Message> {
     const newMessage: Message = {
       ...message,
       id: IDGenerator.generate(randomIdLength),
@@ -81,7 +81,10 @@ class MockMessageRepository implements IMessageRepository {
 
     this.messages.push(newMessage);
 
-    return newMessage;
+    // Small delay to fake the async
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    return Promise.resolve(newMessage);
   }
 }
 
@@ -156,7 +159,7 @@ describe("Message Use Cases", () => {
   });
 });
 
-function createTestMessage(content: string): Message {
+function createTestMessage (content: string): Message {
   return {
     id: undefined,
     content,

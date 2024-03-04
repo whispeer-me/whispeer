@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
+/* eslint-disable camelcase */
+
 import { IMessageRepository } from "~/server/interfaces/repositories/IMessageRepository";
 import type { Message } from "~/server/entities/message";
 import { IDatabasePool } from "~/server/interfaces/db/IDatabasePool";
@@ -7,11 +9,11 @@ import { IDatabasePool } from "~/server/interfaces/db/IDatabasePool";
 export class MessageRepository implements IMessageRepository {
   private pool: IDatabasePool;
 
-  constructor(pool: IDatabasePool) {
+  constructor (pool: IDatabasePool) {
     this.pool = pool;
   }
 
-  async increaseViewCount(id: string): Promise<void> {
+  async increaseViewCount (id: string): Promise<void> {
     const updateMessageQuery = `
     UPDATE messages
     SET view_count = view_count + 1
@@ -36,7 +38,7 @@ export class MessageRepository implements IMessageRepository {
     }
   }
 
-  async deleteExpiredMessages(): Promise<void> {
+  async deleteExpiredMessages (): Promise<void> {
     const query = `
     DELETE FROM messages
     WHERE created_at < NOW() - INTERVAL '24 hours';
@@ -44,8 +46,8 @@ export class MessageRepository implements IMessageRepository {
     await this.pool.query(query);
   }
 
-  async save(messageData: Message): Promise<Message> {
-    let id = await this.createUniqueIdForMessage();
+  async save (messageData: Message): Promise<Message> {
+    const id = await this.createUniqueIdForMessage();
     const insertMessageQuery = `
       INSERT INTO messages (id, content, iv, salt, is_private)
       VALUES ($1, $2, $3, $4, $5)
@@ -70,7 +72,7 @@ export class MessageRepository implements IMessageRepository {
     try {
       const { rows: messageRows } = await this.pool.query(
         insertMessageQuery,
-        messageValues
+        messageValues,
       );
       await this.pool.query(updateStatsQuery);
       await this.pool.query("COMMIT");
@@ -81,16 +83,16 @@ export class MessageRepository implements IMessageRepository {
     }
   }
 
-  async createUniqueIdForMessage(attempt = 0): Promise<String> {
-    let id = IDGenerator.generate(10);
-    const query = `INSERT INTO archived_ids (id) VALUES ($1)`;
+  async createUniqueIdForMessage (attempt = 0): Promise<String> {
+    const id = IDGenerator.generate(10);
+    const query = "INSERT INTO archived_ids (id) VALUES ($1)";
 
     try {
       await this.pool.query(query, [id]);
       return id;
     } catch (err) {
       if (err instanceof Error) {
-        let pgUniqueViolationErrorCode = "23505";
+        const pgUniqueViolationErrorCode = "23505";
         const pgError = err as any; // Cast to 'any' or a more specific error type if you have one
         if (pgError.code === pgUniqueViolationErrorCode) {
           // Check if the error is a unique violation
@@ -107,19 +109,19 @@ export class MessageRepository implements IMessageRepository {
         }
       } else {
         // If 'err' is not an instance of Error, handle or rethrow as needed
-        throw new Error("An unknown error occurred");
+        throw new TypeError("An unknown error occurred");
       }
     }
   }
 
-  async findById(id: string): Promise<Message | null> {
+  async findById (id: string): Promise<Message | null> {
     const query =
       "SELECT * FROM messages WHERE id = $1 and created_at > NOW() - INTERVAL '24 hours'";
     const { rows } = await this.pool.query(query, [id]);
     return rows.length ? rows[0] : null;
   }
 
-  async getStats(): Promise<{
+  async getStats (): Promise<{
     created_count: number;
     view_count: number;
     expiring_soon_count: number;
@@ -128,9 +130,9 @@ export class MessageRepository implements IMessageRepository {
       created_count: number;
       view_count: number;
     }> => {
-      const query = `SELECT created_count, view_count FROM message_stats where id = 1`;
+      const query = "SELECT created_count, view_count FROM message_stats where id = 1";
       const result = await this.pool.query(query);
-      let row = result.rows[0];
+      const row = result.rows[0];
       return {
         created_count: row.created_count,
         view_count: row.view_count,
@@ -138,7 +140,7 @@ export class MessageRepository implements IMessageRepository {
     };
 
     const getExpiringCount = async (): Promise<number> => {
-      const query = `SELECT COUNT(*) FROM messages`;
+      const query = "SELECT COUNT(*) FROM messages";
       const result = await this.pool.query(query);
       if (result.rows.length === 0) {
         return 0;

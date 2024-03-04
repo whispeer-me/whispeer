@@ -13,11 +13,11 @@ const commonHeaders: HeadersInit = {
 class Api {
   private baseURL: string;
 
-  constructor(baseURL: string) {
+  constructor (baseURL: string) {
     this.baseURL = baseURL;
   }
 
-  private async fetchWrapper<T>(
+  private async fetchWrapper<T> (
     url: string,
     options: RequestInit,
   ): Promise<ApiResponse<T>> {
@@ -31,21 +31,23 @@ class Api {
         data = await response.json();
       }
       if (!response.ok) {
-        throw {
+        const error = {
           status: response.status,
           message: data?.message || "An error occurred",
         };
+        throw error;
       }
       return { status: response.status, data };
     } catch (error) {
       if (process.env.NODE_ENV === "development") {
+        // eslint-disable-next-line no-console
         console.error("Fetch Error:", error);
       }
       throw error;
     }
   }
 
-  public get<T>(
+  public get<T> (
     url: string,
     params?: Record<string, any>,
   ): Promise<ApiResponse<T>> {
@@ -58,7 +60,7 @@ class Api {
     });
   }
 
-  public post<T, U = any>(url: string, data: U): Promise<ApiResponse<T>> {
+  public post<T, U = any> (url: string, data: U): Promise<ApiResponse<T>> {
     return this.fetchWrapper<T>(url, {
       method: "POST",
       headers: commonHeaders,
@@ -66,7 +68,7 @@ class Api {
     });
   }
 
-  public patch<T, U = any>(
+  public patch<T, U = any> (
     url: string,
     data?: U,
   ): Promise<ApiResponse<T> | void> {

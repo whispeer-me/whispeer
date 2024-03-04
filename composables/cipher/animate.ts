@@ -3,7 +3,7 @@
 import { ref, onMounted, onUnmounted } from "vue";
 import { getRandomChar } from "./random.chars";
 
-export default function useAnimatedMessage(message = "", duration = 1000) {
+export default function useAnimatedMessage (message = "", duration = 1000) {
   const displayMessage = ref("");
   const isAnimating = ref(false);
 

@@ -15,7 +15,6 @@ export default defineEventHandler(async (event) => {
     await patchMessageUseCase.execute(id);
     setResponseStatus(event, 204);
   } catch (error) {
-    console.error(error);
     setResponseStatus(event, 500);
     return { message: "Error occurred and logged." };
   }

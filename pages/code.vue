@@ -3,7 +3,7 @@
 <template>
   <div class="code">
     <h1>Whispeer is Open Source</h1>
-    <div class="repo-section" v-for="repo in repositories" :key="repo.name">
+    <div v-for="repo in repositories" :key="repo.name" class="repo-section">
       <h2>{{ repo.name }}</h2>
       <p>
         <a :href="repo.url" target="_blank" rel="noopener noreferrer">Code</a>
@@ -13,16 +13,14 @@
           :href="`${repo.url}/contributors`"
           target="_blank"
           rel="noopener noreferrer"
-          >Contributors</a
-        >
+        >Contributors</a>
       </p>
       <p>
         <a
           :href="`${repo.url}/blob/main/package.json`"
           target="_blank"
           rel="noopener noreferrer"
-          >Libraries</a
-        >
+        >Libraries</a>
       </p>
     </div>
   </div>

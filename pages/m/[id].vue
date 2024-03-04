@@ -2,16 +2,16 @@
 
 <template>
   <div class="message">
-    <CommonLoadingIndicator :isLoading="isLoading" />
-    <CommonError :errorMessage="!message.is_private && errorMessage" />
+    <CommonLoadingIndicator :is-loading="isLoading" />
+    <CommonError :error-message="!message.is_private && errorMessage" />
 
     <div v-if="message.content">
       <MessageInfo :message="message" />
       <MessageCipherDisplay :message="message.content" class="chiper-display" />
     </div>
 
-    <LazyCommonModal :isVisible="isModalVisible" class="passphrase-modal">
-      <CommonError :errorMessage="message.is_private && errorMessage" />
+    <LazyCommonModal :is-visible="isModalVisible" class="passphrase-modal">
+      <CommonError :error-message="message.is_private && errorMessage" />
       <MessagePassphraseInput @close="closeModal" @submit="onModalSubmit" />
     </LazyCommonModal>
   </div>
@@ -161,7 +161,7 @@ const decryptMessage = (passphrase) => {
       message.value.encryptedContent,
       message.value.salt,
       message.value.iv,
-      passphrase
+      passphrase,
     );
     return decryptedContent;
   } catch (error) {
@@ -194,11 +194,11 @@ const logAnalytics = () => {
   trackEventClean("message-viewed",
     {
       props: {
-        is_private: message.value.is_private
+        is_private: message.value.is_private,
       },
-    }
+    },
   );
-}
+};
 
 watch(
   () => route.params.id,
@@ -207,7 +207,7 @@ watch(
       await processIdChange(newId);
     }
   },
-  { immediate: true }
+  { immediate: true },
 );
 </script>
 

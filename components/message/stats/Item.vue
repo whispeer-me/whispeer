@@ -11,9 +11,9 @@
 defineProps(
   {
     title: { type: String, default: "" },
-    value: { type: Number, default: 0 }
-  }
-)
+    value: { type: Number, default: 0 },
+  },
+);
 </script>
 
 <style scoped lang="scss">

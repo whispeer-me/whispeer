@@ -4,9 +4,12 @@
   <footer class="app-footer">
     <p class="footer-text">
       © 2024 Whispeer.me
-      <router-link to="/privacy-policy" class="footer-link"
-        >Privacy Policy</router-link
+      <router-link
+        to="/privacy-policy"
+        class="footer-link"
       >
+        Privacy Policy
+      </router-link>
     </p>
   </footer>
 </template>

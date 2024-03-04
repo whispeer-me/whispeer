@@ -7,7 +7,7 @@ import MenuItem from "./MenuItem.vue";
 const isMobile = ref<boolean>(false);
 const hasMounted = ref<boolean>(false);
 
-function handleResize() {
+function handleResize () {
   if (typeof window !== "undefined") {
     isMobile.value = window.innerWidth <= 480;
   }
@@ -35,31 +35,31 @@ onUnmounted(() => {
         height="36"
         loading="lazy"
       />
-      <MenuItem to="/" title="Home" icon="home.svg" :isMobile="isMobile" />
+      <MenuItem to="/" title="Home" icon="home.svg" :is-mobile="isMobile" />
       <MenuItem
         to="/m/new?ref=nav"
         title="New Message"
         icon="message.svg"
-        :isMobile="isMobile"
+        :is-mobile="isMobile"
       />
       <MenuItem
         to="https://blog.whispeer.me"
         title="Blog"
         icon="blog.svg"
-        :isMobile="isMobile"
+        :is-mobile="isMobile"
       />
       <MenuItem
         to="/the-story"
         title="The Story"
         icon="the-story.svg"
-        :isMobile="isMobile"
+        :is-mobile="isMobile"
       />
-      <MenuItem to="/code" title="Code" icon="code.svg" :isMobile="isMobile" />
+      <MenuItem to="/code" title="Code" icon="code.svg" :is-mobile="isMobile" />
       <MenuItem
         to="/contact"
         title="Contact"
         icon="contact.svg"
-        :isMobile="isMobile"
+        :is-mobile="isMobile"
       />
     </nav>
   </header>

@@ -2,24 +2,24 @@
 
 import type { ChatMessage } from "~/types/chat.message";
 
-import type EncryptedMessage from "~/types/encrypted.message";
+import type { EncryptedMessage } from "~/types/encrypted.message";
 
-export let id = 1;
+export const id = 1;
 
 export default {
-  createMessage(content: string, passphrase: string): EncryptedMessage {
+  createMessage (content: string, passphrase: string): EncryptedMessage {
     return cryptoService.encrypt(content, passphrase);
   },
 
-  readTheMessage(
+  readTheMessage (
     chatMessage: EncryptedMessage,
-    passphrase: string
+    passphrase: string,
   ): ChatMessage {
-    let decryptedContent = cryptoService.decrypt(
+    const decryptedContent = cryptoService.decrypt(
       chatMessage.ciphertext,
       chatMessage.salt,
       chatMessage.iv,
-      passphrase
+      passphrase,
     );
 
     return {

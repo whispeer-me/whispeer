@@ -3,7 +3,7 @@
 <template>
   <div id="app" class="page-wrapper">
     <LayoutHeader />
-    <hr class="divider" />
+    <hr class="divider">
     <div class="content">
       <NuxtPage />
     </div>
