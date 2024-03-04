@@ -19,7 +19,7 @@ class Api {
 
   private async fetchWrapper<T>(
     url: string,
-    options: RequestInit
+    options: RequestInit,
   ): Promise<ApiResponse<T>> {
     try {
       const response = await fetch(`${this.baseURL}${url}`, options);
@@ -47,7 +47,7 @@ class Api {
 
   public get<T>(
     url: string,
-    params?: Record<string, any>
+    params?: Record<string, any>,
   ): Promise<ApiResponse<T>> {
     const queryString = params
       ? `?${new URLSearchParams(params).toString()}`
@@ -68,7 +68,7 @@ class Api {
 
   public patch<T, U = any>(
     url: string,
-    data?: U
+    data?: U,
   ): Promise<ApiResponse<T> | void> {
     return this.fetchWrapper<T>(url, {
       method: "PATCH",

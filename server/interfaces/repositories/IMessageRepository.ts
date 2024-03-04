@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Message } from "~/server/entities/message";
+import type { Message } from "~/server/entities/message";
 
 export interface IMessageRepository {
   save(message: Message): Promise<Message>;
