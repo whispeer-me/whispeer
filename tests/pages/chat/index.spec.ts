@@ -15,13 +15,11 @@ describe("Chat Component", () => {
       default: vi.fn(() => ({
         message,
         messages,
-        sendMessage: vi.fn(async () => {
+        sendMessage: vi.fn(() => {
           const chatMessage: ChatMessage = {
             id: new Date().getTime(),
             content: message.value,
           };
-
-          await new Promise(resolve => setTimeout(resolve, 100));
 
           messages.value.push(chatMessage);
         }),

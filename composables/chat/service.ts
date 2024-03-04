@@ -4,7 +4,8 @@ import type { ChatMessage } from "~/types/chat.message";
 
 import type { EncryptedMessage } from "~/types/encrypted.message";
 
-export const id = 1;
+// eslint-disable-next-line import/no-mutable-exports
+export let id = 1;
 
 export default {
   createMessage (content: string, passphrase: string): EncryptedMessage {

@@ -71,7 +71,7 @@ class MockMessageRepository implements IMessageRepository {
     return Promise.resolve();
   }
 
-  async save (message: Message): Promise<Message> {
+  save (message: Message): Promise<Message> {
     const newMessage: Message = {
       ...message,
       id: IDGenerator.generate(randomIdLength),
@@ -80,9 +80,6 @@ class MockMessageRepository implements IMessageRepository {
     };
 
     this.messages.push(newMessage);
-
-    // Small delay to fake the async
-    await new Promise(resolve => setTimeout(resolve, 100));
 
     return Promise.resolve(newMessage);
   }
