@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "prestart": "node ./node_modules/db-migrate/bin/db-migrate up",
+    "lint": "eslint --ext .ts,.js,.cjs,.vue . --fix",
     "build": "nuxt build",
     "dev": "nuxt dev",
     "test": "vitest",
@@ -17,9 +18,11 @@
   },
   "devDependencies": {
     "@nuxt/test-utils": "^3.11.0",
+    "@nuxtjs/eslint-config-typescript": "^12.1.0",
     "@nuxtjs/plausible": "^0.2.4",
     "@types/crypto-js": "^4.2.2",
     "@vue/test-utils": "^2.4.4",
+    "eslint": "^8.57.0",
     "happy-dom": "^13.3.8",
     "node-pg-migrate": "^6.2.2",
     "nuxt": "^3.10.1",
