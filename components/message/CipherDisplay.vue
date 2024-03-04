@@ -14,7 +14,7 @@
 
 <script setup lang="js">
 import { ref, onMounted, onBeforeUnmount } from "vue";
-import { createRandomChars  } from "~/composables/cipher/random-chars";
+import { createRandomChars } from "~/composables/cipher/random.chars";
 
 const props = defineProps({
   message: {

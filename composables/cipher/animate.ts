@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { ref, onMounted, onUnmounted } from "vue";
-import { getRandomChar } from "./random-chars";
+import { getRandomChar } from "./random.chars";
 
 export default function useAnimatedMessage(message = "", duration = 1000) {
   const displayMessage = ref("");
@@ -12,7 +12,7 @@ export default function useAnimatedMessage(message = "", duration = 1000) {
   const animateMessage = () => {
     displayMessage.value = Array.from(
       { length: message.length },
-      getRandomChar
+      getRandomChar,
     ).join("");
   };
 

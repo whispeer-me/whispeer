@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { describe, it, expect } from "vitest";
-import sanitizeUrl from "~/utils/sanitize-url";
+import sanitizeUrl from "~/utils/sanitize.url";
 
 describe("sanitizeUrl", () => {
   it("should return the same URL and false if the path does not exist in the URL", () => {

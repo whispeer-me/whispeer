@@ -2,8 +2,8 @@
 
 import { describe, it, expect } from "vitest";
 
-import CryptoService from "~/composables/crypto-service";
-import type EncryptedMessage from "~/types/encrypted.message";
+import CryptoService from "~/composables/crypto.service";
+import type { EncryptedMessage } from "~/types/encrypted.message";
 
 describe("CryptoService", () => {
   const message = "Hello, World!";
@@ -13,7 +13,7 @@ describe("CryptoService", () => {
     it("should encrypt the message with the given passphrase", () => {
       let encryptedResult: EncryptedMessage = CryptoService.encrypt(
         message,
-        passphrase
+        passphrase,
       );
       expect(encryptedResult).toHaveProperty("ciphertext");
       expect(encryptedResult).toHaveProperty("salt");
@@ -23,13 +23,13 @@ describe("CryptoService", () => {
     it("should decrypt the ciphertext with the correct passphrase, salt, and iv", () => {
       let encryptedResult: EncryptedMessage = CryptoService.encrypt(
         message,
-        passphrase
+        passphrase,
       );
       const decryptedMessage = CryptoService.decrypt(
         encryptedResult.ciphertext,
         encryptedResult.salt,
         encryptedResult.iv,
-        passphrase
+        passphrase,
       );
 
       expect(decryptedMessage).toBe(message);
@@ -38,14 +38,14 @@ describe("CryptoService", () => {
     it("should throw an error if the passphrase is incorrect", () => {
       let encryptedResult: EncryptedMessage = CryptoService.encrypt(
         message,
-        passphrase
+        passphrase,
       );
       expect(() => {
         CryptoService.decrypt(
           encryptedResult.ciphertext,
           encryptedResult.salt,
           encryptedResult.iv,
-          "wrong passphrase"
+          "wrong passphrase",
         );
       }).toThrowError("Incorrect passphrase");
     });
