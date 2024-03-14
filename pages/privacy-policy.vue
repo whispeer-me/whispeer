@@ -137,7 +137,7 @@ onMounted(() => {
   color: $secondary-color;
   font-family: $secondary-font;
   text-align: left;
-  margin: 0px 20px 100px 20px;
+  margin: 0 20px 100px 20px;
 
   h1 {
     text-align: center;

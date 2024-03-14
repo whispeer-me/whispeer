@@ -58,6 +58,6 @@ onMounted(() => {
 .the-story {
   color: $secondary-color;
   font-family: $secondary-font;
-  margin: 0px 20px 0px 20px;
+  margin: 0 20px 0 20px;
 }
 </style>
