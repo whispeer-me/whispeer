@@ -5,12 +5,13 @@
 import { ref, nextTick, onMounted, onUnmounted } from "vue";
 import chatService from "@/composables/chat/service";
 import type { EncryptedMessage } from "~/types/encrypted.message";
+import type { ChatMessage } from "~/types/chat.message";
 
 export default function useChat () {
   // It will be prompted later
   const passphrase = "bla bla";
   const message = ref("");
-  const messages = ref([]);
+  const messages = ref<ChatMessage[]>([]);
   const messagesContainer = ref<HTMLElement | null>(null);
   const userHasScrolledUp = ref(false);
   const showNewMessageNotification = ref(false);
@@ -18,8 +19,8 @@ export default function useChat () {
   let socket: WebSocket;
 
   onMounted(() => {
-    const websockerUrl = "ws://localhost:3001";
-    socket = new WebSocket(websockerUrl);
+    const websocketUrl = "ws://localhost:3001";
+    socket = new WebSocket(websocketUrl);
     socket.onopen = () => {
       console.log("Connected to the chat server");
     };
@@ -109,12 +110,12 @@ export default function useChat () {
   return {
     message,
     messages,
+    showNewMessageNotification,
+    messagesContainer,
+    maxCharsAllowed,
     sendMessage,
     checkScrollPosition,
     scrollToBottom,
-    showNewMessageNotification,
-    messagesContainer,
     getMessageClass,
-    maxCharsAllowed,
   };
 }
