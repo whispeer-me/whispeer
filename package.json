@@ -25,7 +25,7 @@
     "eslint": "^8.57.0",
     "happy-dom": "^13.3.8",
     "node-pg-migrate": "^6.2.2",
-    "nuxt": "^3.10.1",
+    "nuxt": "^3.11.2",
     "sass": "^1.70.0",
     "sass-loader": "^14.0.0",
     "vite-tsconfig-paths": "^4.3.1",
