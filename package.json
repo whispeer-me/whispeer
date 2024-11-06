@@ -17,15 +17,15 @@
     "start": "node .output/server/index.mjs"
   },
   "devDependencies": {
-    "@nuxt/test-utils": "^3.11.0",
+    "@nuxt/test-utils": "^3.14.4",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
     "@nuxtjs/plausible": "^0.2.4",
     "@types/crypto-js": "^4.2.2",
     "@vue/test-utils": "^2.4.4",
     "eslint": "^8.57.0",
-    "happy-dom": "^13.3.8",
+    "happy-dom": "^15.10.1",
     "node-pg-migrate": "^6.2.2",
-    "nuxt": "^3.11.2",
+    "nuxt": "^3.12.4",
     "sass": "^1.70.0",
     "sass-loader": "^14.0.0",
     "vite-tsconfig-paths": "^4.3.1",
