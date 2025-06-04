@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { Message } from "~/server/entities/message";
-import { IMessageRepository } from "~/server/interfaces/repositories/IMessageRepository";
+import type { Message } from "~/server/entities/message";
+import type { IMessageRepository } from "~/server/interfaces/repositories/IMessageRepository";
 import { TimeUtils } from "~/server/utils/time.utils";
 
 export class FindMessage {

@@ -3,35 +3,34 @@
 // @vitest-environment happy-dom
 import { describe, it, expect, vi } from "vitest";
 import { mount } from "@vue/test-utils";
+import { ref, nextTick } from "vue";
 import Chat from "@/pages/chat/index.vue";
 import useChat from "@/composables/chat/ui";
 import type { ChatMessage } from "~/types/chat.message";
 
-describe("Chat Component", () => {
-  vi.mock("@/composables/chat/ui", () => {
-    const message = ref("");
-    const messages = ref<ChatMessage[]>([]);
-    return {
-      default: vi.fn(() => ({
-        message,
-        messages,
-        sendMessage: vi.fn(() => {
-          const chatMessage: ChatMessage = {
-            id: new Date().getTime(),
-            content: message.value,
-          };
+const message = ref("");
+const messages = ref<ChatMessage[]>([]);
+const mockedChat = {
+  message,
+  messages,
+  sendMessage: vi.fn(() => {
+    const chatMessage: ChatMessage = { id: Date.now(), content: message.value };
+    messages.value.push(chatMessage);
+  }),
+  checkScrollPosition: vi.fn(),
+  scrollToBottom: vi.fn(),
+  showNewMessageNotification: ref(false),
+  messagesContainer: ref(null),
+  getMessageClass: vi.fn(),
+  maxCharsAllowed: 500,
+};
 
-          messages.value.push(chatMessage);
-        }),
-        checkScrollPosition: vi.fn(),
-        scrollToBottom: vi.fn(),
-        showNewMessageNotification: ref(false),
-        messagesContainer: ref(null),
-        getMessageClass: vi.fn(),
-        maxCharsAllowed: 500,
-      })),
-    };
-  });
+describe("Chat Component", () => {
+  vi.mock("@/composables/chat/ui", () => ({
+    default: vi.fn(() => {
+      return mockedChat;
+    }),
+  }));
 
   it("renders without crashing", () => {
     const wrapper = mount(Chat);

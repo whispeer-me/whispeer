@@ -1,12 +1,16 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 // @vitest-environment happy-dom
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import { mount } from "@vue/test-utils";
 import NewMessage from "@/pages/m/new.vue";
 
 describe("Creating NewMessage", () => {
-  const wrapper = mount(NewMessage);
+  let wrapper: ReturnType<typeof mount>;
+
+  beforeEach(() => {
+    wrapper = mount(NewMessage);
+  });
 
   it("renders without crashing", () => {
     expect(wrapper.exists()).toBe(true);
