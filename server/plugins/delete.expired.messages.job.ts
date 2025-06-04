@@ -26,6 +26,6 @@ async function deleteExpiredMessages () {
 
     console.info(`${JOB_NAME} completed successfully.`);
   } catch (err) {
-    console.error(`Error occured on ${JOB_NAME}.`, err);
+    console.error(`Error occurred on ${JOB_NAME}.`, err);
   }
 }

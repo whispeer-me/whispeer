@@ -2,7 +2,7 @@
 
 /* eslint-disable no-console */
 
-import { Log } from "~/server/interfaces/utils/ILog";
+import type { Log } from "~/server/interfaces/utils/ILog";
 
 export class AppLogger implements Log {
   info (message: string, ...args: unknown[]): void {

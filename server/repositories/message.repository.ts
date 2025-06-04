@@ -2,9 +2,9 @@
 
 /* eslint-disable camelcase */
 
-import { IMessageRepository } from "~/server/interfaces/repositories/IMessageRepository";
+import type { IMessageRepository } from "~/server/interfaces/repositories/IMessageRepository";
 import type { Message } from "~/server/entities/message";
-import { IDatabasePool } from "~/server/interfaces/db/IDatabasePool";
+import type { IDatabasePool } from "~/server/interfaces/db/IDatabasePool";
 
 export class MessageRepository implements IMessageRepository {
   private pool: IDatabasePool;
