@@ -3,7 +3,8 @@
   "extends": "./.nuxt/tsconfig.json",
   "compilerOptions": {
     "types": [
-      "./types/nuxt.d.ts"
+      "./types/nuxt.d.ts",
+      "./types/vue-shim.d.ts"
     ]
   }
 }
