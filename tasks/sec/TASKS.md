@@ -34,6 +34,12 @@ Read `tasks/sec/DESIGN.md` first. One task per run. "Tests first" = write them, 
 - Accept: gate green.
 
 ## 05 — Fable review fixes
-- Read `tasks/sec/REVIEW.md` (written by the lead from a Claude Fable 5.2 review of the whole branch). Fix every finding marked MUST and SHOULD; for anything you disagree with, explain in your summary instead of changing it.
+- Read `tasks/sec/REVIEW.md` (written by the lead from a Claude Fable 5.2 review of the whole branch). Fix the MUST, every SHOULD and every NIT except the docs one (see the lead note at the top of REVIEW.md); for anything you disagree with, explain in your summary instead of changing it.
 - Tests first for each behavioural fix.
+- Dependencies (GitHub Dependabot shows 169 open alerts against main's lockfile; `npm audit` on this branch shows 25). Clear them:
+  - `npm update` within ranges (fixes vue/@vue/server-renderer XSS, nuxt/nitro route-rule case-variant bypass, picomatch, glob, minimatch, archiver…). Bump `nuxt` to the latest 3.x.
+  - Replace `nuxt-scheduler` (pulls `node-cron` + `uuid`, no fix available) with a plain `setInterval(…, 60_000)` in `server/plugins/delete.expired.messages.job.ts` (run once at startup too; `unref()` the timer); uninstall it and drop it from `nuxt.config.ts` modules. Keep the job test.
+  - `@nuxt/image` → 2.x (fixes ipx/sharp); `NuxtImg`/`NuxtPicture` are used in `components/how/Section.vue`, `components/layout/MenuItem.vue`, `components/layout/Header.vue` — keep them rendering the same.
+  - Test-only: `happy-dom` → ≥21, `vitest` → latest (fixes tinypool/@vitest/mocker), with matching `@nuxt/test-utils`; adapt test config if needed. Do not weaken tests.
+  - Target: `npm audit` 0 critical/high; list anything left with the reason.
 - Accept: gate green.
