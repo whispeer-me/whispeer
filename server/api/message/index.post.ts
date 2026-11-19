@@ -3,21 +3,29 @@
 import { CreateMessage } from "~/server/usecases/message/create";
 import { MessageRepository } from "~/server/repositories/message.repository";
 import db from "~/server/utils/db";
+import { validateMessagePayload } from "~/server/utils/validate.message";
 
 export default defineEventHandler(async (event) => {
+  let payload;
   try {
-    const receivedMessage = await readBody(event);
+    payload = validateMessagePayload(await readBody(event));
+  } catch {
+    payload = null;
+  }
 
-    const messageRepository = new MessageRepository(db);
+  if (payload === null) {
+    setResponseStatus(event, 400);
+    return { message: "Invalid message." };
+  }
 
-    const createMessageUseCase = new CreateMessage(messageRepository);
-    const message = await createMessageUseCase.execute(receivedMessage);
+  try {
+    const createMessageUseCase = new CreateMessage(new MessageRepository(db));
+    const { id } = await createMessageUseCase.execute(payload);
 
     setResponseStatus(event, 201);
-
-    return message;
-  } catch (error) {
+    return { id };
+  } catch {
     setResponseStatus(event, 500);
-    return { message: "Error occurred and logged." };
+    return { message: "Something went wrong." };
   }
 });
