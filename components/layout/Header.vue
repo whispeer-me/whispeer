@@ -43,12 +43,6 @@ onUnmounted(() => {
         :is-mobile="isMobile"
       />
       <MenuItem
-        to="https://blog.whispeer.me"
-        title="Blog"
-        icon="blog.svg"
-        :is-mobile="isMobile"
-      />
-      <MenuItem
         to="/the-story"
         title="The Story"
         icon="the-story.svg"

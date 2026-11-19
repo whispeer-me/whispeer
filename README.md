@@ -1,126 +1,119 @@
 # Whispeer
 
-Whispeer ([whispeer.me](https://whispeer.me)) is a web app for sending short messages (up to 256 characters) through a link. A message can be sent as plain text, or encrypted in the browser with a passphrase you choose ("Secure Message"). Every message expires 24 hours after it is created.
+> **The hosted version is offline.** The domain it ran on has lapsed. You can still run Whispeer yourself; see [Running locally](#running-locally).
+
+Whispeer is a web app for sending short messages (up to 256 characters) through a link. Every message is encrypted in the browser before it is sent. A message expires 24 hours after it is created, or right after it is first opened if you choose "Delete after first view".
 
 <img src="public/resources/CreatingMessage.gif" alt="Creating a Message" width="320"/>
 <img src="public/resources/ViewingMessage.gif" alt="Viewing a Message" width="320"/>
 
 ## How it works
 
-Encryption is **optional**. It only happens when the "Secure Message" toggle is turned on; it is off by default.
+All encryption and decryption happen in the browser, using the Web Crypto API.
 
-**Creating a Secure Message (in the browser):**
+**Creating a message:**
 
-1. You type the message and a passphrase.
-2. The browser generates a random 128-bit salt and a random 128-bit IV.
-3. A 256-bit key is derived from the passphrase and salt with PBKDF2 (1,000 iterations, HMAC-SHA256 — the crypto-js 4.2.0 default; the code does not set the hash explicitly).
-4. The message is encrypted with AES-256 in CBC mode with PKCS#7 padding, using the [crypto-js](https://github.com/brix/crypto-js) library.
-5. The browser sends the ciphertext, salt and IV to the server. The passphrase is never sent.
-6. The server returns a random 10-character ID, and the browser shows the link `/m/<id>`. The passphrase is not part of the link; you must share it separately.
+1. The browser generates a random 32-byte **link key**, a random 16-byte salt and a random 12-byte IV.
+2. If you add a passphrase (optional, at least 8 characters), the browser derives 256 bits from it with PBKDF2-HMAC-SHA256 (600,000 iterations, the salt above).
+3. The encryption key is derived with HKDF-SHA256 from the link key, plus the passphrase bits if there is a passphrase.
+4. The message is encrypted with AES-256-GCM. The "has passphrase" and "delete after first view" settings are bound to the ciphertext as additional authenticated data, so changing them makes decryption fail.
+5. The browser sends the ciphertext, salt, IV and the two settings to the server, and gets back a random 10-character ID.
+6. The link is `/m/<id>#<link key>`. The part after `#` (the URL fragment) is never sent to the server by browsers. If you set a passphrase, share it separately from the link.
 
-**Reading a Secure Message:** the browser fetches the ciphertext, salt and IV, asks for the passphrase, derives the key the same way, and decrypts locally. A wrong passphrase produces an "incorrect passphrase" error (detected when the decrypted output is empty or not valid UTF-8; there is no integrity check).
+**Opening a message:** the page reads the link key from the fragment, removes it from the address bar and browser history, fetches the ciphertext, asks for the passphrase if the message has one, and decrypts locally. Any failure (wrong key, wrong passphrase, tampered data) shows the same "decryption failed" error. Because the fragment is removed after loading, refreshing the page asks you to open the original link again.
 
-**Plain messages** (toggle off) are sent to the server and stored as plain text, and anyone with the link can read them.
-
-A message can be opened any number of times until it expires.
+**Delete after first view:** the page first shows an **Open** button; the server does not return the ciphertext until it is pressed. The server then returns it and deletes the message in one database statement, so it can be opened only once. If you mistype the passphrase you can retry, as long as the page stays open.
 
 ## What the server can and cannot see
 
-Per message, the database (`messages` table) stores:
+The database stores, per message: `id`, `content` (ciphertext), `salt`, `iv`, `version`, `has_passphrase`, `burn_after_read`, `view_count`, `created_at`.
 
-| Column | Secure Message | Plain message |
-| --- | --- | --- |
-| `id` | random 10-char ID | same |
-| `content` | ciphertext (Base64) | **plaintext** |
-| `salt`, `iv` | hex strings | empty |
-| `is_private` | `true` | `false` |
-| `view_count` | number of times opened | same |
-| `created_at` | timestamp | same |
+The server **never receives** the plaintext, the link key or the passphrase. Anyone who obtains the database alone cannot read messages, because the link key is not in it.
 
-The server **never receives** the passphrase, and for Secure Messages it never receives the plaintext.
+The server rejects anything that is not a well-formed encrypted message (wrong format, wrong field lengths, extra fields, bodies over 4 KB).
 
-The server **does receive and store** the plaintext of plain messages.
-
-The application does not store IP addresses, user agents or any user identifier in the database.
-
-Note: the server does not validate what it is sent. The 256-character limit and the encryption step are enforced by the browser code only; a client that calls the API directly can store anything in `content` and set `is_private` to any value.
+The application does not store IP addresses, user agents or any user identifier.
 
 ## Data retention
 
-- Message lookups only return messages created less than 24 hours ago.
-- A scheduled job inside the server process runs **hourly** and deletes rows from `messages` where `created_at` is older than 24 hours. An expired message can therefore remain in the database for up to about one more hour, longer if the server process is not running when the job is due.
-- Every message ID ever issued is kept permanently in the `archived_ids` table (ID only, no timestamp or content) so that IDs are never reused.
-- Database backups, if any, depend on the hosting setup and are not controlled by this repository.
+- Messages can be read only within 24 hours of creation.
+- A job inside the server process runs once at startup and then every minute, deleting messages older than 24 hours. If the server is not running, deletion happens when it starts again.
+- "Delete after first view" messages are deleted when they are opened.
+- Every message ID ever issued is kept in the `archived_ids` table (the ID only, no timestamp or content) so IDs are never reused.
+- Database backups, if any, depend on how you host it and are outside this repository.
 
 ## Accounts, logging and analytics
 
 **Accounts:** none. There is no sign-up, login, session or user identifier.
 
-**Server logging:** the application has no request logging. It logs only:
-- the expiry job's start, success, and errors (`server/plugins/delete.expired.messages.job.ts`);
-- unhandled errors from the stats endpoint, which are passed to Nuxt/Nitro's default error handler.
-Other API errors are caught and not logged.
+**Logging:** the application does not log requests, IP addresses or message content. It logs the expiry job (two lines a minute) and its errors. What your hosting platform, proxy or database provider logs is outside this repository.
 
-What the hosting platform, reverse proxy or database provider logs (for example IP addresses or request URLs) is outside this repository and cannot be verified from the code.
+**Rate limiting:** creates are limited to 10 per minute per client (300 per minute in total), other message requests to 60 per minute per client. Client addresses are kept only in server memory for the current minute, never logged or stored; IPv6 addresses are grouped by /64. The client address is taken from the `fly-client-ip` header (set by Fly.io's proxy) or the connection address.
 
-**Analytics:**
-- **Plausible** (`@nuxtjs/plausible`) records page views on all pages, outbound link clicks, and these events: `message-created`, `create-message`, `message-viewed`, each with an `is_private` or `source` property. For message pages the URL is trimmed to `/m/`, so the message ID is not sent; on message pages the referrer is not sent. The script is loaded from the module's default host (plausible.io); what Plausible itself collects (e.g. derived from IP and user agent) is governed by Plausible, not this code. Tracking is disabled on localhost.
-- **Public counters:** the home page shows three numbers from `GET /api/message/stats`: total messages ever created, total message opens, and the current number of rows in `messages` (shown as "expiring soon"). These are global counters in a single `message_stats` row; nothing per user is stored.
-- **Browser storage:** `localStorage` holds two counters used to limit how often a tooltip and a disclaimer are shown. Nothing is sent to the server.
+**Analytics:** the app includes [Plausible](https://plausible.io) via `@nuxtjs/plausible` (disabled on localhost). It records page views and these events: `message-created` and `message-viewed` (each with only the `has_passphrase` and `burn_after_read` settings) and `create-message`. On message pages the URL is cut to `/m/` and no referrer is sent, so the message ID and key never reach Plausible. Outbound link tracking is off. What Plausible itself collects is governed by Plausible.
+
+**Public counters:** the home page shows the total messages created, total messages opened, and messages currently live. These are global totals; nothing per user is stored.
+
+**Browser storage:** `localStorage` holds two counters that limit how often a tooltip and a disclaimer are shown.
+
+**Security headers** (via `nuxt-security`): Content-Security-Policy with per-request nonces, `Referrer-Policy: no-referrer`, HSTS, `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, a restrictive `Permissions-Policy`, and `Cache-Control: no-store` on API and message pages.
 
 ## Security notes and limitations
 
-- **Encryption is opt-in.** Plain messages are stored and readable as plain text by the server and by anyone with the link.
-- **No authentication of ciphertext.** AES-CBC is used without a MAC or AEAD mode. Modified ciphertext is not reliably detected; it may decrypt to altered text or fail with a generic error.
-- **Weak key derivation.** PBKDF2 with 1,000 iterations is low by current standards, which makes offline guessing of weak passphrases relatively cheap for anyone who obtains the ciphertext, salt and IV (e.g. the server operator or anyone with database access).
-- **Security depends on the passphrase.** Its strength, and sharing it through a different channel than the link, are up to the user. Anyone with the link can download the ciphertext.
-- **You trust the served code.** Encryption runs in JavaScript delivered by the same server that stores the ciphertext. A compromised or malicious server could serve code that captures passphrases.
-- **Link = access.** IDs are 10 characters from a 62-character alphabet, generated with Node's `crypto.randomInt`. There is no rate limiting in the app.
-- **No server-side validation** of message length, content or the `is_private` flag (see above).
-- **Expiry is not instant**: deletion runs hourly, and only while the server is running.
-- **Infrastructure is out of scope**: hosting, proxy, CDN and database logs or backups are not visible in this repository.
+- **Not audited.** The design and code have not been reviewed by an independent security firm.
+- **The link is the key.** Anyone who gets the full link can read a message without a passphrase. Links can leak through chat backups, screenshots, link-preview services that keep URLs, or browser sync of open tabs. Use a passphrase for anything sensitive, and share it through a different channel.
+- **You trust the served code.** Encryption runs in JavaScript delivered by the same server that stores the ciphertext. A compromised or malicious server could serve code that captures the key or passphrase.
+- **Passphrase strength matters.** 600,000 PBKDF2 iterations slow down guessing, but a weak passphrase can still be guessed by someone who also has the link key and the ciphertext.
+- **Metadata is visible to the server:** when a message was created and opened, its approximate length, whether it has a passphrase or is delete-after-first-view, and the client network address while a request is handled.
+- **Expiry is not instant:** deletion runs every minute, and only while the server is running.
+- **Known residual issue:** on Nuxt 3, route rules are not applied to case-variant page paths (for example `/M/...`), so those pages miss the `no-store` header. API routes are not affected. It is fixed in Nuxt 4.
+- **Secure context required:** the Web Crypto API only works over HTTPS or on `localhost`.
+- **Infrastructure is out of scope:** hosting, proxy, CDN and database logs or backups are not visible in this repository.
 
 ## Tech stack
 
 - [Nuxt 3](https://nuxt.com) (Vue 3, server-side rendering, Nitro server API)
+- Web Crypto API (AES-256-GCM, HKDF, PBKDF2) in the browser
 - PostgreSQL via `pg`; migrations with `node-pg-migrate`
-- `crypto-js` 4.2.0 for client-side encryption
-- `nuxt-scheduler` for the hourly expiry job
-- `@nuxtjs/plausible` for analytics
+- `nuxt-security` for headers, CSP and request limits
+- `@nuxtjs/plausible` for analytics, `@nuxt/image` for images
 - Vitest for tests
-- Dockerfile (Node 18) for deployment
+- Docker (Node 24) for builds
 
 ## Running locally
 
-Requirements: Node.js 18+, a PostgreSQL database.
+**With Docker** (app and Postgres):
 
 ```sh
-npm i
-
-# Create the tables
-export DATABASE_URL=postgres://user:password@localhost:5432/whispeer
-npm run migrate
-
-# Development server (Nuxt also reads DATABASE_URL from a .env file)
-npm run dev
-
-# Tests
-npm test
-
-# Production build
-npm run build
-node .output/server/index.mjs
+docker compose up --build    # http://localhost:3100
+docker compose down -v       # stop and delete the local database
 ```
 
-Environment variables:
-- `DATABASE_URL` — PostgreSQL connection string (required).
-- `NUXT_PUBLIC_DOMAIN` — domain used to build the Open Graph image URL on message pages.
+**Without Docker** (Node.js 24+, a PostgreSQL database):
 
-Note: `npm start` runs a `prestart` script that calls `db-migrate`, which is not a dependency of this project; use `npm run migrate` and start the built server directly as shown above. The Docker image runs migrations and starts the server via `entrypoint.sh`.
+```sh
+npm ci
+export DATABASE_URL=postgres://user:password@localhost:5432/whispeer
+npm run migrate      # create the tables
+npm run dev          # development server
+npm run build && npm start   # production build (start runs migrations first)
+```
+
+**Tests:**
+
+```sh
+npx vitest run
+# Database integration tests (skipped unless set), e.g. against the Docker Postgres:
+TEST_DATABASE_URL=postgres://whispeer:whispeer@127.0.0.1:5433/whispeer npx vitest run
+```
+
+**Environment variables:**
+- `DATABASE_URL`: PostgreSQL connection string (required).
+- `NUXT_PUBLIC_DOMAIN`: domain used to build the Open Graph image URL on message pages.
 
 ## Contributing
 
-See the [Contributing Guide](CONTRIBUTING.md).
+See the [Contributing Guide](CONTRIBUTING.md). Report security issues privately through [GitHub private vulnerability reporting](https://github.com/whispeer-me/whispeer/security/advisories/new).
 
 ## License
 
