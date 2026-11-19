@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { vi } from "vitest";
-import { useHead } from "#imports";
 
 // Mock for useHead
 vi.mock("@unhead/vue", () => ({

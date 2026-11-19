@@ -27,3 +27,4 @@ fly.toml
 .env
 .env.*
 !.env.example
+/tasks/sec/runs/
