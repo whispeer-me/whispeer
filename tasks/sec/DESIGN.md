@@ -73,4 +73,4 @@ IDs: `^[A-Za-z0-9]{10}$`; anything else → 404 without touching the DB.
 - Disable nuxt-security features that would break things or add no value here (e.g. XSS validator on base64 bodies) and say why in a comment.
 
 ## Out of scope
-Accounts, WebSockets/chat (dead code, deleted in task 03), changing hosting.
+Accounts, changing hosting. The chat prototype (`pages/chat`, `composables/chat`, WebSocket, excluded via `.nuxtignore`) is KEPT: never delete it; only adapt it to the new crypto API so it compiles and its tests pass.

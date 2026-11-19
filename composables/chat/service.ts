@@ -4,6 +4,9 @@ import type { ChatMessage } from "~/types/chat.message";
 
 import type { EncryptedMessage } from "~/types/encrypted.message";
 
+// ponytail: dead code (pages/chat is in .nuxtignore) still on the removed v1
+// crypto API; deleted in task 03, not ported.
+
 // eslint-disable-next-line import/no-mutable-exports
 export let id = 1;
 

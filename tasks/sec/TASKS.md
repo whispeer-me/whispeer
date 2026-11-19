@@ -21,9 +21,9 @@ Read `tasks/sec/DESIGN.md` first. One task per run. "Tests first" = write them, 
 ## 03 — UI
 - `pages/m/new.vue` and `pages/m/[id].vue` per DESIGN UI section (always encrypt, passphrase toggle min 8, burn toggle, fragment key, replaceState, burn Open flow, retry passphrase locally, clear errors). Reuse existing components (`CommonSwitch`, `MessagePassphraseInput`, `CommonModal`, `CommonError`).
 - `nuxt.config.ts`: `autoOutboundTracking: false`. Analytics events keep only `has_passphrase`/`burn_after_read` booleans; never the URL hash or ID.
-- Delete dead chat code: `pages/chat/`, `composables/chat/`, `components/chat/`, `types/chat.message.ts`, `tests/pages/chat/`, the `.nuxtignore` line. Delete `composables/cipher/*` only if nothing uses it.
+- KEEP the chat prototype (`pages/chat/`, `composables/chat/`, `components/chat/`, `types/chat.message.ts`, `tests/pages/chat/`, the `.nuxtignore` line). Do not delete or redesign it; only keep it compiling and its tests passing against the new crypto API.
 - Update on-page copy that mentions "Secure Message"/plain messages so it matches the new behaviour (not README/privacy page).
-- Tests first (`tests/pages/m/`): new page builds a link with `#` + 43-char key and posts no plaintext (spy on `messageService.createMessage`, assert body has no original text); passphrase < 8 blocked; burn toggle sets flag; view page with valid hash decrypts and calls `history.replaceState` without the hash; missing hash shows error and makes no decrypt; burn message shows Open button and only calls `/open` on click; wrong passphrase can be retried without a second fetch.
+- Tests first (`tests/pages/m/`): new page builds a link with `#` + 43-char key and posts no plaintext (spy on `messageService.createMessage`, assert body has no original text); passphrase < 8 blocked; burn toggle sets flag; view page with valid hash decrypts and calls `history.replaceState` without the hash; missing hash shows error and makes no decrypt; burn message shows Open button and only calls `/open` on click; wrong passphrase can be retried without a second fetch. `tests/pages/chat/` must still pass.
 - Accept: gate green; no `v-html`; manual check notes in summary.
 
 ## 04 — Platform hardening

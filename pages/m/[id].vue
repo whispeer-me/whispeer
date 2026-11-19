@@ -155,12 +155,21 @@ const extractMessage = (retrievedMessage) => {
   });
 };
 
-const decryptMessage = (passphrase) => {
+// ponytail: interim adapter to the async v2 crypto API against the v1 server
+// (is_private rows = v2 with passphrase); task 03 rewrites this page
+// (replaceState, burn flow, no-passphrase messages).
+const decryptMessage = async (passphrase) => {
   try {
-    const decryptedContent = cryptoService.decrypt(
-      message.value.encryptedContent,
-      message.value.salt,
-      message.value.iv,
+    const decryptedContent = await cryptoService.decrypt(
+      {
+        version: 2,
+        content: message.value.encryptedContent,
+        salt: message.value.salt,
+        iv: message.value.iv,
+        has_passphrase: true,
+        burn_after_read: false,
+      },
+      window.location.hash.slice(1),
       passphrase,
     );
     return decryptedContent;
@@ -178,7 +187,7 @@ const closeModal = () => {
 };
 
 const onModalSubmit = async (submittedPassphrase) => {
-  const decryptedContent = decryptMessage(submittedPassphrase);
+  const decryptedContent = await decryptMessage(submittedPassphrase);
   if (decryptedContent) {
     message.value.content = decryptedContent;
     closeModal();

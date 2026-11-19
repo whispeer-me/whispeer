@@ -170,9 +170,9 @@ const submitMessage = async () => {
   requestProcessing.value = true;
 
   try {
-    const newMessage = prepareAndMaybeEncryptTheMessage();
+    const { newMessage, linkKey } = await prepareAndMaybeEncryptTheMessage();
     const newlyCreatedMessage = await messageService.createMessage(newMessage);
-    handleSuccessfulSubmission(newlyCreatedMessage);
+    handleSuccessfulSubmission(newlyCreatedMessage, linkKey);
   } catch (error) {
     handleError(error);
   } finally {
@@ -204,29 +204,34 @@ const resetErrorMessage = () => {
   errorMessage.value = null;
 };
 
-const prepareAndMaybeEncryptTheMessage = () => {
+// ponytail: interim adapter to the async v2 crypto API against the v1 server
+// (is_private); task 03 rewrites this to always encrypt and send the v2 payload.
+const prepareAndMaybeEncryptTheMessage = async () => {
   const newMessage = {
     content: message.value.content,
     is_private: message.value.is_private,
   };
+  let linkKey = null;
 
   if (message.value.is_private && message.value.passphrase) {
-    const encryptedMessage = cryptoService.encrypt(
-      message.value.content,
-      message.value.passphrase,
-    );
+    const encrypted = await cryptoService.encrypt(message.value.content, {
+      passphrase: message.value.passphrase,
+      burnAfterRead: false,
+    });
 
-    newMessage.content = encryptedMessage.ciphertext;
-    newMessage.iv = encryptedMessage.iv;
-    newMessage.salt = encryptedMessage.salt;
+    linkKey = encrypted.linkKey;
+    newMessage.content = encrypted.payload.content;
+    newMessage.iv = encrypted.payload.iv;
+    newMessage.salt = encrypted.payload.salt;
   }
 
-  return newMessage;
+  return { newMessage, linkKey };
 };
 
-const handleSuccessfulSubmission = (newlyCreatedMessage) => {
+const handleSuccessfulSubmission = (newlyCreatedMessage, linkKey) => {
   if (newlyCreatedMessage.id) {
-    messageLink.value = `${window.location.origin}/m/${newlyCreatedMessage.id}`;
+    const fragment = linkKey ? `#${linkKey}` : "";
+    messageLink.value = `${window.location.origin}/m/${newlyCreatedMessage.id}${fragment}`;
     resetForm();
     logMessageCreation();
   }
