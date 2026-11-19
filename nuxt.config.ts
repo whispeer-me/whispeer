@@ -13,7 +13,9 @@ export default defineNuxtConfig({
   plausible: {
     trackLocalhost: false,
     autoPageviews: false,
-    autoOutboundTracking: true,
+    // Off: Plausible's outbound tracker sends location.href, which would leak
+    // the message ID and the #key on /m/ pages.
+    autoOutboundTracking: false,
   },
   ssr: true,
   app: {

@@ -13,6 +13,7 @@ vi.mock("~/composables/useAnalytics.ts", async (importOriginal) => {
   return Object.assign({}, actual, {
     default: () => ({
       trackEvent: vi.fn(),
+      trackEventClean: vi.fn(),
       trackPageView: vi.fn(),
     }),
   });

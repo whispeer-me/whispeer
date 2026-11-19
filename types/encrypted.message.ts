@@ -20,7 +20,3 @@ export type EncryptResult = {
   linkKey: string;
   payload: EncryptedPayload;
 };
-
-// ponytail: alias only for the dead chat code (composables/chat), which is
-// deleted in task 03 together with this alias.
-export type EncryptedMessage = EncryptedPayload;

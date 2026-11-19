@@ -1,28 +1,34 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import type { ChatMessage } from "~/types/chat.message";
+import type { EncryptResult } from "~/types/encrypted.message";
 
-import type { EncryptedMessage } from "~/types/encrypted.message";
-
-// ponytail: dead code (pages/chat is in .nuxtignore) still on the removed v1
-// crypto API; deleted in task 03, not ported.
+// ponytail: prototype (pages/chat is in .nuxtignore). The per-message link key
+// travels next to the ciphertext over the socket, so the socket server could
+// read it. Upgrade: a room key shared via the URL fragment and a CryptoService
+// variant that accepts a caller-supplied key.
 
 // eslint-disable-next-line import/no-mutable-exports
 export let id = 1;
 
 export default {
-  createMessage (content: string, passphrase: string): EncryptedMessage {
-    return cryptoService.encrypt(content, passphrase);
+  async createMessage (
+    content: string,
+    passphrase: string,
+  ): Promise<EncryptResult> {
+    return await cryptoService.encrypt(content, {
+      passphrase,
+      burnAfterRead: false,
+    });
   },
 
-  readTheMessage (
-    chatMessage: EncryptedMessage,
+  async readTheMessage (
+    chatMessage: EncryptResult,
     passphrase: string,
-  ): ChatMessage {
-    const decryptedContent = cryptoService.decrypt(
-      chatMessage.ciphertext,
-      chatMessage.salt,
-      chatMessage.iv,
+  ): Promise<ChatMessage> {
+    const decryptedContent = await cryptoService.decrypt(
+      chatMessage.payload,
+      chatMessage.linkKey,
       passphrase,
     );
 

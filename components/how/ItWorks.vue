@@ -12,25 +12,25 @@
         <HowSection
           icon="shield-lock.svg"
           title="Strong Encryption"
-          description="Whispeer encrypts messages on your device – only you and the recipient can read them."
+          description="Every message is encrypted on your device. Our server only stores ciphertext it can not read."
         />
 
         <HowSection
           icon="hourglass-bottom.svg"
           title="Messages Disappear"
-          description="Messages are automatically deleted after 24 hours for maximum security."
+          description="Messages are deleted after 24 hours, or right after the first view if you choose."
         />
 
         <HowSection
           icon="key.svg"
-          title="Passphrases are Key"
-          description="Use strong, unique passphrases to make your messages ultra-secure."
+          title="The Key is in the Link"
+          description="The key lives after the # in the link and never reaches our server. Add an optional passphrase for extra protection."
         />
 
         <HowSection
           icon="share.svg"
           title="Secure Sharing"
-          description="Share encrypted messages with unique links. Only the right person can unlock them."
+          description="Anyone with the link (and the passphrase, if set) can read the message, so share it only with the right person."
         />
 
         <HowSection

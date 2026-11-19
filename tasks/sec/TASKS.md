@@ -28,7 +28,7 @@ Read `tasks/sec/DESIGN.md` first. One task per run. "Tests first" = write them, 
 
 ## 04 — Platform hardening
 - `npm i nuxt-security` and configure per DESIGN "Hardening" (headers, CSP nonces, rate limits with `fly-client-ip`, body limit, no-store). Check the config against the module's docs/source in `node_modules/nuxt-security`, and make sure Plausible's script still gets a nonce and is allowed by the CSP. The lead verifies headers on a running server afterwards.
-- `package.json`: `prestart` → `node-pg-migrate up` (db-migrate isn't installed); `engines.node` `>=22`. Dockerfile both stages `node:22-alpine`; `.github/workflows/ci.yml` node 22 and run lint too.
+- `package.json`: `prestart` → `node-pg-migrate up` (db-migrate isn't installed); `engines.node` `>=22`. Dockerfile both stages `node:22-alpine`, copy `package-lock.json` too and use `npm ci` (today it installs without the lockfile); `docker-compose.yml` (local stack, added by the lead) must keep working; `.github/workflows/ci.yml` node 22 and run lint too.
 - `npm audit fix` (no `--force`); list remaining advisories in your summary.
 - Tests first where feasible: rate limiter config unit (limits per route), `fly-client-ip` preferred over socket address, body > 4 KB rejected.
 - Accept: gate green.

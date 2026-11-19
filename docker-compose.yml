@@ -1,0 +1,33 @@
+# Local test stack: app (production build from Dockerfile) + Postgres.
+#   docker compose up --build      → http://localhost:3100
+#   docker compose down -v         → stop and delete the local database
+services:
+  db:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_USER: whispeer
+      POSTGRES_PASSWORD: whispeer
+      POSTGRES_DB: whispeer
+    volumes:
+      # pg 18+ images keep data in a versioned subdirectory; mount the parent.
+      - db-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U whispeer -d whispeer"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+
+  app:
+    build: .
+    environment:
+      DATABASE_URL: postgres://whispeer:whispeer@db:5432/whispeer
+      PORT: 3000
+      NUXT_PUBLIC_DOMAIN: localhost:3100
+    ports:
+      - "127.0.0.1:3100:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db-data:
