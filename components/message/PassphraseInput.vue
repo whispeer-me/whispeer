@@ -9,6 +9,7 @@
       type="password"
       placeholder="Enter the passphrase"
       class="input-style passphrase-input"
+      autocomplete="off"
       required
     >
     <div class="modal-buttons">

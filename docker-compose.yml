@@ -8,6 +8,9 @@ services:
       POSTGRES_USER: whispeer
       POSTGRES_PASSWORD: whispeer
       POSTGRES_DB: whispeer
+    ports:
+      # Loopback only; used by the TEST_DATABASE_URL integration test.
+      - "127.0.0.1:5433:5432"
     volumes:
       # pg 18+ images keep data in a versioned subdirectory; mount the parent.
       - db-data:/var/lib/postgresql

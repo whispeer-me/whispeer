@@ -10,7 +10,7 @@ on:
 
 jobs:
   test:
-    name: Lint and Test
+    name: Lint, Test and Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -20,3 +20,4 @@ jobs:
       - run: npm ci
       - run: npx eslint --ext .ts,.js,.cjs,.vue .
       - run: npx vitest run
+      - run: npx nuxi build

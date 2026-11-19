@@ -4,12 +4,18 @@ import { CreateMessage } from "~/server/usecases/message/create";
 import { MessageRepository } from "~/server/repositories/message.repository";
 import db from "~/server/utils/db";
 import { validateMessagePayload } from "~/server/utils/validate.message";
+import { readJsonBodyCapped } from "~/server/utils/read.body";
+import { MAX_BODY_BYTES } from "~/security.config";
 
 export default defineEventHandler(async (event) => {
   let payload;
   try {
-    payload = validateMessagePayload(await readBody(event));
-  } catch {
+    payload = validateMessagePayload(await readJsonBodyCapped(event, MAX_BODY_BYTES));
+  } catch (err) {
+    if ((err as { statusCode?: number }).statusCode === 413) {
+      setResponseStatus(event, 413);
+      return { message: "Message too large." };
+    }
     payload = null;
   }
 

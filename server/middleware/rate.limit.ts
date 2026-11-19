@@ -11,7 +11,7 @@ export default defineEventHandler((event) => {
   const rule = limitFor(event.method, getRequestURL(event).pathname);
   if (!rule) { return; }
   const ip = clientIp(event.node.req.headers, event.node.req.socket?.remoteAddress);
-  if (!allow(ip, rule.bucket, rule.limit)) {
+  if (!allow(ip, rule.bucket, rule.limit, rule.global)) {
     throw createError({ statusCode: 429, statusMessage: "Too Many Requests" });
   }
 });

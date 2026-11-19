@@ -4,6 +4,9 @@
 
 export const POST_MESSAGE_LIMIT = { tokensPerInterval: 10, interval: 60_000 };
 export const OTHER_MESSAGE_LIMIT = { tokensPerInterval: 60, interval: 60_000 };
+// ponytail: coarse global cap on creates (all clients together) as a backstop
+// against botnets; upgrade path: tune from real traffic or add a proof of work.
+export const GLOBAL_POST_MESSAGE_LIMIT = { tokensPerInterval: 300, interval: 60_000 };
 export const MAX_BODY_BYTES = 4096;
 
 export const securityHeaders = {
@@ -50,9 +53,13 @@ const NO_STORE = { headers: { "cache-control": "no-store" } };
 export const securityRouteRules = {
   "/api/**": {
     ...NO_STORE,
-    requestSizeLimiter: {
-      maxRequestSizeInBytes: MAX_BODY_BYTES,
-      maxUploadFileRequestInBytes: MAX_BODY_BYTES,
+    // nuxt-security reads route options only under `security`. It checks the
+    // Content-Length header only; index.post.ts also caps the streamed body.
+    security: {
+      requestSizeLimiter: {
+        maxRequestSizeInBytes: MAX_BODY_BYTES,
+        maxUploadFileRequestInBytes: MAX_BODY_BYTES,
+      },
     },
   },
   "/m/**": NO_STORE,

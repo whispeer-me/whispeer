@@ -5,6 +5,7 @@ import { describe, it, expect } from "vitest";
 import CryptoService, {
   CRYPTO_VERSION,
   PBKDF2_ITERATIONS,
+  isValidLinkKey,
 } from "~/composables/crypto.service";
 import type { EncryptedPayload } from "~/types/encrypted.message";
 
@@ -27,7 +28,7 @@ const expectDecryptFails = async (promise: Promise<unknown>) => {
 };
 
 describe("CryptoService v2", () => {
-  const message = "Hello, World! ünïcödé 🔐";
+  const message = "Hello, World! ünïcödé \u{1F510}";
   const passphrase = "correct horse battery staple";
 
   it("exports the format constants", () => {
@@ -61,14 +62,25 @@ describe("CryptoService v2", () => {
   });
 
   it("normalizes the passphrase to NFC", async () => {
+    // Built from code points, so the two spellings visibly differ byte-wise.
+    const decomposed = `cafe${String.fromCharCode(0x0301)}-passphrase`; // e + combining acute (NFD)
+    const composed = `caf${String.fromCharCode(0x00E9)}-passphrase`; // precomposed e-acute (NFC)
+    expect(decomposed).not.toBe(composed);
+
     const { linkKey, payload } = await CryptoService.encrypt(message, {
-      passphrase: "café-passphrase",
+      passphrase: decomposed,
       burnAfterRead: false,
     });
 
-    expect(
-      await CryptoService.decrypt(payload, linkKey, "café-passphrase"),
-    ).toBe(message);
+    expect(await CryptoService.decrypt(payload, linkKey, composed)).toBe(
+      message,
+    );
+  });
+
+  it("rejects an empty passphrase instead of dropping it", async () => {
+    await expect(
+      CryptoService.encrypt(message, { passphrase: "", burnAfterRead: false }),
+    ).rejects.toThrow();
   });
 
   it("fails with a wrong link key", async () => {
@@ -218,6 +230,17 @@ describe("CryptoService v2", () => {
 
     const empty = await CryptoService.encrypt("", { burnAfterRead: false });
     expect(empty.payload.content).toHaveLength(22); // 16-byte tag only
+  });
+
+  it("isValidLinkKey accepts real keys and rejects damaged ones", async () => {
+    const { linkKey } = await CryptoService.encrypt(message, { burnAfterRead: false });
+    expect(isValidLinkKey(linkKey)).toBe(true);
+    expect(isValidLinkKey(linkKey.slice(0, 42))).toBe(false); // truncated
+    expect(isValidLinkKey(`${linkKey}A`)).toBe(false); // too long
+    expect(isValidLinkKey(`${linkKey.slice(0, 20)}*${linkKey.slice(21)}`)).toBe(false);
+    expect(isValidLinkKey(`${linkKey.slice(0, 42)}B`)).toBe(false); // non-canonical last char
+    expect(isValidLinkKey("")).toBe(false);
+    expect(isValidLinkKey(null as unknown as string)).toBe(false);
   });
 
   it("returns exactly the payload keys the API accepts", async () => {

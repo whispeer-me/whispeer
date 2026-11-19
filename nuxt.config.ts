@@ -8,7 +8,6 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   modules: [
     "@nuxt/test-utils/module",
-    "nuxt-scheduler",
     "@nuxt/image",
     "@nuxtjs/plausible",
     "nuxt-security",

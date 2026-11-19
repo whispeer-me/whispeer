@@ -56,6 +56,19 @@ const decodeExact = (value: string, length: number): Uint8Array => {
   return bytes;
 };
 
+// Shape check before anything irreversible (e.g. opening a burn message): 43
+// base64url chars that decode to exactly 32 bytes in canonical form.
+export const isValidLinkKey = (value: string): boolean => {
+  if (typeof value !== "string" || !/^[A-Za-z0-9_-]{43}$/.test(value)) {
+    return false;
+  }
+  try {
+    return toBase64Url(decodeExact(value, LINK_KEY_BYTES)) === value;
+  } catch {
+    return false;
+  }
+};
+
 const buildAad = (hasPassphrase: boolean, burnAfterRead: boolean): Uint8Array => {
   return encoder.encode(
     `whispeer:v2:p${hasPassphrase ? 1 : 0}:b${burnAfterRead ? 1 : 0}`,
@@ -115,7 +128,11 @@ export default class CryptoService {
     if (typeof plaintext !== "string" || plaintext.length > MAX_PLAINTEXT_CHARS) {
       throw new Error(`Message exceeds ${MAX_PLAINTEXT_CHARS} characters.`);
     }
-    const hasPassphrase = typeof passphrase === "string" && passphrase.length > 0;
+    // An empty passphrase must not silently produce an unprotected message.
+    if (passphrase !== undefined && (typeof passphrase !== "string" || passphrase.length === 0)) {
+      throw new Error("Passphrase must be a non-empty string.");
+    }
+    const hasPassphrase = passphrase !== undefined;
     const burn = burnAfterRead === true;
 
     const linkKey = randomBytes(LINK_KEY_BYTES);

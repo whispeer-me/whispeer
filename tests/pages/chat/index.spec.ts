@@ -25,13 +25,15 @@ const mockedChat = {
   maxCharsAllowed: 500,
 };
 
-describe("Chat Component", () => {
-  vi.mock("@/composables/chat/ui", () => ({
-    default: vi.fn(() => {
-      return mockedChat;
-    }),
-  }));
+// Top level (vitest 5 rejects nested vi.mock); the factory reads mockedChat
+// lazily, at mount time.
+vi.mock("@/composables/chat/ui", () => ({
+  default: vi.fn(() => {
+    return mockedChat;
+  }),
+}));
 
+describe("Chat Component", () => {
   it("renders without crashing", () => {
     const wrapper = mount(Chat);
     expect(wrapper.exists()).toBe(true);

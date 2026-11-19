@@ -17,7 +17,13 @@ mockNuxtImport("useRuntimeConfig", () => () => ({
 
 vi.mock("vue-router", async (importOriginal) => {
   const actual = await importOriginal<typeof import("vue-router")>();
-  return { ...actual, useRoute: () => ({ params: { id: "AbCdEfGhIj" } }) };
+  // Minimal route (no hash: the page reads it from location). The real-router
+  // behaviour is covered in view.router.spec.ts.
+  return {
+    ...actual,
+    useRoute: () => ({ params: { id: "AbCdEfGhIj" }, path: "/m/AbCdEfGhIj", query: {}, hash: "" }),
+    useRouter: () => ({ replace: async () => {} }),
+  };
 });
 
 const openAt = (hash: string) => {

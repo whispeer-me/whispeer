@@ -23,7 +23,7 @@
     </div>
 
     <div
-      v-if="payload && content === null && !isModalVisible"
+      v-if="payload?.has_passphrase && content === null && !isModalVisible"
       class="submit-button"
     >
       <button type="button" class="enter-passphrase" @click="showModal">
@@ -48,18 +48,24 @@
 </template>
 
 <script setup lang="js">
-import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { ref, onMounted, onBeforeUnmount, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { isValidLinkKey } from "~/composables/crypto.service";
 const { trackPageView, trackEventClean } = useAnalytics();
 
 const INCOMPLETE_LINK_ERROR =
   "This link is incomplete: the key after # is missing, so the message can not be decrypted. If you already opened this page, open the original link again.";
+const DAMAGED_LINK_ERROR =
+  "This link is damaged: the key after # is not complete, so the message can not be decrypted. Copy the whole original link and open it again. The message has not been opened.";
 
 const route = useRoute();
+const router = useRouter();
 
 // The link key lives only in this closure: never in reactive state, the
-// address bar or history.
+// address bar, history or the router.
 let linkKey = null;
+// Last key taken from the URL (dedupes the two listeners for one navigation).
+let takenKey = null;
 
 const info = ref({
   id: "",
@@ -113,30 +119,97 @@ useHead({
 });
 
 onMounted(async () => {
-  linkKey = takeKeyFromUrl();
   logPageView();
+  window.addEventListener("hashchange", onUrlChange);
+  await loadFromUrl(true);
+});
 
-  if (!linkKey) {
-    errorMessage.value = INCOMPLETE_LINK_ERROR;
+onBeforeUnmount(() => {
+  window.removeEventListener("hashchange", onUrlChange);
+});
+
+// Pasting the link again into this tab is a same-document fragment
+// navigation: no reload, no remount. Catch it from both sides.
+watch(() => route.hash, (hash) => {
+  if (hash) { onUrlChange(); }
+});
+
+const onUrlChange = () => loadFromUrl(false);
+
+const loadFromUrl = async (initial) => {
+  const key = await takeKeyFromUrl();
+
+  if (key === null) {
+    if (initial) {
+      errorMessage.value = INCOMPLETE_LINK_ERROR;
+      isLoading.value = false;
+    }
+    return;
+  }
+  // hashchange and the route watcher both fire for one navigation.
+  if (key === takenKey) {
+    return;
+  }
+  takenKey = key;
+
+  // Check the key before anything irreversible: a damaged link must not
+  // burn a message it can never decrypt.
+  if (!isValidLinkKey(key)) {
+    resetView();
+    errorMessage.value = DAMAGED_LINK_ERROR;
     isLoading.value = false;
     return;
   }
 
+  resetView();
+  linkKey = key;
   await fetchTheMessage(route.params.id);
-});
+};
 
-// Reads the key from the fragment, then drops the fragment from the address
-// bar and history so it is not left behind on this device.
-const takeKeyFromUrl = () => {
-  const key = window.location.hash.slice(1);
-  if (window.location.hash) {
-    window.history.replaceState(
-      window.history.state,
-      "",
-      window.location.pathname + window.location.search,
-    );
+const resetView = () => {
+  linkKey = null;
+  payload.value = null;
+  content.value = null;
+  isBurnReady.value = false;
+  isModalVisible.value = false;
+  passphraseError.value = null;
+  errorMessage.value = null;
+};
+
+// Reads the key from the fragment, then drops it from the address bar,
+// history.state and the router state so it is not left behind on this device.
+const takeKeyFromUrl = async () => {
+  const key = window.location.hash.slice(1) || route.hash.slice(1);
+  if (!key) {
+    return null;
   }
-  return key || null;
+
+  // Synchronously first, so a second listener for the same navigation finds
+  // no hash in the address bar.
+  const clean = window.location.pathname + window.location.search;
+  window.history.replaceState(scrubState(window.history.state, key), "", clean);
+
+  // vue-router keeps its own copy (history.state.current, route.hash) and
+  // would write it back on the next navigation: replace through the router.
+  if (route.hash) {
+    await router.replace({ path: route.path, query: route.query, hash: "" });
+  }
+  if (JSON.stringify(window.history.state ?? null).includes(key)) {
+    window.history.replaceState(scrubState(window.history.state, key), "", clean);
+  }
+  return key;
+};
+
+// Copy of a history state object with every "#<key>" removed from its strings.
+const scrubState = (state, key) => {
+  if (state === null || typeof state !== "object") {
+    return state;
+  }
+  const out = {};
+  for (const [k, v] of Object.entries(state)) {
+    out[k] = typeof v === "string" ? v.split(`#${key}`).join("").split(key).join("") : v;
+  }
+  return out;
 };
 
 const fetchTheMessage = async (messageId) => {
