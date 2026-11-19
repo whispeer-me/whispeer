@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { securityHeaders, securityRouteRules } from "./security.config";
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
 export default defineNuxtConfig({
@@ -9,7 +11,22 @@ export default defineNuxtConfig({
     "nuxt-scheduler",
     "@nuxt/image",
     "@nuxtjs/plausible",
+    "nuxt-security",
   ],
+  security: {
+    headers: securityHeaders,
+    nonce: true,
+    // Own limiter in server/middleware/rate.limit.ts (fly-client-ip + socket fallback).
+    rateLimiter: false,
+    // No value: bodies are base64url ciphertext, validated strictly by the API.
+    xssValidator: false,
+    // Browser-only app; same-origin API, no cross-origin callers.
+    corsHandler: false,
+    // SRI/hashes add nothing for self-hosted SSR assets; nonces cover CSP.
+    sri: false,
+    ssg: { hashScripts: false, hashStyles: false },
+  },
+  routeRules: securityRouteRules,
   plausible: {
     trackLocalhost: false,
     autoPageviews: false,

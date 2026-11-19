@@ -10,13 +10,13 @@ on:
 
 jobs:
   test:
-    name: Run Tests
+    name: Lint and Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: "18"
-      - run: npm cache clean --force
-      - run: npm i
-      - run: npm test
+          node-version: "22"
+      - run: npm ci
+      - run: npx eslint --ext .ts,.js,.cjs,.vue .
+      - run: npx vitest run
