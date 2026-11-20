@@ -63,6 +63,7 @@ export const rateKey = (ip: string): string => {
 };
 
 const DEFAULT_MAX_KEYS = 100_000;
+const OVERFLOW_FACTOR = 10;
 
 // ponytail: in-memory, per-process (single Fly machine); upgrade path: shared store.
 // IPs live only in this Map for one interval, never logged or persisted.
@@ -74,9 +75,9 @@ export const createLimiter = (
   let lastSweep = now();
   let sweepEvery = Infinity;
 
-  // At most once per interval (or when forced): drop windows that have ended.
-  const sweep = (t: number, force = false) => {
-    if (!force && t - lastSweep < sweepEvery) { return; }
+  // At most once per interval: drop windows that have ended (O(n), never per request).
+  const sweep = (t: number) => {
+    if (t - lastSweep < sweepEvery) { return; }
     lastSweep = t;
     for (const [k, v] of hits) {
       if (t - v.start >= v.interval) { hits.delete(k); }
@@ -87,12 +88,15 @@ export const createLimiter = (
     const e = hits.get(key);
     if (!e || t - e.start >= limit.interval) {
       if (!e && capped && hits.size >= maxKeys) {
-        sweep(t, true);
-        // ponytail: still full → let new clients through untracked (memory stays
-        // bounded; known clients stay limited; the global create cap still holds).
-        // Failing closed here would lock out every new visitor under a flood.
-        // Upgrade path: LRU eviction or coarser IPv6 prefixes when a /48 floods.
-        if (hits.size >= maxKeys) { return true; }
+        // ponytail: table full → new clients share one overflow bucket (10× the
+        // per-client limit) until the next sweep frees space. Never unlimited,
+        // never a full lockout, memory bounded. Under a large distributed flood,
+        // new visitors share that budget. Upgrade path: LRU eviction.
+        const bucket = key.slice(0, key.indexOf("|"));
+        return take(`${bucket}|overflow`, {
+          tokensPerInterval: limit.tokensPerInterval * OVERFLOW_FACTOR,
+          interval: limit.interval,
+        }, t, false);
       }
       hits.set(key, { count: 1, start: t, interval: limit.interval });
       return true;

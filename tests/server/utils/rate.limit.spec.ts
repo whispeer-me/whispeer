@@ -72,33 +72,33 @@ describe("createLimiter IPv6 rotation", () => {
 });
 
 describe("createLimiter memory bounds", () => {
-  it("when full, lets new clients through untracked; known clients stay limited", () => {
+  it("when full, new clients share a strict overflow bucket; memory stays bounded", () => {
     let t = 0;
     const allow = createLimiter(() => t, { maxKeys: 3 });
-    const limit = { tokensPerInterval: 2, interval: 1000 };
+    const limit = { tokensPerInterval: 1, interval: 1000 };
     expect(allow("1.1.1.1", "b", limit)).toBe(true);
     expect(allow("1.1.1.2", "b", limit)).toBe(true);
+    // The overflow key takes the third slot once the table is full.
     expect(allow("1.1.1.3", "b", limit)).toBe(true);
-    // Table full: a new visitor is not locked out...
-    expect(allow("1.1.1.4", "b", limit)).toBe(true);
-    // ...and is not added, so memory stays bounded.
-    expect(allow("1.1.1.4", "b", limit)).toBe(true);
-    expect(allow("1.1.1.4", "b", limit)).toBe(true);
-    // Known clients still hit their limit.
-    expect(allow("1.1.1.1", "b", limit)).toBe(true);
+    // Untracked newcomers share overflow: 10 × 1 per interval in total, then refused.
+    let allowed = 0;
+    for (let i = 0; i < 25; i++) {
+      if (allow(`2.2.2.${i}`, "b", limit)) { allowed++; }
+    }
+    expect(allowed).toBeLessThanOrEqual(10);
+    expect(allowed).toBeGreaterThan(0);
+    // Known clients keep their own limit.
     expect(allow("1.1.1.1", "b", limit)).toBe(false);
-    // After one interval a forced sweep frees space and the new client is tracked.
+    // After one interval the regular sweep frees space; newcomers are tracked again.
     t = 1000;
-    expect(allow("1.1.1.4", "b", limit)).toBe(true);
-    expect(allow("1.1.1.4", "b", limit)).toBe(true);
-    expect(allow("1.1.1.4", "b", limit)).toBe(false);
+    expect(allow("3.3.3.3", "b", limit)).toBe(true);
+    expect(allow("3.3.3.3", "b", limit)).toBe(false);
   });
 
-  it("when full, the global cap still applies to untracked clients", () => {
+  it("when full, the global cap still applies", () => {
     const allow = createLimiter(() => 0, { maxKeys: 2 });
     const limit = { tokensPerInterval: 10, interval: 1000 };
     const global = { tokensPerInterval: 3, interval: 1000 };
-    // The global key itself is uncapped; fill the per-client table.
     expect(allow("1.1.1.1", "post", limit, global)).toBe(true);
     expect(allow("1.1.1.2", "post", limit, global)).toBe(true);
     expect(allow("9.9.9.9", "post", limit, global)).toBe(true);
