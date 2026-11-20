@@ -1,5 +1,0 @@
-01	opus	medium	crypto v2 with WebCrypto
-02	opus	medium	server v2, validation, burn, minute expiry
-03	opus	medium	UI fragment key, passphrase, burn, drop chat
-04	sonnet	medium	nuxt-security headers, rate limits, node 22
-05	opus	medium	Fable review fixes
