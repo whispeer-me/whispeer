@@ -48,7 +48,7 @@ The application does not store IP addresses, user agents or any user identifier.
 
 **Logging:** the application does not log requests, IP addresses or message content. It logs the expiry job (two lines a minute) and its errors. What your hosting platform, proxy or database provider logs is outside this repository.
 
-**Rate limiting:** creates are limited to 10 per minute per client (300 per minute in total), other message requests to 60 per minute per client. Client addresses are kept only in server memory for the current minute, never logged or stored; IPv6 addresses are grouped by /64. The client address is taken from the `fly-client-ip` header (set by Fly.io's proxy) or the connection address.
+**Rate limiting:** creates are limited to 10 per minute per client (300 per minute in total), other message requests to 60 per minute per client (6,000 per minute in total). Client addresses are kept only in server memory for the current minute, never logged or stored; IPv6 addresses are grouped by /64, and when the in-memory table is full the oldest entry is evicted. The client address is taken from the `fly-client-ip` header (set by Fly.io's proxy) or the connection address.
 
 **Analytics:** the app includes [Plausible](https://plausible.io) via `@nuxtjs/plausible` (disabled on localhost). It records page views and these events: `message-created` and `message-viewed` (each with only the `has_passphrase` and `burn_after_read` settings) and `create-message`. On message pages the URL is cut to `/m/` and no referrer is sent, so the message ID and key never reach Plausible. Outbound link tracking is off. What Plausible itself collects is governed by Plausible.
 

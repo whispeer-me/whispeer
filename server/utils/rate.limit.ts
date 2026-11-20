@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import {
+  GLOBAL_OTHER_MESSAGE_LIMIT,
   GLOBAL_POST_MESSAGE_LIMIT,
   OTHER_MESSAGE_LIMIT,
   POST_MESSAGE_LIMIT,
@@ -25,7 +26,7 @@ export const limitFor = (method: string, path: string): Rule | null => {
     return { bucket: "post", limit: POST_MESSAGE_LIMIT, global: GLOBAL_POST_MESSAGE_LIMIT };
   }
   if (p === "/api/message" || p.startsWith("/api/message/")) {
-    return { bucket: "other", limit: OTHER_MESSAGE_LIMIT };
+    return { bucket: "other", limit: OTHER_MESSAGE_LIMIT, global: GLOBAL_OTHER_MESSAGE_LIMIT };
   }
   return null;
 };

@@ -3,6 +3,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { limitFor, clientIp, createLimiter, rateKey } from "~/server/utils/rate.limit";
 import {
+  GLOBAL_OTHER_MESSAGE_LIMIT,
   GLOBAL_POST_MESSAGE_LIMIT,
   MAX_BODY_BYTES,
   securityRouteRules,
@@ -135,9 +136,10 @@ describe("createLimiter memory bounds", () => {
 });
 
 describe("limitFor global cap", () => {
-  it("POST /api/message has a global cap, others do not", () => {
+  it("every message route has a global cap", () => {
     expect(limitFor("POST", "/api/message")?.global).toEqual(GLOBAL_POST_MESSAGE_LIMIT);
-    expect(limitFor("GET", "/api/message/abcdefghij")?.global).toBeUndefined();
+    expect(limitFor("GET", "/api/message/abcdefghij")?.global).toEqual(GLOBAL_OTHER_MESSAGE_LIMIT);
+    expect(limitFor("POST", "/api/message/abcdefghij/open")?.global).toEqual(GLOBAL_OTHER_MESSAGE_LIMIT);
   });
 });
 
