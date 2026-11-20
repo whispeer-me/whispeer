@@ -42,7 +42,7 @@ PERMS=(--permission-mode acceptEdits --allowedTools
   "Bash(npx vitest:*)" "Bash(npx eslint:*)" "Bash(npx nuxi build)" "Bash(npx nuxi typecheck)" "Bash(npx nuxi prepare)"
   "Bash(npm i:*)" "Bash(npm install:*)" "Bash(npm uninstall:*)" "Bash(npm audit:*)" "Bash(npm ls:*)"
   "Bash(git status:*)" "Bash(git diff:*)" "Bash(git log:*)" "Bash(git ls-files:*)" "Bash(git rm:*)"
-  "Bash(ls:*)" "Bash(wc:*)" "Bash(cat:*)")
+  "Bash(ls:*)" "Bash(wc:*)")
 
 worker() {
   local acct=$1 model=$2 effort=$3 out=$4 prompt=$5

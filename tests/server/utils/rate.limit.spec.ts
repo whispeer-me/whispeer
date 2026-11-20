@@ -72,18 +72,37 @@ describe("createLimiter IPv6 rotation", () => {
 });
 
 describe("createLimiter memory bounds", () => {
-  it("fails closed for new keys when full, keeps known keys", () => {
+  it("when full, lets new clients through untracked; known clients stay limited", () => {
     let t = 0;
     const allow = createLimiter(() => t, { maxKeys: 3 });
-    const limit = { tokensPerInterval: 5, interval: 1000 };
+    const limit = { tokensPerInterval: 2, interval: 1000 };
     expect(allow("1.1.1.1", "b", limit)).toBe(true);
     expect(allow("1.1.1.2", "b", limit)).toBe(true);
     expect(allow("1.1.1.3", "b", limit)).toBe(true);
-    expect(allow("1.1.1.4", "b", limit)).toBe(false);
+    // Table full: a new visitor is not locked out...
+    expect(allow("1.1.1.4", "b", limit)).toBe(true);
+    // ...and is not added, so memory stays bounded.
+    expect(allow("1.1.1.4", "b", limit)).toBe(true);
+    expect(allow("1.1.1.4", "b", limit)).toBe(true);
+    // Known clients still hit their limit.
     expect(allow("1.1.1.1", "b", limit)).toBe(true);
-    // After one interval the sweep frees the stale entries.
+    expect(allow("1.1.1.1", "b", limit)).toBe(false);
+    // After one interval a forced sweep frees space and the new client is tracked.
     t = 1000;
     expect(allow("1.1.1.4", "b", limit)).toBe(true);
+    expect(allow("1.1.1.4", "b", limit)).toBe(true);
+    expect(allow("1.1.1.4", "b", limit)).toBe(false);
+  });
+
+  it("when full, the global cap still applies to untracked clients", () => {
+    const allow = createLimiter(() => 0, { maxKeys: 2 });
+    const limit = { tokensPerInterval: 10, interval: 1000 };
+    const global = { tokensPerInterval: 3, interval: 1000 };
+    // The global key itself is uncapped; fill the per-client table.
+    expect(allow("1.1.1.1", "post", limit, global)).toBe(true);
+    expect(allow("1.1.1.2", "post", limit, global)).toBe(true);
+    expect(allow("9.9.9.9", "post", limit, global)).toBe(true);
+    expect(allow("9.9.9.8", "post", limit, global)).toBe(false);
   });
 
   it("sweeps at most once per interval, not per request", () => {
