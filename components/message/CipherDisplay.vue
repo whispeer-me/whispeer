@@ -27,13 +27,22 @@ const isBoardReady = ref(false);
 
 let randomizer = null;
 
+// Split into user-perceived characters (graphemes), not UTF-16 code units:
+// indexing a string splits emoji into lone surrogates that render invisible.
+const toGraphemes = (text) => {
+  if (typeof Intl !== "undefined" && typeof Intl.Segmenter === "function") {
+    return Array.from(new Intl.Segmenter().segment(text), s => s.segment);
+  }
+  return Array.from(text);
+};
+
 const display = () => {
-  let charIndex = 0;
+  const graphemes = toGraphemes(props.message);
   characters.value.forEach((char, i) => {
-    if (i < props.message.length) {
+    if (i < graphemes.length) {
       char.matched = true;
       char.class = "matched";
-      char.char = props.message[charIndex++];
+      char.char = graphemes[i];
     } else {
       char.class = "unmatched";
       char.matched = false;

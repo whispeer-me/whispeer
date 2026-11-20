@@ -3,7 +3,7 @@
 <template>
   <footer class="app-footer">
     <p class="footer-text">
-      © 2024 Whispeer.me
+      © 2024 Whispeer
       <router-link
         to="/privacy-policy"
         class="footer-link"

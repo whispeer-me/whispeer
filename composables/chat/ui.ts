@@ -4,7 +4,7 @@
 
 import { ref, nextTick, onMounted, onUnmounted } from "vue";
 import chatService from "@/composables/chat/service";
-import type { EncryptedMessage } from "~/types/encrypted.message";
+import type { EncryptResult } from "~/types/encrypted.message";
 import type { ChatMessage } from "~/types/chat.message";
 
 export default function useChat () {
@@ -25,11 +25,11 @@ export default function useChat () {
       console.log("Connected to the chat server");
     };
 
-    socket.onmessage = (event) => {
+    socket.onmessage = async (event) => {
       console.log("Received message", event.data);
-      const message = JSON.parse(event.data) as EncryptedMessage;
+      const message = JSON.parse(event.data) as EncryptResult;
 
-      const decryptedMessage = chatService.readTheMessage(
+      const decryptedMessage = await chatService.readTheMessage(
         message,
         passphrase,
       );
@@ -49,7 +49,7 @@ export default function useChat () {
       return;
     }
 
-    const encryptedMessage = chatService.createMessage(content, passphrase);
+    const encryptedMessage = await chatService.createMessage(content, passphrase);
     socket.send(JSON.stringify(encryptedMessage));
 
     message.value = "";

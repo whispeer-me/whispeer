@@ -1,16 +1,16 @@
-FROM node:18-alpine as builder
+FROM node:24-alpine as builder
 
 WORKDIR /app
 
-COPY package.json /app
+COPY package.json package-lock.json /app/
 
-RUN npm install
+RUN npm ci
 
 COPY . /app
 
 RUN npm run build
 
-FROM node:18-alpine as prod
+FROM node:24-alpine as prod
 
 USER node
 

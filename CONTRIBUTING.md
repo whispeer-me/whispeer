@@ -14,14 +14,14 @@ Please read it before you start participating.
 
 ## Asking Questions
 
-You can send us an email at <hey@whispeer.me>
+Open an issue on [GitHub](https://github.com/whispeer-me/whispeer/issues).
 
 ## Reporting Security Issues
 
 We take  security seriously. If you discover a security issue, please bring it to our attention right away!
 
 Please **DO NOT** file a public issue,
-instead send your report privately to us via [email](mailto:hey@whispeer.me?subject=Security%20Issue).
+instead report it privately via [GitHub private vulnerability reporting](https://github.com/whispeer-me/whispeer/security/advisories/new).
 This will help ensure that any vulnerabilities that _are_ found
 can be [disclosed responsibly](https://en.wikipedia.org/wiki/Responsible_disclosure)
 to any affected parties.

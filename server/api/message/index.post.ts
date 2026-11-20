@@ -3,21 +3,35 @@
 import { CreateMessage } from "~/server/usecases/message/create";
 import { MessageRepository } from "~/server/repositories/message.repository";
 import db from "~/server/utils/db";
+import { validateMessagePayload } from "~/server/utils/validate.message";
+import { readJsonBodyCapped } from "~/server/utils/read.body";
+import { MAX_BODY_BYTES } from "~/security.config";
 
 export default defineEventHandler(async (event) => {
+  let payload;
   try {
-    const receivedMessage = await readBody(event);
+    payload = validateMessagePayload(await readJsonBodyCapped(event, MAX_BODY_BYTES));
+  } catch (err) {
+    if ((err as { statusCode?: number }).statusCode === 413) {
+      setResponseStatus(event, 413);
+      return { message: "Message too large." };
+    }
+    payload = null;
+  }
 
-    const messageRepository = new MessageRepository(db);
+  if (payload === null) {
+    setResponseStatus(event, 400);
+    return { message: "Invalid message." };
+  }
 
-    const createMessageUseCase = new CreateMessage(messageRepository);
-    const message = await createMessageUseCase.execute(receivedMessage);
+  try {
+    const createMessageUseCase = new CreateMessage(new MessageRepository(db));
+    const { id } = await createMessageUseCase.execute(payload);
 
     setResponseStatus(event, 201);
-
-    return message;
-  } catch (error) {
+    return { id };
+  } catch {
     setResponseStatus(event, 500);
-    return { message: "Error occurred and logged." };
+    return { message: "Something went wrong." };
   }
 });

@@ -5,13 +5,13 @@
     <h1>The Story</h1>
 
     <section class="app-description">
-      <h2>Whispeer.me: Secure Messaging for Everyone</h2>
+      <h2>Whispeer: Secure Messaging for Everyone</h2>
       <p>
-        Whispeer.me is more than just a messaging app; it's a commitment to
+        Whispeer is more than just a messaging app; it's a commitment to
         secure and private communication. Inspired by the intricate storytelling
         of the
         <a
-          href="https://www.imdb.com/title/tt5651844/?ref_=whispeer.me"
+          href="https://www.imdb.com/title/tt5651844/"
           target="_blank"
         >"Travelers"</a>
         TV series, Whispeer brings a blend of art and technology to your

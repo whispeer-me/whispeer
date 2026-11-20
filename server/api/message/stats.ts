@@ -4,15 +4,12 @@ import { GetStats } from "~/server/usecases/message/get.stats";
 import { MessageRepository } from "~/server/repositories/message.repository";
 import db from "~/server/utils/db";
 
-export default defineEventHandler(async () => {
+export default defineEventHandler(async (event) => {
   try {
-    const messageRepository = new MessageRepository(db);
-    const getMessageStatsUseCase = new GetStats(messageRepository);
-    const stats = await getMessageStatsUseCase.execute();
-
-    return stats;
-  } catch (err) {
-    const error = err as Error;
-    throw error;
+    const getMessageStatsUseCase = new GetStats(new MessageRepository(db));
+    return await getMessageStatsUseCase.execute();
+  } catch {
+    setResponseStatus(event, 500);
+    return { message: "Something went wrong." };
   }
 });

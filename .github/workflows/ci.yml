@@ -8,15 +8,20 @@ on:
     branches:
       - main
 
+# Least privilege: the job only reads the repo.
+permissions:
+  contents: read
+
 jobs:
   test:
-    name: Run Tests
+    name: Lint, Test and Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: "18"
-      - run: npm cache clean --force
-      - run: npm i
-      - run: npm test
+          node-version: "24"
+      - run: npm ci
+      - run: npx eslint --ext .ts,.js,.cjs,.vue .
+      - run: npx vitest run
+      - run: npx nuxi build

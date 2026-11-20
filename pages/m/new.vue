@@ -16,10 +16,12 @@
           placeholder="Type your message here ..."
           :maxlength="maxCharsAllowed"
           required
-          @keydown.tab="focusToPassphraseInput"
         />
 
-        <p>Maximum characters allowed: {{ maxCharsAllowed }}.</p>
+        <p>
+          Maximum characters allowed: {{ maxCharsAllowed }}. Every message is
+          encrypted in your browser before it is sent.
+        </p>
 
         <p v-if="shouldWarn" class="warning">
           {{ maxCharsAllowed - message.content.length }} characters left.
@@ -27,32 +29,39 @@
 
         <div class="privacy-settings">
           <CommonSwitch
-            title="Secure Message"
-            :value="message.is_private"
-            @change="handleToggleChange"
+            class="passphrase-toggle"
+            title="Add passphrase"
+            :value="message.usePassphrase"
+            @change="(value) => (message.usePassphrase = value)"
+          />
+          <CommonSwitch
+            class="burn-toggle"
+            title="Delete after first view"
+            :value="message.burnAfterRead"
+            @change="(value) => (message.burnAfterRead = value)"
           />
         </div>
 
-        <div v-if="message.is_private" class="passphrase">
+        <div v-if="message.usePassphrase" class="passphrase">
           <input
-            ref="passphraseInput"
             v-model="message.passphrase"
             class="new-message-passphrase-input"
             type="password"
-            placeholder="Enter a passphrase to encrypt"
-            required
-            @keydown.enter="submitMessage"
+            :placeholder="`Passphrase (at least ${minPassphraseLength} characters)`"
+            :minlength="minPassphraseLength"
+            autocomplete="new-password"
+            @keydown.enter.prevent="submitMessage"
           >
           <p class="passphrase-warning">
-            Handle passphrase with care: Never share it where the message link
-            is visible.
+            Share the passphrase separately: never in the same place as the
+            message link.
           </p>
         </div>
 
         <div v-if="showDisclaimer" class="security-disclaimer">
           <p>
-            Please note that while Whispeer provides enhanced encryption for
-            messaging, <br>
+            Please note that while Whispeer encrypts every message in your
+            browser, <br>
             <b>it has not been audited by experts, and it is not made by
               security experts. </b><br>
             It should not be solely relied upon for complete privacy or
@@ -62,22 +71,26 @@
 
         <div class="submit-button">
           <button
-            ref="submitButton"
             title="Submit (CMD / Ctrl + Enter)"
             type="submit"
             :disabled="requestProcessing"
           >
-            {{ submitButtonTitle }}
+            Create Message
           </button>
         </div>
       </form>
     </div>
     <div v-if="messageLink && !newMessage" class="message-link">
       <p>
-        Your
-        <span v-if="message.is_private" class="highlight">secure </span> message
-        has been created. Click to copy the link and safely share it with your
-        friends.
+        Your encrypted message has been created. Click to copy the link and
+        share it.
+      </p>
+      <p class="link-warning">
+        Anyone with this link<span v-if="created.hasPassphrase"> and the passphrase</span>
+        can read the message<span v-if="created.burnAfterRead">, once: it is deleted
+          after the first view</span>. The key is the part after
+        <b>#</b>; it never reaches our server, so a link without it cannot
+        be opened.
       </p>
 
       <p title="Click to copy link">
@@ -109,18 +122,24 @@
 import { ref, onMounted, computed } from "vue";
 const { trackPageView, trackEvent } = useAnalytics();
 
+const minPassphraseLength = 8;
+
 const message = ref({
   content: "",
-  is_private: false,
+  usePassphrase: false,
   passphrase: "",
+  burnAfterRead: false,
 });
+
+// Flags of the last created message, for the link warning and analytics.
+const created = ref({ hasPassphrase: false, burnAfterRead: false });
 
 const newMessage = ref(true);
 const messageLink = ref(null);
 const errorMessage = ref(null);
 const messageCopiedToClipboard = ref(false);
 const messageCopiedToClipboardFailed = ref(false);
-const maxCharsAllowed = ref(256);
+const maxCharsAllowed = ref(constants.MESSAGE_MAX_CHARS_ALLOWED);
 const warningCharsLeft = ref(20);
 const requestProcessing = ref(false);
 const showTooltip = ref(false);
@@ -132,12 +151,12 @@ useHead({
     {
       name: "description",
       content:
-        "Create new secure and private messages with Whispeer. Our platform offers end-to-end encryption for confidential, private communication.",
+        "Create encrypted, expiring messages with Whispeer. Every message is encrypted in your browser; the key stays in the link and never reaches the server.",
     },
     {
       name: "keywords",
       content:
-        "Secure Messaging, Private Message Creation, Encrypted Communication, Confidential Messaging Platform, End-to-End Encryption, Whispeer Messaging Service, Online Safe Communication, Private Chat Application, Digital Privacy, Personal Data Security, Anonymous Messaging Tool, Vue.js Encrypted Chat, Protecting Conversations Online, Cybersecurity in Messaging, Temporary Messaging, Auto Expiring Message, Secure, Safe Messaging",
+        "Secure Messaging, Private Message Creation, Encrypted Communication, Confidential Messaging Platform, End-to-End Encryption, Whispeer Messaging Service, Online Safe Communication, Digital Privacy, Personal Data Security, Anonymous Messaging Tool, Burn After Reading, Temporary Messaging, Auto Expiring Message, Secure, Safe Messaging",
     },
   ],
 });
@@ -150,10 +169,6 @@ const shouldWarn = computed(() => {
   return charsLeft.value < warningCharsLeft.value;
 });
 
-const submitButtonTitle = computed(() => {
-  return message.value.is_private ? "Create Secure Message" : "Create Message";
-});
-
 onMounted(() => {
   maybeShowTooltip();
   maybeShowDisclaimer();
@@ -161,6 +176,9 @@ onMounted(() => {
 });
 
 const submitMessage = async () => {
+  if (requestProcessing.value) {
+    return;
+  }
   resetErrorMessage();
 
   if (!isMessageValid()) {
@@ -170,9 +188,18 @@ const submitMessage = async () => {
   requestProcessing.value = true;
 
   try {
-    const newMessage = prepareAndMaybeEncryptTheMessage();
-    const newlyCreatedMessage = await messageService.createMessage(newMessage);
-    handleSuccessfulSubmission(newlyCreatedMessage);
+    const options = {
+      passphrase: message.value.usePassphrase
+        ? message.value.passphrase
+        : undefined,
+      burnAfterRead: message.value.burnAfterRead,
+    };
+    const { linkKey, payload } = await cryptoService.encrypt(
+      message.value.content,
+      options,
+    );
+    const { id } = await messageService.createMessage(payload);
+    handleSuccessfulSubmission(id, linkKey, payload);
   } catch (error) {
     handleError(error);
   } finally {
@@ -181,10 +208,14 @@ const submitMessage = async () => {
 };
 
 const isMessageValid = () => {
-  return isLengthValid() && isPassphraseValidIfPrivate();
+  return isContentValid() && isPassphraseValid();
 };
 
-const isLengthValid = () => {
+const isContentValid = () => {
+  if (message.value.content.trim().length === 0) {
+    errorMessage.value = "Please type a message.";
+    return false;
+  }
   if (message.value.content.length > maxCharsAllowed.value) {
     errorMessage.value = `Message exceeds ${maxCharsAllowed.value} characters.`;
     return false;
@@ -192,9 +223,12 @@ const isLengthValid = () => {
   return true;
 };
 
-const isPassphraseValidIfPrivate = () => {
-  if (message.value.is_private && !message.value.passphrase) {
-    focusToPassphraseInput();
+const isPassphraseValid = () => {
+  if (
+    message.value.usePassphrase &&
+    message.value.passphrase.length < minPassphraseLength
+  ) {
+    errorMessage.value = `Passphrase must be at least ${minPassphraseLength} characters.`;
     return false;
   }
   return true;
@@ -204,32 +238,18 @@ const resetErrorMessage = () => {
   errorMessage.value = null;
 };
 
-const prepareAndMaybeEncryptTheMessage = () => {
-  const newMessage = {
-    content: message.value.content,
-    is_private: message.value.is_private,
+const handleSuccessfulSubmission = (id, linkKey, payload) => {
+  if (!id) {
+    errorMessage.value = "An unexpected error occurred";
+    return;
+  }
+  messageLink.value = `${window.location.origin}/m/${id}#${linkKey}`;
+  created.value = {
+    hasPassphrase: payload.has_passphrase,
+    burnAfterRead: payload.burn_after_read,
   };
-
-  if (message.value.is_private && message.value.passphrase) {
-    const encryptedMessage = cryptoService.encrypt(
-      message.value.content,
-      message.value.passphrase,
-    );
-
-    newMessage.content = encryptedMessage.ciphertext;
-    newMessage.iv = encryptedMessage.iv;
-    newMessage.salt = encryptedMessage.salt;
-  }
-
-  return newMessage;
-};
-
-const handleSuccessfulSubmission = (newlyCreatedMessage) => {
-  if (newlyCreatedMessage.id) {
-    messageLink.value = `${window.location.origin}/m/${newlyCreatedMessage.id}`;
-    resetForm();
-    logMessageCreation();
-  }
+  resetForm();
+  logMessageCreation();
 };
 
 const handleError = (error) => {
@@ -243,16 +263,16 @@ const resetForm = () => {
   message.value.passphrase = "";
   newMessage.value = false;
 
-  // Due to Toggle Switch problem let's not change the state of the switch
+  // Toggles keep their state for the next message.
 };
 
-const handleToggleChange = (newValue) => {
-  message.value.is_private = newValue;
-};
-
+// Only booleans: never the link, key or message ID.
 const logMessageCreation = () => {
   trackEvent("message-created", {
-    props: { is_private: message.value.is_private },
+    props: {
+      has_passphrase: created.value.hasPassphrase,
+      burn_after_read: created.value.burnAfterRead,
+    },
   });
 };
 
@@ -288,16 +308,8 @@ const resetClipboardState = () => {
 
 const composeNewMessage = () => {
   newMessage.value = true;
+  messageLink.value = null;
   logNewMessageCreation();
-};
-
-const focusToPassphraseInput = (e) => {
-  e.preventDefault();
-  if (message.value.is_private) {
-    this.$refs.passphraseInput.focus();
-  } else {
-    this.$refs.submitButton.focus();
-  }
 };
 
 const maybeShowTooltip = () => {

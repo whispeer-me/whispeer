@@ -8,8 +8,8 @@
       questions, or suggestions, we'd love to hear from you.
     </p>
     <p class="contact-info">
-      Feel free to reach out to us at:
-      <a href="mailto:hey@whispeer.me">hey@whispeer.me</a>
+      Feel free to reach out by opening an issue on
+      <a href="https://github.com/whispeer-me/whispeer/issues">GitHub</a>.
     </p>
     <p class="additional-info">
       Your insights help us make Whispeer better for everyone. Thank you for
@@ -27,7 +27,7 @@ useHead({
     {
       name: "description",
       content:
-        "Reach out to Whispeer for feedback, questions, or suggestions. Your insights help us make Whispeer better for everyone. Contact us at hey@whispeer.me.",
+        "Reach out to Whispeer for feedback, questions, or suggestions. Your insights help us make Whispeer better for everyone. Contact us on GitHub.",
     },
   ],
 });

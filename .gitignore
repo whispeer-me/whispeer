@@ -27,3 +27,6 @@ fly.toml
 .env
 .env.*
 !.env.example
+
+# Agent task specs, runners and reviews (local only)
+/tasks/
