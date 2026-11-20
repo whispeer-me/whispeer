@@ -72,37 +72,34 @@ describe("createLimiter IPv6 rotation", () => {
 });
 
 describe("createLimiter memory bounds", () => {
-  it("when full, new clients share a strict overflow bucket; memory stays bounded", () => {
-    let t = 0;
-    const allow = createLimiter(() => t, { maxKeys: 3 });
+  it("when full, evicts the oldest client: newcomers are tracked and limited, never locked out", () => {
+    const allow = createLimiter(() => 0, { maxKeys: 3 });
     const limit = { tokensPerInterval: 1, interval: 1000 };
     expect(allow("1.1.1.1", "b", limit)).toBe(true);
     expect(allow("1.1.1.2", "b", limit)).toBe(true);
-    // The overflow key takes the third slot once the table is full.
     expect(allow("1.1.1.3", "b", limit)).toBe(true);
-    // Untracked newcomers share overflow: 10 × 1 per interval in total, then refused.
-    let allowed = 0;
-    for (let i = 0; i < 25; i++) {
-      if (allow(`2.2.2.${i}`, "b", limit)) { allowed++; }
+    // Table full: a newcomer gets in (evicting 1.1.1.1) and is limited like anyone.
+    expect(allow("2.2.2.2", "b", limit)).toBe(true);
+    expect(allow("2.2.2.2", "b", limit)).toBe(false);
+    // Clients still in the table keep their limit.
+    expect(allow("1.1.1.3", "b", limit)).toBe(false);
+    // Many newcomers: each still gets exactly its own one request.
+    for (let i = 0; i < 50; i++) {
+      expect(allow(`3.3.3.${i}`, "b", limit)).toBe(true);
+      expect(allow(`3.3.3.${i}`, "b", limit)).toBe(false);
     }
-    expect(allowed).toBeLessThanOrEqual(10);
-    expect(allowed).toBeGreaterThan(0);
-    // Known clients keep their own limit.
-    expect(allow("1.1.1.1", "b", limit)).toBe(false);
-    // After one interval the regular sweep frees space; newcomers are tracked again.
-    t = 1000;
-    expect(allow("3.3.3.3", "b", limit)).toBe(true);
-    expect(allow("3.3.3.3", "b", limit)).toBe(false);
   });
 
-  it("when full, the global cap still applies", () => {
+  it("eviction never resets the global cap", () => {
     const allow = createLimiter(() => 0, { maxKeys: 2 });
     const limit = { tokensPerInterval: 10, interval: 1000 };
     const global = { tokensPerInterval: 3, interval: 1000 };
     expect(allow("1.1.1.1", "post", limit, global)).toBe(true);
     expect(allow("1.1.1.2", "post", limit, global)).toBe(true);
     expect(allow("9.9.9.9", "post", limit, global)).toBe(true);
-    expect(allow("9.9.9.8", "post", limit, global)).toBe(false);
+    for (let i = 0; i < 20; i++) {
+      expect(allow(`8.8.8.${i}`, "post", limit, global)).toBe(false);
+    }
   });
 
   it("sweeps at most once per interval, not per request", () => {

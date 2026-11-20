@@ -63,7 +63,8 @@ export const rateKey = (ip: string): string => {
 };
 
 const DEFAULT_MAX_KEYS = 100_000;
-const OVERFLOW_FACTOR = 10;
+
+type Window = { count: number; start: number; interval: number };
 
 // ponytail: in-memory, per-process (single Fly machine); upgrade path: shared store.
 // IPs live only in this Map for one interval, never logged or persisted.
@@ -71,7 +72,10 @@ export const createLimiter = (
   now: () => number = Date.now,
   { maxKeys = DEFAULT_MAX_KEYS }: { maxKeys?: number } = {},
 ) => {
-  const hits = new Map<string, { count: number; start: number; interval: number }>();
+  // Per-client windows, oldest window first (Map keeps insertion order).
+  const clients = new Map<string, Window>();
+  // Global caps live apart so client eviction can never reset them.
+  const globals = new Map<string, Window>();
   let lastSweep = now();
   let sweepEvery = Infinity;
 
@@ -79,26 +83,24 @@ export const createLimiter = (
   const sweep = (t: number) => {
     if (t - lastSweep < sweepEvery) { return; }
     lastSweep = t;
-    for (const [k, v] of hits) {
-      if (t - v.start >= v.interval) { hits.delete(k); }
+    for (const [k, v] of clients) {
+      if (t - v.start >= v.interval) { clients.delete(k); }
     }
   };
 
-  const take = (key: string, limit: Limit, t: number, capped: boolean): boolean => {
-    const e = hits.get(key);
+  const take = (map: Map<string, Window>, key: string, limit: Limit, t: number): boolean => {
+    const e = map.get(key);
     if (!e || t - e.start >= limit.interval) {
-      if (!e && capped && hits.size >= maxKeys) {
-        // ponytail: table full → new clients share one overflow bucket (10× the
-        // per-client limit) until the next sweep frees space. Never unlimited,
-        // never a full lockout, memory bounded. Under a large distributed flood,
-        // new visitors share that budget. Upgrade path: LRU eviction.
-        const bucket = key.slice(0, key.indexOf("|"));
-        return take(`${bucket}|overflow`, {
-          tokensPerInterval: limit.tokensPerInterval * OVERFLOW_FACTOR,
-          interval: limit.interval,
-        }, t, false);
+      map.delete(key); // re-insert at the end so the Map stays ordered by window start
+      if (map === clients && map.size >= maxKeys) {
+        // ponytail: full → evict the oldest window (O(1)). Every client stays
+        // tracked and limited; memory stays bounded. Only a flood churning
+        // maxKeys distinct clients per interval can reset an evicted client's
+        // window early (lenient, never a lockout); the global create cap still holds.
+        const oldest = map.keys().next().value;
+        if (oldest !== undefined) { map.delete(oldest); }
       }
-      hits.set(key, { count: 1, start: t, interval: limit.interval });
+      map.set(key, { count: 1, start: t, interval: limit.interval });
       return true;
     }
     e.count++;
@@ -109,7 +111,7 @@ export const createLimiter = (
     const t = now();
     sweepEvery = Math.min(sweepEvery, limit.interval);
     sweep(t);
-    if (!take(`${bucket}|${rateKey(ip)}`, limit, t, true)) { return false; }
-    return !global || take(`${bucket}|*`, global, t, false);
+    if (!take(clients, `${bucket}|${rateKey(ip)}`, limit, t)) { return false; }
+    return !global || take(globals, bucket, global, t);
   };
 };
